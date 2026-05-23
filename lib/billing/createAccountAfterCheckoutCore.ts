@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
+import { findAuthUserIdByEmail } from "@/lib/auth/findAuthUserByEmail";
 import { syncStripeCheckoutSession } from "@/lib/billing/stripeCheckoutSync";
 import { ensureUserForPaidCheckout } from "@/lib/billing/stripeLinkUser";
 import { resolveCheckoutEmailForCreateAccount } from "@/app/create-account/stripeSession";
@@ -8,13 +9,29 @@ export type CreateAccountResult =
   | { ok: true; email: string; userId: string }
   | { ok: false; error: string; status: number };
 
-const serviceSupabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
+function serviceSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!url || !key) return null;
+  return createClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
+
+async function upsertPublicUserRow(
+  supabase: ReturnType<typeof createClient>,
+  id: string,
+  email: string
+): Promise<boolean> {
+  const { error } = await supabase
+    .from("users")
+    .upsert({ id, email }, { onConflict: "id" });
+  if (error) {
+    console.error("[createAccountAfterCheckout] upsertPublicUserRow failed:", error);
+    return false;
   }
-);
+  return true;
+}
 
 export async function createAccountAfterCheckoutCore(args: {
   sessionId: string;
@@ -43,6 +60,19 @@ export async function createAccountAfterCheckoutCore(args: {
     return { ok: false, error: "Passwords do not match.", status: 400 };
   }
 
+  const supabase = serviceSupabase();
+  if (!supabase) {
+    console.error(
+      "[createAccountAfterCheckout] missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"
+    );
+    return {
+      ok: false,
+      error:
+        "Account setup is temporarily unavailable. Contact support if you completed payment.",
+      status: 503,
+    };
+  }
+
   const email = await resolveCheckoutEmailForCreateAccount(sessionId);
   if (!email) {
     return {
@@ -53,7 +83,9 @@ export async function createAccountAfterCheckoutCore(args: {
   }
 
   let userId: string | null = null;
-  const { data: existingRow, error: userRowErr } = await serviceSupabase
+  let provisionError: string | null = null;
+
+  const { data: existingRow, error: userRowErr } = await supabase
     .from("users")
     .select("id")
     .eq("email", email)
@@ -88,9 +120,18 @@ export async function createAccountAfterCheckoutCore(args: {
       });
       userId = await ensureUserForPaidCheckout(checkoutSession);
       if (userId) {
-        await syncStripeCheckoutSession(checkoutSession);
+        try {
+          await syncStripeCheckoutSession(checkoutSession);
+        } catch (syncErr) {
+          console.error(
+            "[createAccountAfterCheckout] syncStripeCheckoutSession failed:",
+            syncErr
+          );
+        }
       }
     } catch (err) {
+      provisionError =
+        err instanceof Error ? err.message : "Checkout provisioning failed";
       console.error(
         "[createAccountAfterCheckout] provision from checkout failed:",
         err
@@ -99,6 +140,21 @@ export async function createAccountAfterCheckoutCore(args: {
   }
 
   if (!userId) {
+    const authUserId = await findAuthUserIdByEmail(email);
+    if (authUserId) {
+      const upserted = await upsertPublicUserRow(supabase, authUserId, email);
+      if (upserted) {
+        userId = authUserId;
+      }
+    }
+  }
+
+  if (!userId) {
+    console.error("[createAccountAfterCheckout] could not resolve user", {
+      sessionId,
+      email,
+      provisionError,
+    });
     return {
       ok: false,
       error:
@@ -107,7 +163,7 @@ export async function createAccountAfterCheckoutCore(args: {
     };
   }
 
-  const { error: updateErr } = await serviceSupabase.auth.admin.updateUserById(
+  const { error: updateErr } = await supabase.auth.admin.updateUserById(
     userId,
     { password }
   );

@@ -6,6 +6,7 @@ import { randomBytes } from "node:crypto";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 import { applyAdminAppMetadataForUserId } from "@/lib/auth/adminAppMetadata";
+import { findAuthUserIdByEmail } from "@/lib/auth/findAuthUserByEmail";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-11-17.clover",
@@ -201,25 +202,19 @@ export async function ensureUserForPaidCheckout(
         await applyAdminAppMetadataForUserId(supabase, row.id);
         return row.id;
       }
-      const { data: listData, error: listErr } =
-        await supabase.auth.admin.listUsers({ perPage: 200 });
-      if (!listErr && listData?.users) {
-        const found = listData.users.find(
-          (u) => u.email?.toLowerCase() === email.toLowerCase()
-        );
-        if (found?.id) {
-          const upserted = await upsertPublicUserRow(found.id, email);
-          if (!upserted) return null;
-          if (cid) {
-            await supabase
-              .from("users")
-              .update({ stripe_customer_id: cid })
-              .eq("id", found.id);
-            await stripeMetadataHasUserId(cid, found.id);
-          }
-          await applyAdminAppMetadataForUserId(supabase, found.id);
-          return found.id;
+      const authUserId = await findAuthUserIdByEmail(email);
+      if (authUserId) {
+        const upserted = await upsertPublicUserRow(authUserId, email);
+        if (!upserted) return null;
+        if (cid) {
+          await supabase
+            .from("users")
+            .update({ stripe_customer_id: cid })
+            .eq("id", authUserId);
+          await stripeMetadataHasUserId(cid, authUserId);
         }
+        await applyAdminAppMetadataForUserId(supabase, authUserId);
+        return authUserId;
       }
     }
     console.error("[stripeLinkUser] createUser:", createErr);

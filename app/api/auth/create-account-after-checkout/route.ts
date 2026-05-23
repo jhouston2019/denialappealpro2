@@ -3,6 +3,13 @@ import { createServerClient } from "@supabase/ssr";
 import { createAccountAfterCheckoutCore } from "@/lib/billing/createAccountAfterCheckoutCore";
 import type { Database } from "@/lib/supabase-types";
 
+export async function GET() {
+  return NextResponse.json(
+    { error: "Method not allowed. Submit the create-account form." },
+    { status: 405 }
+  );
+}
+
 export async function POST(request: NextRequest) {
   let body: {
     session_id?: string;
