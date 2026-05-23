@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Props = {
   planDisplayName: string;
   usedReviews: number;
@@ -63,6 +65,25 @@ export function DashboardPlanUsage({
           {billingCadence === "one_time" ? "Access through" : "Resets on"}{" "}
           {periodEndLabel}
         </p>
+      ) : null}
+      {reviewsRemaining === 0 ? (
+        <div className="mt-5 rounded-xl border border-rose-500/30 bg-rose-950/30 p-4">
+          <p className="text-sm font-medium text-rose-100">
+            You&apos;re out of reviews for this{" "}
+            {billingCadence === "one_time" ? "purchase" : "billing period"}.
+          </p>
+          {periodEndLabel && billingCadence === "monthly" ? (
+            <p className="mt-1 text-xs text-rose-200/70">
+              Your count resets on {periodEndLabel}, or you can buy more now.
+            </p>
+          ) : null}
+          <Link
+            href="/pricing"
+            className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-[#2563EB] px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#2563EB]/30 transition hover:bg-[#1E40AF] sm:w-auto"
+          >
+            Buy more reviews
+          </Link>
+        </div>
       ) : null}
     </div>
   );
