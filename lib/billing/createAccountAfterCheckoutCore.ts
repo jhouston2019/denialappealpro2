@@ -150,6 +150,36 @@ export async function createAccountAfterCheckoutCore(args: {
   }
 
   if (!userId) {
+    const { data: created, error: createErr } =
+      await supabase.auth.admin.createUser({
+        email,
+        email_confirm: true,
+      });
+
+    if (created?.user?.id) {
+      const upserted = await upsertPublicUserRow(
+        supabase,
+        created.user.id,
+        email
+      );
+      if (upserted) {
+        userId = created.user.id;
+      } else {
+        provisionError = "Could not create profile row for new auth user";
+      }
+    } else if (createErr) {
+      provisionError = createErr.message;
+      const authUserId = await findAuthUserIdByEmail(email);
+      if (authUserId) {
+        const upserted = await upsertPublicUserRow(supabase, authUserId, email);
+        if (upserted) {
+          userId = authUserId;
+        }
+      }
+    }
+  }
+
+  if (!userId) {
     console.error("[createAccountAfterCheckout] could not resolve user", {
       sessionId,
       email,
@@ -157,8 +187,9 @@ export async function createAccountAfterCheckoutCore(args: {
     });
     return {
       ok: false,
-      error:
-        "We could not find your account. Contact support if you completed payment.",
+      error: provisionError?.includes("already")
+        ? "An account with this email already exists. Try logging in, or contact support to link your payment."
+        : "We could not find your account. Contact support if you completed payment.",
       status: 404,
     };
   }
