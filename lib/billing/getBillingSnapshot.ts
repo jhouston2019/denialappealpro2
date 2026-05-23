@@ -85,6 +85,30 @@ export async function getBillingSnapshot(
     }
   }
 
+  let usage = 0;
+  let storedLimit = 0;
+  let billing_period_end: string | null = null;
+
+  const { data: usageRow } = await supabase
+    .from("user_review_usage")
+    .select("reviews_used, reviews_limit")
+    .eq("user_id", userId)
+    .maybeSingle();
+  const ur = usageRow as {
+    reviews_used: number | null;
+    reviews_limit: number | null;
+  } | null;
+  usage = ur?.reviews_used ?? 0;
+  storedLimit = ur?.reviews_limit ?? 0;
+
+  const { count: savedReviewCount } = await supabase
+    .from("reviews")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", userId);
+  if (savedReviewCount != null && savedReviewCount > usage) {
+    usage = savedReviewCount;
+  }
+
   const { data: rpcData } = await (
     supabase as unknown as {
       rpc: (
@@ -94,31 +118,19 @@ export async function getBillingSnapshot(
     }
   ).rpc("get_user_plan_usage", { user_id_param: userId });
 
-  let usage = 0;
-  let storedLimit = 0;
-  let billing_period_end: string | null = null;
-
   if (Array.isArray(rpcData) && rpcData[0] && typeof rpcData[0] === "object") {
-    const ur = rpcData[0] as {
+    const rpcRow = rpcData[0] as {
       reviews_used?: number;
       reviews_limit?: number | null;
       billing_period_end?: string | null;
     };
-    usage = ur.reviews_used ?? 0;
-    storedLimit = ur.reviews_limit ?? 0;
-    billing_period_end = ur.billing_period_end ?? null;
-  } else {
-    const { data: usageRow } = await supabase
-      .from("user_review_usage")
-      .select("reviews_used, reviews_limit")
-      .eq("user_id", userId)
-      .maybeSingle();
-    const ur = usageRow as {
-      reviews_used: number | null;
-      reviews_limit: number | null;
-    } | null;
-    usage = ur?.reviews_used ?? 0;
-    storedLimit = ur?.reviews_limit ?? 0;
+    if (usage === 0 && (rpcRow.reviews_used ?? 0) > 0) {
+      usage = rpcRow.reviews_used ?? 0;
+    }
+    if (storedLimit <= 0 && (rpcRow.reviews_limit ?? 0) > 0) {
+      storedLimit = rpcRow.reviews_limit ?? 0;
+    }
+    billing_period_end = rpcRow.billing_period_end ?? null;
   }
 
   const reviews_limit = resolveEffectiveReviewLimit({

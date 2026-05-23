@@ -4,6 +4,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { incrementReviewUsageForUser } from '@/lib/billing/incrementUserReviewUsage';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -126,17 +127,11 @@ export async function incrementUsage(userId: string): Promise<boolean> {
   }
   
   try {
-    const { data, error } = await (client as any)
-      .rpc('increment_review_usage', { user_id_param: userId });
-    
-    if (error) {
-      console.error('[USAGE] Error incrementing usage:', error);
-      return false;
+    const ok = await incrementReviewUsageForUser(client, userId);
+    if (ok) {
+      console.log('[USAGE] Usage incremented successfully');
     }
-    
-    console.log('[USAGE] Usage incremented successfully');
-    return data === true;
-    
+    return ok;
   } catch (error) {
     console.error('[USAGE] Error incrementing usage:', error);
     return false;

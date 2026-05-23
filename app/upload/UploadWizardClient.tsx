@@ -584,11 +584,16 @@ async function saveReviewToDatabase(
       console.error("[upload] reviews insert:", error);
       return false;
     }
-    const { error: usageError } = await supabase.rpc("increment_review_usage", {
-      user_id_param: session.user.id,
-    });
-    if (usageError) {
-      console.error("[upload] increment_review_usage:", usageError);
+    try {
+      const usageRes = await fetch("/api/increment-review-usage", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!usageRes.ok) {
+        console.error("[upload] increment-review-usage:", await usageRes.text());
+      }
+    } catch (usageErr) {
+      console.error("[upload] increment-review-usage:", usageErr);
     }
     return true;
   } catch (saveErr) {
