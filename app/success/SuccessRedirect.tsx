@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabaseClient";
-import { tryParseWizardSnapshot, PAID_RESUME_SESSION_KEY } from "@/lib/wizard-snapshot";
+import { tryParseWizardSnapshot, PAID_RESUME_SESSION_KEY, NEW_REVIEW_CHECKOUT_KEY, NEW_REVIEW_PLAN_KEY, clearCompletedReviewSession } from "@/lib/wizard-snapshot";
 
 export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
   const router = useRouter();
@@ -27,6 +27,26 @@ export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
         console.info(
           "[TODO] Post-purchase welcome email: not implemented. Supabase Auth has no built-in marketing/welcome email API — add Resend, SendGrid, or an Edge Function with your template (keep idempotent if also triggered from webhooks)."
         );
+        const isNewReviewCheckout =
+          typeof window !== "undefined" &&
+          window.sessionStorage.getItem(NEW_REVIEW_CHECKOUT_KEY) === "true";
+        const newReviewPlan =
+          typeof window !== "undefined"
+            ? window.sessionStorage.getItem(NEW_REVIEW_PLAN_KEY)
+            : null;
+
+        if (isNewReviewCheckout && typeof window !== "undefined") {
+          window.sessionStorage.removeItem(NEW_REVIEW_CHECKOUT_KEY);
+          window.sessionStorage.removeItem(NEW_REVIEW_PLAN_KEY);
+          clearCompletedReviewSession();
+          if (newReviewPlan === "single") {
+            router.replace("/upload");
+          } else {
+            router.replace("/dashboard");
+          }
+          return;
+        }
+
         const w =
           typeof window !== "undefined"
             ? window.sessionStorage.getItem("erp_wizard_state")

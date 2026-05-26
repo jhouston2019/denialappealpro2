@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { markNewReviewCheckout } from "@/lib/wizard-snapshot";
 
 type PlanKey = "single" | "essential" | "professional" | "enterprise";
 
@@ -65,6 +66,7 @@ export default function PricingPage() {
     setLoading(planType);
 
     try {
+      markNewReviewCheckout(planType);
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

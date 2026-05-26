@@ -4,6 +4,9 @@ export const WIZARD_STATE_STORAGE_KEY = "erp_wizard_state" as const;
 export const DELIVERABLES_REVIEW_ID_KEY = "erp_deliverables_review_id" as const;
 /** Set after Stripe success so /upload can skip the usage wall for this session only. */
 export const PAID_RESUME_SESSION_KEY = "erp_paid_resume" as const;
+/** Checkout from pricing / buy-another — not a preview-unlock resume. */
+export const NEW_REVIEW_CHECKOUT_KEY = "erp_new_review_checkout" as const;
+export const NEW_REVIEW_PLAN_KEY = "erp_new_review_plan" as const;
 
 export type SerializableWizardV1 = {
   v: 1;
@@ -56,4 +59,21 @@ export function writeWizardResumeSnapshot(
   if (reviewId?.trim()) {
     window.sessionStorage.setItem(DELIVERABLES_REVIEW_ID_KEY, reviewId.trim());
   }
+}
+
+/** Drop prior review resume data so a new purchase starts fresh. */
+export function clearCompletedReviewSession(): void {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.removeItem(WIZARD_STATE_STORAGE_KEY);
+  window.sessionStorage.removeItem(DELIVERABLES_REVIEW_ID_KEY);
+  window.sessionStorage.removeItem(PAID_RESUME_SESSION_KEY);
+  window.sessionStorage.removeItem("erp_resume");
+  window.sessionStorage.removeItem("erp_extracted_text");
+}
+
+/** Call before Stripe checkout when buying a new review (not preview unlock). */
+export function markNewReviewCheckout(planType: string): void {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.setItem(NEW_REVIEW_CHECKOUT_KEY, "true");
+  window.sessionStorage.setItem(NEW_REVIEW_PLAN_KEY, planType);
 }
