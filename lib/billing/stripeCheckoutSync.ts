@@ -194,6 +194,7 @@ export async function handleSubscriptionUpdate(
       .eq("team_id", existingTeam.id);
 
     for (const m of teamMembers ?? []) {
+      await ensureUserReviewUsageRow(m.id, planType);
       await syncUserPlanTypeToAuthMetadata(m.id, planType);
     }
     const adminIds = new Set<string>([
@@ -232,6 +233,7 @@ export async function handleSubscriptionUpdate(
       })
       .eq("id", userId);
 
+    await ensureUserReviewUsageRow(userId, planType);
     await syncUserPlanTypeToAuthMetadata(userId, planType);
   }
 
