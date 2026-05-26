@@ -11,9 +11,9 @@ import {
   createSupabaseBrowserClient,
   wizardFetch,
 } from "@/lib/supabaseClient";
+import { saveWizardReview } from "@/lib/save-wizard-review";
 import {
   tryParseWizardSnapshot,
-  toSupabaseJsonValue,
   WIZARD_STATE_STORAGE_KEY,
   type SerializableWizardV1,
 } from "@/lib/wizard-snapshot";
@@ -548,74 +548,19 @@ async function saveReviewToDatabase(
   s: WizardState,
   letterTextForStore: string
 ): Promise<boolean> {
-  try {
-    const supabase = createSupabaseBrowserClient();
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (!session?.user?.id) return false;
-    if (!s.letterType) return false;
-    const a = s.analysis;
-    const m = s.claimMeta;
-    const analysisWithClaimMeta =
-      a && typeof a === "object" && a !== null
-        ? {
-            ...(a as Record<string, unknown>),
-            claimMeta: {
-              insuredName: m.insuredName,
-              carrierName: m.carrierName,
-              policyNumber: m.policyNumber,
-              claimNumber: m.claimNumber,
-              dateOfLoss: m.dateOfLoss,
-              adjusterName: m.adjusterName,
-              responseDeadline: m.responseDeadline,
-            },
-          }
-        : a;
-    const { error } = await supabase.from("reviews").insert({
-      user_id: session.user.id,
-      ai_analysis_json: toSupabaseJsonValue(analysisWithClaimMeta),
-      ai_comparison_json: toSupabaseJsonValue(s.comparison),
-      ai_summary_json: toSupabaseJsonValue(s.summary),
-      insured_name: s.claimMeta?.insuredName ?? null,
-      letter_text: letterTextForStore,
-      letter_type: s.letterType,
-    });
-    if (error) {
-      console.error("[upload] reviews insert:", error);
-      return false;
-    }
-    const { data: { session: currentSession } } = await supabase.auth.getSession();
-    if (currentSession) {
-      const { data: userData } = await supabase
-        .from("users")
-        .select("plan_type")
-        .eq("id", currentSession.user.id)
-        .single();
-
-      if (userData?.plan_type === "single") {
-        await supabase
-          .from("users")
-          .update({ plan_type: null })
-          .eq("id", currentSession.user.id);
-      }
-    }
-    try {
-      const usageRes = await fetch("/api/increment-review-usage", {
-        method: "POST",
-        credentials: "include",
-      });
-      if (!usageRes.ok) {
-        console.error("[upload] increment-review-usage:", await usageRes.text());
-      }
-    } catch (usageErr) {
-      console.error("[upload] increment-review-usage:", usageErr);
-    }
-    return true;
-  } catch (saveErr) {
-    console.error("Failed to save review:", saveErr);
+  const result = await saveWizardReview({
+    claimMeta: s.claimMeta,
+    analysis: s.analysis,
+    comparison: s.comparison,
+    summary: s.summary,
+    letterType: s.letterType,
+    letterText: letterTextForStore?.trim() || s.letterRaw,
+  });
+  if (!result.ok) {
+    console.error("[upload] saveReview:", result.error);
     return false;
   }
+  return true;
 }
 
 const CLAIM_META_AUTO_EXTRACT_KEYS = new Set([
@@ -796,17 +741,23 @@ function stepIsNavigable(
   }
 }
 
-type UploadWizardClientProps = { isPreviewMode?: boolean };
+type UploadWizardClientProps = {
+  isPreviewMode?: boolean;
+  initialStep?: number;
+};
 
 export default function UploadWizardClient({
   isPreviewMode = false,
+  initialStep = 1,
 }: UploadWizardClientProps = {}) {
   const router = useRouter();
   const [premierUsageWall, setPremierUsageWall] = useState<
     "checking" | "ok" | "blocked"
   >("checking");
   const [previewUnlockBusy, setPreviewUnlockBusy] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(() =>
+    Math.min(6, Math.max(1, initialStep))
+  );
   const [state, setState] = useState<WizardState>(() => initialWizardState());
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -1819,35 +1770,11 @@ export default function UploadWizardClient({
         state.accessToken,
         true
       );
+      const step = Math.min(6, Math.max(1, initialStep));
       setState(restored);
-      setCurrentStep(6);
+      setCurrentStep(step);
       setSubmitError(null);
-      void (async () => {
-        if (restored.letterRaw?.trim()) {
-          const ok = await saveReviewToDatabase(
-            restored,
-            restored.letterRaw
-          );
-          if (ok) {
-            window.sessionStorage.removeItem(WIZARD_STATE_STORAGE_KEY);
-            window.sessionStorage.removeItem("erp_resume");
-            window.sessionStorage.removeItem("erp_extracted_text");
-            announce(
-              "Your full estimate and letter are saved. You can continue in the app."
-            );
-          } else {
-            postPaymentResumeStartedRef.current = false;
-            announce(
-              "Your work was restored; saving to your account will retry when you open the review again."
-            );
-          }
-        } else {
-          window.sessionStorage.removeItem(WIZARD_STATE_STORAGE_KEY);
-          window.sessionStorage.removeItem("erp_resume");
-          window.sessionStorage.removeItem("erp_extracted_text");
-          announce("Your in-progress work was restored to Step 6.");
-        }
-      })();
+      announce(`Wizard restored at step ${step}.`);
       return;
     }
 
@@ -1912,6 +1839,7 @@ export default function UploadWizardClient({
     state.sessionReady,
     state.accessToken,
     isPreviewMode,
+    initialStep,
     executeStep1Pipeline,
     announce,
   ]);

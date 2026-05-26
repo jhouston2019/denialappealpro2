@@ -1,6 +1,7 @@
 import type { Json } from "@/types/database.types";
 
 export const WIZARD_STATE_STORAGE_KEY = "erp_wizard_state" as const;
+export const DELIVERABLES_REVIEW_ID_KEY = "erp_deliverables_review_id" as const;
 
 export type SerializableWizardV1 = {
   v: 1;

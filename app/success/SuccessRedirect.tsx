@@ -46,7 +46,7 @@ export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
           .single();
         const planType = userData?.plan_type;
         if (resume) {
-          router.replace("/upload");
+          router.replace("/deliverables");
         } else if (planType === "single") {
           router.replace("/upload");
         } else {
