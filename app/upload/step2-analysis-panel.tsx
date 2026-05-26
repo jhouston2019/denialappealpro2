@@ -378,6 +378,14 @@ export function Step2AnalysisPanel({
           {`${analysis.riskLevel.charAt(0).toUpperCase()}${analysis.riskLevel.slice(1)}`}
         </p>
 
+        <div className={isPreviewMode ? "relative mt-4" : undefined}>
+          <div
+            className={
+              isPreviewMode
+                ? "max-h-[28rem] overflow-hidden rounded-xl filter blur-[6px] select-none [pointer-events:none]"
+                : undefined
+            }
+          >
         {comparison && (
           <div className="mt-4 border-b border-[#ebebea] pb-3 text-sm text-[#2a3a4a]">
             <div className={ERP_WHITE_FINDING_PANEL}>
@@ -719,14 +727,36 @@ export function Step2AnalysisPanel({
             </div>
           </section>
         </div>
+          </div>
+          {isPreviewMode && onPreviewUnlock ? (
+            <div
+              className="pointer-events-none absolute inset-0 z-20 flex min-h-[14rem] items-center justify-center px-4 py-6 sm:min-h-[18rem]"
+              role="region"
+              aria-label="Preview gate"
+            >
+              <div className="pointer-events-auto max-w-md rounded-xl border border-[#e0e0dc] bg-white px-6 py-5 text-center shadow-md">
+                <p className="text-sm font-medium text-[#1a2a3a]">
+                  Your full analysis is ready
+                </p>
+                <p className="mt-1 text-xs text-[#7a8a9a]">
+                  Unlock gap amounts, every finding, exports, and your demand
+                  letter.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => onPreviewUnlock()}
+                  disabled={previewUnlockBusy}
+                  className="erp-btn-cta mt-4 w-full max-w-sm disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {previewUnlockBusy
+                    ? "Preparing…"
+                    : "Unlock My Analysis — $49"}
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
-
-      {isPreviewMode && onPreviewUnlock && (
-        <PreviewPaywallBlock
-          onUnlock={onPreviewUnlock}
-          busy={previewUnlockBusy}
-        />
-      )}
 
       <div className="mt-10 flex flex-wrap gap-4 border-t-[0.5px] border-[#1e3f6e] pt-6">
         <button

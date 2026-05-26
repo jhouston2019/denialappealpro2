@@ -2126,6 +2126,11 @@ export default function UploadWizardClient({
   return (
     <div className="erp-wizard-shell flex min-h-screen flex-col bg-[#0f2744]">
       {!isPreviewMode && <PostPaymentSessionRefresh />}
+      {isPreviewMode ? (
+        <div className="border-b border-[#c87830] bg-[#f0a050] px-4 py-2 text-center text-xs font-semibold text-[#091c33] sm:text-sm">
+          Free preview — unlock for full findings, exports, and demand letter
+        </div>
+      ) : null}
       <header className="sticky top-0 z-[100] border-b border-[#1e3f6e] bg-[#091c33] text-white">
         <div className="mx-auto flex min-h-12 max-w-6xl flex-col gap-2 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:px-6 sm:py-0">
           <Link
