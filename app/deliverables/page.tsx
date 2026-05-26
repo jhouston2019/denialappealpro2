@@ -2,13 +2,12 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
 import { DeliverablesHubClient } from "./DeliverablesHubClient";
-import { DeliverablesResumeWizardLink } from "./DeliverablesResumeWizardLink";
 import "@/app/upload/erp-wizard.css";
 
 export const metadata = {
-  title: "Your deliverables | Estimate Review Pro",
+  title: "Complete review report | Estimate Review Pro",
   description:
-    "View, download, and continue your estimate review deliverables after payment.",
+    "View your full estimate review report with analysis, comparison, strategy, summary, and letter deliverables.",
 };
 
 function DeliverablesFallback() {
@@ -38,23 +37,6 @@ export default async function DeliverablesPage() {
               Estimate Review Pro
             </span>
           </Link>
-          <nav className="flex w-full min-w-0 flex-wrap items-center justify-end gap-2 text-[11px] font-medium sm:ml-auto sm:w-auto sm:gap-3 sm:text-sm">
-            <Link
-              href="/dashboard"
-              className="shrink-0 text-[#8aacc8] transition hover:text-[#e8f0f8]"
-            >
-              Dashboard
-            </Link>
-            <Suspense fallback={null}>
-              <DeliverablesResumeWizardLink className="shrink-0 text-[#8aacc8] transition hover:text-[#e8f0f8]" />
-            </Suspense>
-            <Link
-              href="/pricing"
-              className="shrink-0 rounded-full bg-[#2563EB] px-2.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:px-4 sm:py-2 sm:text-sm"
-            >
-              Buy another review
-            </Link>
-          </nav>
         </div>
       </header>
 

@@ -795,6 +795,9 @@ export default function UploadWizardClient({
     docId: string;
     file: File;
   } | null>(null);
+  const [deliverablesReviewId, setDeliverablesReviewId] = useState<string | null>(
+    () => initialReviewId?.trim() || null
+  );
   const liveRegionRef = useRef<HTMLDivElement>(null);
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const wizardStateRef = useRef(state);
@@ -810,6 +813,27 @@ export default function UploadWizardClient({
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (isPreviewMode || typeof window === "undefined") return;
+    const fromProp = initialReviewId?.trim();
+    if (fromProp) {
+      setDeliverablesReviewId(fromProp);
+      return;
+    }
+    const stored = window.sessionStorage
+      .getItem(DELIVERABLES_REVIEW_ID_KEY)
+      ?.trim();
+    if (stored) setDeliverablesReviewId(stored);
+  }, [initialReviewId, isPreviewMode]);
+
+  const completeReviewReportHref = useMemo(() => {
+    if (isPreviewMode || !state.analysis) return null;
+    if (deliverablesReviewId) {
+      return `/deliverables?reviewId=${encodeURIComponent(deliverablesReviewId)}`;
+    }
+    return "/deliverables";
+  }, [deliverablesReviewId, isPreviewMode, state.analysis]);
 
   const handleLogout = useCallback(async () => {
     const supabase = createSupabaseBrowserClient();
@@ -1793,6 +1817,7 @@ export default function UploadWizardClient({
         const step = Math.min(6, Math.max(1, initialStep));
         const snap = wizardSnapshotFromDeliverables(d, step);
         writeWizardResumeSnapshot(snap, reviewIdToLoad);
+        setDeliverablesReviewId(reviewIdToLoad);
         const restored = restoreWizardFromSnapshot(
           snap,
           state.accessToken,
@@ -1838,6 +1863,7 @@ export default function UploadWizardClient({
         const step = Math.min(6, Math.max(1, initialStep));
         const snap = wizardSnapshotFromDeliverables(d, step);
         writeWizardResumeSnapshot(snap, reviewIdToLoad);
+        setDeliverablesReviewId(reviewIdToLoad);
         const restored = restoreWizardFromSnapshot(
           snap,
           state.accessToken,
@@ -2227,12 +2253,14 @@ export default function UploadWizardClient({
               </>
             ) : (
               <>
-                <Link
-                  href="/dashboard"
-                  className="shrink-0 text-[#8aacc8] transition hover:text-[#e8f0f8]"
-                >
-                  Dashboard
-                </Link>
+                {completeReviewReportHref ? (
+                  <Link
+                    href={completeReviewReportHref}
+                    className="shrink-0 rounded-full border border-[#f0a050] bg-[#f0a050]/10 px-2.5 py-1.5 text-xs font-semibold text-[#f0a050] transition hover:bg-[#f0a050]/20 sm:px-4 sm:py-2 sm:text-sm"
+                  >
+                    Complete review report
+                  </Link>
+                ) : null}
                 <Link
                   href="/pricing"
                   className="shrink-0 rounded-full bg-[#2563EB] px-2.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:px-4 sm:py-2 sm:text-sm"

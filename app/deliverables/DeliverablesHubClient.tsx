@@ -142,6 +142,9 @@ function DeliverablesBody({
         >
           Open in wizard
         </button>
+        <Link href="/dashboard" className="erp-btn-ghost">
+          Dashboard
+        </Link>
         <Link href="/pricing" className="erp-btn-cta">
           Buy another review
         </Link>
@@ -376,7 +379,7 @@ export function DeliverablesHubClient() {
   }, [deliverables, reviewId]);
 
   const title = useMemo(
-    () => (deliverables ? deliverablesTitle(deliverables) : "Your deliverables"),
+    () => (deliverables ? deliverablesTitle(deliverables) : "Complete review report"),
     [deliverables]
   );
 
@@ -411,7 +414,10 @@ export function DeliverablesHubClient() {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-3 py-8 sm:px-6">
       <div>
-        <p className="text-xs font-medium text-emerald-400">
+        <p className="text-xs font-semibold uppercase tracking-[0.07em] text-[#8aacc8]">
+          Complete review report
+        </p>
+        <p className="mt-1 text-xs font-medium text-emerald-400">
           Payment complete — your analysis is unlocked
         </p>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[#e8f0f8]">
