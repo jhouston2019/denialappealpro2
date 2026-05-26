@@ -3,6 +3,10 @@
 import { useCallback, useEffect } from "react";
 import { LockIcon } from "@/components/LockIcon";
 import { PreviewPaywallBlock } from "@/components/PreviewPaywallBlock";
+import {
+  PREVIEW_BLUR_CLASS,
+  splitPreviewLines,
+} from "@/lib/preview-blur";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
 import { wizardFetch } from "@/lib/supabaseClient";
 
@@ -450,29 +454,23 @@ export function Step6LetterPanel({
             Letter
           </label>
           {isPreviewMode && letterRaw ? (
-            <div className="relative min-h-[280px] rounded-md border border-[#e0e0dc] bg-white">
-              <div
-                className="max-h-[min(480px,70vh)] min-h-[240px] overflow-y-auto whitespace-pre-wrap border-0 p-4 font-mono text-sm leading-relaxed text-[#2a3a4a] [filter:blur(6px)] [user-select:none] [pointer-events:none]"
-                aria-hidden
-              >
-                {letterRaw}
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0a1e38]/75 px-4 text-center">
-                <LockIcon className="mb-2 h-10 w-10 text-white" />
-                <p className="text-sm font-medium text-white">
-                  Your demand letter is ready. Unlock to read.
-                </p>
-                {onPreviewUnlock ? (
-                  <button
-                    type="button"
-                    disabled={previewUnlockBusy}
-                    onClick={onPreviewUnlock}
-                    className="mt-4 inline-flex min-w-[200px] items-center justify-center rounded-lg bg-[#f0a050] px-5 py-2.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {previewUnlockBusy ? "Redirecting…" : "Unlock My Analysis — $49"}
-                  </button>
-                ) : null}
-              </div>
+            <div className="min-h-[280px] rounded-md border border-[#e0e0dc] bg-white p-4 font-mono text-sm leading-relaxed text-[#2a3a4a]">
+              {(() => {
+                const { visible, blurred } = splitPreviewLines(letterRaw);
+                return (
+                  <>
+                    <div className="whitespace-pre-wrap">{visible.join("\n")}</div>
+                    {blurred.length > 0 ? (
+                      <div
+                        className={`mt-2 whitespace-pre-wrap ${PREVIEW_BLUR_CLASS}`}
+                        aria-hidden
+                      >
+                        {blurred.join("\n")}
+                      </div>
+                    ) : null}
+                  </>
+                );
+              })()}
             </div>
           ) : (
             <textarea

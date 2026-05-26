@@ -2,7 +2,14 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LockIcon } from "@/components/LockIcon";
+import { PreviewPaywallBlock } from "@/components/PreviewPaywallBlock";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
+import {
+  buildPreviewFindingIndex,
+  PREVIEW_BLUR_CLASS,
+  previewBlurForFindingKey,
+  previewMoreFindingsCount,
+} from "@/lib/preview-blur";
 import { wizardFetch } from "@/lib/supabaseClient";
 import type {
   AnalysisResult,
@@ -191,35 +198,18 @@ export function Step2AnalysisPanel({
     announce("Word document downloaded.");
   }, [announce, fetcher]);
 
-  const previewFindingMap = useMemo(() => {
-    const m = new Map<string, number>();
-    if (!analysis) return m;
-    let g = 0;
-    const add = (arr: string[] | undefined, p: string) => {
-      if (!arr) return;
-      for (let i = 0; i < arr.length; i += 1) m.set(`${p}:${i}`, g++);
-    };
-    add(analysis.proceduralDefects, "pc");
-    add(analysis.scopeOmissions, "om");
-    add(analysis.pricingFlags, "pr");
-    add(analysis.codeUpgradeGaps, "cd");
-    add(analysis.opFindings, "op");
-    add(analysis.disputeAngles, "an");
-    add(analysis.actionItems, "ac");
-    add(analysis.requiredDocuments, "rq");
-    add(analysis.escalationOptions, "es");
-    return m;
-  }, [analysis]);
+  const previewFindingMap = useMemo(
+    () => (analysis ? buildPreviewFindingIndex(analysis) : new Map()),
+    [analysis]
+  );
 
-  const previewMoreFindings = useMemo(() => {
-    if (!isPreviewMode) return 0;
-    return Math.max(0, previewFindingMap.size - 3);
-  }, [isPreviewMode, previewFindingMap.size]);
+  const previewMoreFindings = useMemo(
+    () => previewMoreFindingsCount(isPreviewMode, previewFindingMap.size),
+    [isPreviewMode, previewFindingMap.size]
+  );
 
   const blurFinding = (key: string) =>
-    isPreviewMode && (previewFindingMap.get(key) ?? 0) >= 3
-      ? "filter blur-[4px] select-none [pointer-events:none]"
-      : "";
+    previewBlurForFindingKey(isPreviewMode, previewFindingMap, key);
 
   const omissionItems = useMemo(() => {
     if (!analysis?.scopeOmissions.length) return ["None identified."];
@@ -377,16 +367,10 @@ export function Step2AnalysisPanel({
           {`${analysis.riskLevel.charAt(0).toUpperCase()}${analysis.riskLevel.slice(1)}`}
         </p>
 
-        <div className={isPreviewMode ? "relative mt-4" : undefined}>
-          <div
-            className={
-              isPreviewMode
-                ? "max-h-[28rem] overflow-hidden rounded-xl filter blur-[6px] select-none [pointer-events:none]"
-                : undefined
-            }
-          >
         {comparison && (
-          <div className="mt-4 border-b border-[#ebebea] pb-3 text-sm text-[#2a3a4a]">
+          <div
+            className={`mt-4 border-b border-[#ebebea] pb-3 text-sm text-[#2a3a4a] ${isPreviewMode ? PREVIEW_BLUR_CLASS : ""}`}
+          >
             <div className={ERP_WHITE_FINDING_PANEL}>
               <h3 className={sectionHeading}>Comparison</h3>
               <p className="py-2 text-sm text-[#7a8a9a]">
@@ -408,7 +392,7 @@ export function Step2AnalysisPanel({
                     </p>
                     <p className="text-xs text-[#7a8a9a]">Carrier amount</p>
                   </div>
-                  <div>
+                  <div className={isPreviewMode ? PREVIEW_BLUR_CLASS : undefined}>
                     <p className="text-[22px] font-medium text-[#1a2a3a]">
                       {formatMoney(analysis.trueLossRange.low)} –{" "}
                       {formatMoney(analysis.trueLossRange.high)}
@@ -417,7 +401,9 @@ export function Step2AnalysisPanel({
                   </div>
                 </div>
               </div>
-              <div className="rounded-r-[10px] border-[0.5px] border-[#e0e0dc] border-l-[3px] border-l-[#b83030] bg-white py-3 pl-4 pr-3">
+              <div
+                className={`rounded-r-[10px] border-[0.5px] border-[#e0e0dc] border-l-[3px] border-l-[#b83030] bg-white py-3 pl-4 pr-3 ${isPreviewMode ? PREVIEW_BLUR_CLASS : ""}`}
+              >
                 <div>
                   <p className={gapNumberClass}>{gapDisplay}</p>
                   <p className="text-xs text-[#7a8a9a]">Estimated gap</p>
@@ -703,7 +689,9 @@ export function Step2AnalysisPanel({
             </p>
           ) : null}
 
-          <section className="pb-2 pt-2">
+          <section
+            className={`pb-2 pt-2 ${isPreviewMode ? PREVIEW_BLUR_CLASS : ""}`}
+          >
             <div className="w-full rounded-[10px] border border-[#1e3f6e] bg-[#0a1e38] px-[18px] py-4">
               <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#6a9ac0]">
                 Recommended strategy
@@ -726,36 +714,14 @@ export function Step2AnalysisPanel({
             </div>
           </section>
         </div>
-          </div>
-          {isPreviewMode && onPreviewUnlock ? (
-            <div
-              className="pointer-events-none absolute inset-0 z-20 flex min-h-[14rem] items-center justify-center px-4 py-6 sm:min-h-[18rem]"
-              role="region"
-              aria-label="Preview gate"
-            >
-              <div className="pointer-events-auto max-w-md rounded-xl border border-[#e0e0dc] bg-white px-6 py-5 text-center shadow-md">
-                <p className="text-sm font-medium text-[#1a2a3a]">
-                  Your full analysis is ready
-                </p>
-                <p className="mt-1 text-xs text-[#7a8a9a]">
-                  Unlock gap amounts, every finding, exports, and your demand
-                  letter.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => onPreviewUnlock()}
-                  disabled={previewUnlockBusy}
-                  className="erp-btn-cta mt-4 w-full max-w-sm disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {previewUnlockBusy
-                    ? "Preparing…"
-                    : "Unlock My Analysis — $49"}
-                </button>
-              </div>
-            </div>
-          ) : null}
-        </div>
       </div>
+
+      {isPreviewMode && onPreviewUnlock ? (
+        <PreviewPaywallBlock
+          onUnlock={onPreviewUnlock}
+          busy={previewUnlockBusy}
+        />
+      ) : null}
 
       <div className="mt-10 flex flex-wrap gap-4 border-t-[0.5px] border-[#1e3f6e] pt-6">
         <button
@@ -766,26 +732,14 @@ export function Step2AnalysisPanel({
         >
           Back
         </button>
-        {isPreviewMode && onPreviewUnlock ? (
-          <button
-            id="erp-step2-unlock"
-            type="button"
-            disabled={previewUnlockBusy}
-            onClick={() => onPreviewUnlock()}
-            className="erp-btn-cta disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {previewUnlockBusy ? "Redirecting…" : "Unlock My Analysis — $49"}
-          </button>
-        ) : (
-          <button
-            id="erp-step2-next"
-            type="button"
-            className="erp-btn-cta"
-            onClick={onNext}
-          >
-            Continue
-          </button>
-        )}
+        <button
+          id="erp-step2-next"
+          type="button"
+          className="erp-btn-cta"
+          onClick={onNext}
+        >
+          Continue
+        </button>
       </div>
     </div>
   );

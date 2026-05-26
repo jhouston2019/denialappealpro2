@@ -729,10 +729,8 @@ function stepIsNavigable(
   analysis: AnalysisResult | null,
   comparison: ComparisonResult | null,
   letterRaw: string | null,
-  stepNow: number,
-  isPreviewMode: boolean
+  stepNow: number
 ): boolean {
-  if (isPreviewMode && step > 2) return false;
   switch (step) {
     case 1:
       return true;
@@ -851,12 +849,6 @@ export default function UploadWizardClient({
       subscription.unsubscribe();
     };
   }, []);
-
-  useEffect(() => {
-    if (isPreviewMode && currentStep > 2) {
-      setCurrentStep(2);
-    }
-  }, [isPreviewMode, currentStep]);
 
   useEffect(() => {
     if (isPreviewMode) {
@@ -1855,15 +1847,9 @@ export default function UploadWizardClient({
   }, [announce]);
 
   const onStep2Next = useCallback(() => {
-    if (isPreviewMode) {
-      announce(
-        "Unlock your analysis to access comparison, strategy, summary, and letter."
-      );
-      return;
-    }
     setCurrentStep(3);
     announce("Step 3 — Comparison.");
-  }, [announce, isPreviewMode]);
+  }, [announce]);
 
   const onStep3Back = useCallback(() => {
     setCurrentStep(2);
@@ -2128,7 +2114,8 @@ export default function UploadWizardClient({
       {!isPreviewMode && <PostPaymentSessionRefresh />}
       {isPreviewMode ? (
         <div className="border-b border-[#c87830] bg-[#f0a050] px-4 py-2 text-center text-xs font-semibold text-[#091c33] sm:text-sm">
-          Free preview — unlock for full findings, exports, and demand letter
+          Free preview — walk through all steps; unlock for full content and
+          exports
         </div>
       ) : null}
       <header className="sticky top-0 z-[100] border-b border-[#1e3f6e] bg-[#091c33] text-white">
@@ -2203,8 +2190,7 @@ export default function UploadWizardClient({
                   state.analysis,
                   state.comparison,
                   state.letterRaw,
-                  currentStep,
-                  isPreviewMode
+                  currentStep
                 );
                 const circleClass = `flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full text-[10px] font-bold leading-none ${
                   isActive

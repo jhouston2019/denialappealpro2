@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { LockIcon } from "@/components/LockIcon";
 import { PreviewPaywallBlock } from "@/components/PreviewPaywallBlock";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
+import { previewBlurClassForIndex } from "@/lib/preview-blur";
 import { wizardFetch } from "@/lib/supabaseClient";
 import type { ComparisonResult } from "./step2-analysis-panel";
 
@@ -328,7 +329,7 @@ export function Step3ComparisonPanel({
                   <tr
                     key={n}
                     id={`erp-step3-row-${n}`}
-                    className="border-b border-[#e0e0dc]"
+                    className={`border-b border-[#e0e0dc] ${previewBlurClassForIndex(isPreviewMode, n, lineItems.length)}`}
                   >
                     <td
                       id={`erp-step3-cell-${n}-trade`}
@@ -389,7 +390,9 @@ export function Step3ComparisonPanel({
                     </td>
                   </tr>
                 ))}
-                <tr className="border-t border-[#e0e0dc] font-medium">
+                <tr
+                  className={`border-t border-[#e0e0dc] font-medium ${isPreviewMode ? "filter blur-[4px] select-none [pointer-events:none]" : ""}`}
+                >
                   <td
                     colSpan={2}
                     className="bg-[#f4f4f0] px-3 py-3 text-[#0f2744]"

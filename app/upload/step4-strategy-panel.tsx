@@ -172,11 +172,7 @@ export function Step4StrategyPanel({
         className="mt-6 rounded-[10px] border-[0.5px] border-[#e0e0dc] bg-white p-4 text-sm leading-relaxed text-[#2a3a4a]"
       >
         {analysis ? (
-          isPreviewMode ? (
-            previewSplitParagraph(buildAutoRationale(analysis))
-          ) : (
-            buildAutoRationale(analysis)
-          )
+          buildAutoRationale(analysis)
         ) : (
           "No analysis is loaded. Return to earlier steps to run analysis before choosing a strategy."
         )}
@@ -221,9 +217,7 @@ export function Step4StrategyPanel({
                 id={`erp-step4-card-${key}-rationale`}
                 className="mt-2 text-sm text-[#6a7a8a]"
               >
-                {isPreviewMode
-                  ? previewSplitParagraph(cardRationale(code, analysis))
-                  : cardRationale(code, analysis)}
+                {cardRationale(code, analysis)}
               </p>
               <p
                 id={`erp-step4-card-${key}-risk`}
