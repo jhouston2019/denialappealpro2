@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LockIcon } from "@/components/LockIcon";
-import { PreviewPaywallBlock } from "@/components/PreviewPaywallBlock";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
 import { wizardFetch } from "@/lib/supabaseClient";
 import type {
