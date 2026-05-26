@@ -4,7 +4,10 @@
 import type Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 import { getPlanReviewLimit } from "@/lib/billing/planLimits";
-import { syncUserPlanTypeToAuthMetadata } from "./stripeCheckoutSync";
+import {
+  provisionSingleReviewCredit,
+  syncUserPlanTypeToAuthMetadata,
+} from "./stripeCheckoutSync";
 import { userHasPaidAccessForUserId } from "./paidAccess";
 
 const supabase = createClient(
@@ -27,7 +30,13 @@ export async function ensureEntitlementAfterStripeCheckout(
   session: Stripe.Checkout.Session,
   userId: string
 ): Promise<void> {
-  if (await userHasPaidAccessForUserId(userId)) return;
+  if (await userHasPaidAccessForUserId(userId)) {
+    const planTypeMeta = session.metadata?.plan_type?.toLowerCase() ?? null;
+    if (session.mode === "payment" && planTypeMeta === "single") {
+      await provisionSingleReviewCredit(userId);
+    }
+    return;
+  }
 
   const { data: activeUsage } = await supabase
     .from("user_review_usage")
@@ -36,7 +45,13 @@ export async function ensureEntitlementAfterStripeCheckout(
     .eq("is_active", true)
     .gt("billing_period_end", new Date().toISOString())
     .limit(1);
-  if (activeUsage && activeUsage.length > 0) return;
+  if (activeUsage && activeUsage.length > 0) {
+    const planTypeMeta = session.metadata?.plan_type?.toLowerCase() ?? null;
+    if (session.mode === "payment" && planTypeMeta === "single") {
+      await provisionSingleReviewCredit(userId);
+    }
+    return;
+  }
 
   const paid =
     session.payment_status === "paid" ||
@@ -82,6 +97,7 @@ export async function ensureEntitlementAfterStripeCheckout(
     if (session.mode === "payment") {
       await supabase.from("users").update({ plan_type: "single" }).eq("id", userId);
       await syncUserPlanTypeToAuthMetadata(userId, "single");
+      await provisionSingleReviewCredit(userId);
     } else if (planTypeMeta) {
       await supabase.from("users").update({ plan_type: planTypeMeta }).eq("id", userId);
       await syncUserPlanTypeToAuthMetadata(userId, planTypeMeta);

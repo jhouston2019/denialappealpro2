@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 import {
   ensureUserReviewUsageRow,
+  provisionSingleReviewCredit,
   syncUserPlanTypeToAuthMetadata,
 } from "@/lib/billing/stripeCheckoutSync";
 import {
@@ -189,7 +190,11 @@ async function createSessionFromStripe(
     );
   }
 
-  await ensureUserReviewUsageRow(userId, resolvedPlanType);
+  if (resolvedPlanType === "single") {
+    await provisionSingleReviewCredit(userId);
+  } else {
+    await ensureUserReviewUsageRow(userId, resolvedPlanType);
+  }
   await syncUserPlanTypeToAuthMetadata(userId, resolvedPlanType);
 
   const cid = stripeCustomerIdFromSession(checkoutSession);

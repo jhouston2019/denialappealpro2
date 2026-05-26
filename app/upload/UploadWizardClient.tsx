@@ -898,6 +898,15 @@ export default function UploadWizardClient({
       setPremierUsageWall("ok");
       return;
     }
+    if (typeof window !== "undefined") {
+      const pendingPostPayment =
+        Boolean(window.sessionStorage.getItem(WIZARD_STATE_STORAGE_KEY)) ||
+        window.sessionStorage.getItem("erp_resume") === "true";
+      if (pendingPostPayment) {
+        setPremierUsageWall("ok");
+        return;
+      }
+    }
     let cancelled = false;
     (async () => {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

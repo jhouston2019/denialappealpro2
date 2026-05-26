@@ -122,6 +122,61 @@ export async function ensureUserReviewUsageRow(
   }
 }
 
+/**
+ * Each single-review purchase grants one fresh review credit (resets used count).
+ */
+export async function provisionSingleReviewCredit(
+  userId: string
+): Promise<void> {
+  const reviewsLimit = getPlanReviewLimit("single") ?? 1;
+  const now = new Date();
+  const periodEnd = new Date(now);
+  periodEnd.setDate(periodEnd.getDate() + 30);
+
+  const { data: plan } = await supabase
+    .from("subscription_plans")
+    .select("id")
+    .eq("plan_type", "single")
+    .maybeSingle();
+
+  const payload: Record<string, unknown> = {
+    reviews_used: 0,
+    reviews_limit: reviewsLimit,
+    billing_period_start: now.toISOString(),
+    billing_period_end: periodEnd.toISOString(),
+    is_active: true,
+    updated_at: now.toISOString(),
+  };
+  if (plan?.id) {
+    payload.plan_id = plan.id;
+  }
+
+  const { data: existing } = await supabase
+    .from("user_review_usage")
+    .select("user_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (existing) {
+    const { error } = await supabase
+      .from("user_review_usage")
+      .update(payload)
+      .eq("user_id", userId);
+    if (error) {
+      console.error("[provisionSingleReviewCredit] update failed:", error);
+    }
+    return;
+  }
+
+  const { error } = await supabase.from("user_review_usage").insert({
+    user_id: userId,
+    ...payload,
+  });
+  if (error) {
+    console.error("[provisionSingleReviewCredit] insert failed:", error);
+  }
+}
+
 function normalizeUserPlanType(
   raw: string | undefined,
   planName: string | undefined
@@ -277,8 +332,7 @@ export async function syncStripeCheckoutSession(
 
     await syncUserPlanTypeToAuthMetadata(userId, "single");
 
-    // Create usage row if it doesn't exist
-    await ensureUserReviewUsageRow(userId, "single");
+    await provisionSingleReviewCredit(userId);
 
     console.log(`Single plan payment completed for user ${userId}`);
   }
