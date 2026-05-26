@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
 import { PostPaymentSessionRefresh } from "@/components/billing/PostPaymentSessionRefresh";
+import { PreviewPaywallBlock } from "@/components/PreviewPaywallBlock";
 import { getPlanReviewLimit } from "@/lib/billing/planLimits";
 import {
   createSupabaseBrowserClient,
@@ -583,6 +584,21 @@ async function saveReviewToDatabase(
     if (error) {
       console.error("[upload] reviews insert:", error);
       return false;
+    }
+    const { data: { session: currentSession } } = await supabase.auth.getSession();
+    if (currentSession) {
+      const { data: userData } = await supabase
+        .from("users")
+        .select("plan_type")
+        .eq("id", currentSession.user.id)
+        .single();
+
+      if (userData?.plan_type === "single") {
+        await supabase
+          .from("users")
+          .update({ plan_type: null })
+          .eq("id", currentSession.user.id);
+      }
     }
     try {
       const usageRes = await fetch("/api/increment-review-usage", {
@@ -2937,6 +2953,13 @@ export default function UploadWizardClient({
                   >
                     {submitError}
                   </p>
+                )}
+
+                {isPreviewMode && handlePreviewUnlock && (
+                  <PreviewPaywallBlock
+                    onUnlock={handlePreviewUnlock}
+                    busy={previewUnlockBusy}
+                  />
                 )}
 
                 <div className="flex flex-wrap items-center gap-4 border-t-[0.5px] border-[#1e3f6e] pt-6">

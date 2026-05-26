@@ -74,7 +74,7 @@ export function LoginForm() {
         redirectTo.startsWith("//") ||
         redirectTo.includes("://")
       ) {
-        redirectTo = "/dashboard";
+        redirectTo = "/app";
       }
       router.push(redirectTo);
       router.refresh();

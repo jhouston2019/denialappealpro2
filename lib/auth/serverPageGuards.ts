@@ -96,10 +96,18 @@ export async function requireUserAndPaywall(): Promise<{
   );
 
   const isAdmin = row.is_admin === true;
-  const hasPlan = row.plan_type != null && row.plan_type !== "";
 
-  if (!isPaymentBypassActive() && !isAdmin && !hasPlan) {
-    redirect("/pricing?message=payment_required");
+  if (!isPaymentBypassActive() && !isAdmin) {
+    const { data: paid, error: paidErr } = await supabase.rpc(
+      "user_has_paid_access"
+    );
+    if (paidErr) {
+      console.error("[serverPageGuards] user_has_paid_access error:", paidErr);
+      redirect("/pricing?message=payment_required");
+    }
+    if (paid !== true) {
+      redirect("/pricing?message=payment_required");
+    }
   }
 
   return { supabase, user };

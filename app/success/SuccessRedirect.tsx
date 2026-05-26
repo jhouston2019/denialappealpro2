@@ -39,7 +39,19 @@ export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
             (window.sessionStorage.getItem("erp_extracted_text") || "").trim()
           );
         const resume = hasWizardSnapshot || hasTextResume;
-        router.replace(resume ? "/upload" : "/dashboard");
+        const { data: userData } = await supabase
+          .from("users")
+          .select("plan_type")
+          .eq("id", data.session.user.id)
+          .single();
+        const planType = userData?.plan_type;
+        if (resume) {
+          router.replace("/upload");
+        } else if (planType === "single") {
+          router.replace("/upload");
+        } else {
+          router.replace("/dashboard");
+        }
       } else {
         router.replace("/create-account?session_id=" + encodeURIComponent(sessionId));
       }

@@ -109,15 +109,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
-  try {
-    await syncStripeCheckoutSession(session);
-  } catch (error) {
-    console.error(
-      '[webhook] checkout.session.completed syncStripeCheckoutSession failed',
-      { session_id: session.id },
-      error
-    );
-  }
+  await syncStripeCheckoutSession(session);
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {

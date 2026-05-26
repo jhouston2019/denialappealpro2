@@ -3,6 +3,10 @@ import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 import {
+  ensureUserReviewUsageRow,
+  syncUserPlanTypeToAuthMetadata,
+} from "@/lib/billing/stripeCheckoutSync";
+import {
   ensureUserForPaidCheckout,
   stripeCustomerIdFromSession,
 } from "@/lib/billing/stripeLinkUser";
@@ -183,6 +187,11 @@ async function createSessionFromStripe(
       "[create-session-from-stripe] plan_type update:",
       planTypeUpdateErr
     );
+  }
+
+  if (resolvedPlanType != null && resolvedPlanType !== "none") {
+    await ensureUserReviewUsageRow(userId, resolvedPlanType);
+    await syncUserPlanTypeToAuthMetadata(userId, resolvedPlanType);
   }
 
   const cid = stripeCustomerIdFromSession(checkoutSession);

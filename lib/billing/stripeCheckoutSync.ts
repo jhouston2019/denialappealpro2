@@ -283,58 +283,6 @@ export async function syncStripeCheckoutSession(
     console.log(`Single plan payment completed for user ${userId}`);
   }
 
-  if (metadata?.type === "single_plan") {
-    const legacyUserId = metadata.user_id;
-    if (legacyUserId) {
-      if (opts?.trustedUserId && legacyUserId !== opts.trustedUserId) {
-        console.warn(
-          "[syncStripeCheckoutSession] single_plan metadata user_id mismatch, skipping"
-        );
-      } else {
-        await supabase
-          .from("users")
-          .update({ plan_type: "single" })
-          .eq("id", legacyUserId);
-
-        await syncUserPlanTypeToAuthMetadata(legacyUserId, "single");
-
-        // Create usage row if it doesn't exist
-        await ensureUserReviewUsageRow(legacyUserId, "single");
-
-        await applyAdminAppMetadataForUserId(supabase, legacyUserId);
-
-        console.log(`Single plan payment completed for user ${legacyUserId}`);
-      }
-    }
-  }
-
-  if (metadata?.type === "single_review") {
-    const reportId = metadata.report_id;
-    const reportUserId = metadata.user_id;
-
-    if (!reportId || !reportUserId) return userId;
-    if (opts?.trustedUserId && reportUserId !== opts.trustedUserId) {
-      console.warn(
-        "[syncStripeCheckoutSession] single_review user_id mismatch, skipping"
-      );
-      return userId;
-    }
-
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 30);
-
-    await supabase
-      .from("reports")
-      .update({
-        paid_single_use: true,
-        expires_at: expiresAt.toISOString(),
-      })
-      .eq("id", reportId)
-      .eq("user_id", reportUserId);
-
-    console.log(`Single review payment completed for report ${reportId}`);
-  }
-
   if (session.mode === "subscription" && session.subscription) {
     const subField = session.subscription;
     const subscription: Stripe.Subscription =
