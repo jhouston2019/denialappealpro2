@@ -43,6 +43,7 @@ import {
 } from "./step6-letter-panel";
 import {
   countNativePagesWithText,
+  defaultVisionPageIndices,
   extractPageImagesFromPDF,
   extractTextPagesFromPDF,
   mergeNativeAndVisionPages,
@@ -1195,6 +1196,7 @@ export default function UploadWizardClient({
               ),
             })
           );
+          let lastPartialExtract = "";
           try {
             const applyPdfExtractResult = (
               fullText: string,
@@ -1262,6 +1264,7 @@ export default function UploadWizardClient({
             const nativeFull = nativePages.join("\n\n");
             const nativeChars = nativeFull.trim().length;
             const nativeTextPageCount = countNativePagesWithText(nativePages);
+            lastPartialExtract = nativeFull;
 
             if (
               hasEstimateLineContent(nativeFull) &&
@@ -1276,24 +1279,26 @@ export default function UploadWizardClient({
               return;
             }
 
-            if (
-              totalPages > PDF_LARGE_PAGE_THRESHOLD &&
-              nativeChars < 2500 &&
-              nativeTextPageCount < 3
-            ) {
-              throw new Error(
-                `This PDF has ${totalPages} pages and little selectable text. Export a shorter estimate PDF from Xactimate (File → Print → PDF, under ~30 pages) or copy all line items into the text field below.`
-              );
-            }
-
             const visionByPageIndex = new Map<number, string>();
             let ocrPartialFailure = false;
-            const pagesNeedingVision: number[] = [];
-            for (let i = 0; i < totalPages && pagesNeedingVision.length < PDF_VISION_MAX_PAGES; i++) {
-              if (!nativePdfPageTextIsSufficient(nativePages[i] ?? "")) {
-                pagesNeedingVision.push(i);
-              }
-            }
+
+            const pagesNeedingVision: number[] =
+              totalPages > PDF_LARGE_PAGE_THRESHOLD &&
+              !hasEstimateLineContent(nativeFull)
+                ? defaultVisionPageIndices(totalPages)
+                : (() => {
+                    const indices: number[] = [];
+                    for (
+                      let i = 0;
+                      i < totalPages && indices.length < PDF_VISION_MAX_PAGES;
+                      i++
+                    ) {
+                      if (!nativePdfPageTextIsSufficient(nativePages[i] ?? "")) {
+                        indices.push(i);
+                      }
+                    }
+                    return indices;
+                  })();
 
             if (pagesNeedingVision.length > 0) {
               setState((s) =>
@@ -1376,10 +1381,13 @@ export default function UploadWizardClient({
               visionByPageIndex,
               nativePdfPageTextIsSufficient
             );
+            lastPartialExtract = fullText;
 
             if (!fullText.trim()) {
               throw new Error(
-                "No text could be extracted from this PDF. Paste the estimate below or export a text-based PDF from Xactimate."
+                totalPages > PDF_LARGE_PAGE_THRESHOLD
+                  ? `This ${totalPages}-page PDF has no readable text. Paste line items below, or export a shorter estimate-only PDF from Xactimate (File → Print → PDF).`
+                  : "No text could be extracted from this PDF. Paste the estimate below or export a text-based PDF from Xactimate."
               );
             }
 
@@ -1388,7 +1396,7 @@ export default function UploadWizardClient({
 
             const statusMessage = incomplete
               ? totalPages > PDF_LARGE_PAGE_THRESHOLD
-                ? `"${file.name}" — ${totalPages}-page PDF: embedded text on ${nativeTextPageCount} page${nativeTextPageCount === 1 ? "" : "s"}, but line items may still be incomplete. In Xactimate use File → Print → Save as PDF (full estimate), or paste all line items below.`
+                ? `"${file.name}" — ${totalPages} pages: read ${nativeTextPageCount} with embedded text and AI vision on ${visionByPageIndex.size} page${visionByPageIndex.size === 1 ? "" : "s"}. Line items may be incomplete — paste the full estimate below or use a shorter Xactimate PDF export.`
                 : `"${file.name}" — extraction incomplete (${nativeTextPageCount} of ${totalPages} pages with text). Paste the full estimate below or re-export from Xactimate.`
               : `"${file.name}" — embedded text from ${totalPages} page${totalPages > 1 ? "s" : ""}${visionByPageIndex.size > 0 ? ` (+ AI vision on ${visionByPageIndex.size} page${visionByPageIndex.size > 1 ? "s" : ""})` : ""} (${fullText.length.toLocaleString()} characters).`;
 
@@ -1407,6 +1415,11 @@ export default function UploadWizardClient({
               pdfErr instanceof Error
                 ? pdfErr.message
                 : "Could not extract text from PDF";
+            const keepPartial =
+              typeof lastPartialExtract === "string" &&
+              lastPartialExtract.trim().length > 0
+                ? lastPartialExtract
+                : "";
             setState((s) =>
               withDerived(s, {
                 documents: s.documents.map((d) =>
@@ -1414,8 +1427,10 @@ export default function UploadWizardClient({
                     ? {
                         ...d,
                         extractStatus: "error" as const,
-                        extractedText: "",
-                        statusMessage: `${detail} Paste the full estimate text below.`,
+                        extractedText: keepPartial,
+                        statusMessage: keepPartial
+                          ? `${detail} Partial text is shown below — add missing pages or paste the full estimate.`
+                          : `${detail} Paste the full estimate text below.`,
                       }
                     : d
                 ),

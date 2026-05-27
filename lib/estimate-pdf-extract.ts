@@ -30,14 +30,30 @@ export async function extractTextPagesFromPDF(
   const total = pdf.numPages;
   for (let i = 1; i <= total; i++) {
     onProgress?.(i, total);
-    const page = await pdf.getPage(i);
-    const textContent = await page.getTextContent();
-    const pageText = textContent.items
-      .map((item) => ("str" in item ? item.str : ""))
-      .join(" ");
-    textPages.push(pageText);
+    try {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .map((item) => ("str" in item ? item.str : ""))
+        .join(" ");
+      textPages.push(pageText);
+    } catch {
+      textPages.push("");
+    }
+    if (i % 25 === 0) {
+      await new Promise<void>((r) => setTimeout(r, 0));
+    }
   }
   return { pages: textPages, totalPages: total };
+}
+
+/** First N page indices (0-based) to run AI vision on for large/scanned PDFs. */
+export function defaultVisionPageIndices(
+  totalPages: number,
+  maxVision: number = PDF_VISION_MAX_PAGES
+): number[] {
+  const n = Math.min(totalPages, maxVision);
+  return Array.from({ length: n }, (_, i) => i);
 }
 
 export async function extractTextFromPDF(file: File): Promise<string> {
