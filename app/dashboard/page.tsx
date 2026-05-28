@@ -101,21 +101,62 @@ export default async function DashboardPage({
             >
               Account
             </Link>
-            <ReviewNavCtaLink
-              variant="dashboard-header"
-              billing={{
-                plan: planType ?? "none",
-                status: snap.status,
-                reviews_limit: limitReviews,
-                reviews_remaining: reviewsRemainingCount,
-              }}
-            />
           </nav>
         </div>
       </header>
 
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-3 py-6 sm:px-6 sm:py-8">
         <PaymentActivationNotice enabled={paymentReturn} />
+
+        <section className="flex flex-col items-center px-2 py-4 text-center sm:py-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300">
+            Dashboard
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
+            Your estimate reviews
+          </h1>
+          <p className="mt-2 max-w-xl text-sm text-slate-300">
+            Upload new estimates, download AI reports, and re‑run analysis as
+            claims evolve.
+          </p>
+          {planNameDisplay ? (
+            <div className="mt-3 flex min-w-0 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[11px] text-slate-400">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+              <span className="min-w-0 break-words">
+                Current plan:{" "}
+                <span className="font-semibold text-slate-100">
+                  {planNameDisplay}
+                </span>
+                {limitReviews > 0 ? (
+                  <>
+                    {" "}
+                    ·{" "}
+                    <span className="font-semibold text-emerald-300">
+                      {reviewsRemainingCount} of {limitReviews} reviews left
+                    </span>
+                  </>
+                ) : null}
+              </span>
+              {tier !== "pro" && (
+                <Link
+                  href="/account"
+                  className="shrink-0 font-semibold text-blue-300 hover:underline hover:underline-offset-4"
+                >
+                  Upgrade
+                </Link>
+              )}
+            </div>
+          ) : null}
+          <ReviewNavCtaLink
+            variant="dashboard-hero"
+            billing={{
+              plan: planType ?? "none",
+              status: snap.status,
+              reviews_limit: limitReviews,
+              reviews_remaining: reviewsRemainingCount,
+            }}
+          />
+        </section>
 
         <section className="rounded-3xl border border-slate-800 bg-slate-900/40 p-4 shadow-lg shadow-slate-950/50 sm:p-6">
           <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-blue-300">
@@ -172,47 +213,6 @@ export default async function DashboardPage({
               Buy more reviews
             </Link>
           </div>
-        </section>
-
-        <section>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300">
-            Dashboard
-          </p>
-          <h1 className="mt-2 text-xl font-semibold tracking-tight text-slate-50 min-[400px]:text-2xl">
-            Your estimate reviews
-          </h1>
-          <p className="mt-1 max-w-2xl text-xs text-slate-300">
-            Upload new estimates, download AI reports, and re‑run analysis as
-            claims evolve.
-          </p>
-          {planNameDisplay ? (
-            <div className="mt-3 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-400">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-              <span className="min-w-0 break-words">
-                Current plan:{" "}
-                <span className="font-semibold text-slate-100">
-                  {planNameDisplay}
-                </span>
-                {limitReviews > 0 ? (
-                  <>
-                    {" "}
-                    ·{" "}
-                    <span className="font-semibold text-emerald-300">
-                      {reviewsRemainingCount} of {limitReviews} reviews left
-                    </span>
-                  </>
-                ) : null}
-              </span>
-              {tier !== "pro" && (
-                <Link
-                  href="/account"
-                  className="shrink-0 font-semibold text-blue-300 hover:underline hover:underline-offset-4"
-                >
-                  Upgrade
-                </Link>
-              )}
-            </div>
-          ) : null}
         </section>
 
         <section className="rounded-3xl border border-slate-800 bg-slate-950/70 p-4 text-xs text-slate-200 shadow-lg shadow-slate-950/60 sm:p-5">
