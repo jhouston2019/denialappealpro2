@@ -25,6 +25,8 @@ import {
   wizardSnapshotFromDeliverables,
   type WizardDeliverables,
 } from "@/lib/wizard-deliverables";
+import { ReviewNavCtaLink } from "@/components/billing/ReviewNavCtaLink";
+import type { ReviewNavBillingInput } from "@/lib/billing/reviewNavCta";
 import {
   DELIVERABLES_REVIEW_ID_KEY,
   tryParseWizardSnapshot,
@@ -40,9 +42,11 @@ function noop() {}
 function DeliverablesBody({
   d,
   reviewId,
+  reviewNavBilling,
 }: {
   d: WizardDeliverables;
   reviewId: string | null;
+  reviewNavBilling: ReviewNavBillingInput;
 }) {
   const router = useRouter();
   const strategy =
@@ -145,9 +149,10 @@ function DeliverablesBody({
         <Link href="/dashboard" className="erp-btn-ghost">
           Dashboard
         </Link>
-        <Link href="/pricing" className="erp-btn-cta">
-          Buy another review
-        </Link>
+        <ReviewNavCtaLink
+          billing={reviewNavBilling}
+          variant="ghost-cta"
+        />
       </div>
 
       {announceMsg ? (
@@ -246,7 +251,13 @@ function DeliverablesBody({
   );
 }
 
-export function DeliverablesHubClient() {
+type DeliverablesHubClientProps = {
+  reviewNavBilling: ReviewNavBillingInput;
+};
+
+export function DeliverablesHubClient({
+  reviewNavBilling,
+}: DeliverablesHubClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
@@ -446,7 +457,11 @@ export function DeliverablesHubClient() {
         ) : null}
       </div>
 
-      <DeliverablesBody d={deliverables} reviewId={reviewId} />
+      <DeliverablesBody
+        d={deliverables}
+        reviewId={reviewId}
+        reviewNavBilling={reviewNavBilling}
+      />
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
 import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
 import { PaymentActivationNotice } from "@/components/billing/PaymentActivationNotice";
 import { PostPaymentSessionRefresh } from "@/components/billing/PostPaymentSessionRefresh";
+import { ReviewNavCtaLink } from "@/components/billing/ReviewNavCtaLink";
 import { DashboardPlanUsage } from "@/components/dashboard/DashboardPlanUsage";
 
 export default async function DashboardPage({
@@ -99,12 +100,14 @@ export default async function DashboardPage({
             >
               Account
             </Link>
-            <Link
-              href="/pricing"
-              className="rounded-full bg-[#2563EB] px-3 py-1.5 text-xs font-semibold text-white shadow-md shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:px-4 sm:py-2 sm:text-sm"
-            >
-              Buy another review
-            </Link>
+            <ReviewNavCtaLink
+              billing={{
+                plan: planType ?? "none",
+                status: snap.status,
+                reviews_limit: limitReviews,
+                reviews_remaining: reviewsRemainingCount,
+              }}
+            />
           </nav>
         </div>
       </header>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
 import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
+import { ReviewNavCtaLink } from "@/components/billing/ReviewNavCtaLink";
 import { AccountSignOutButton } from "./AccountSignOutButton";
 
 export default async function AccountPage() {
@@ -35,12 +36,14 @@ export default async function AccountPage() {
             >
               Account
             </Link>
-            <Link
-              href="/pricing"
-              className="rounded-full bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#2563EB]/40 transition hover:bg-[#1E40AF]"
-            >
-              Buy another review
-            </Link>
+            <ReviewNavCtaLink
+              billing={{
+                plan: snap.plan,
+                status: snap.status,
+                reviews_limit: snap.reviews_limit,
+                reviews_remaining: snap.reviews_remaining,
+              }}
+            />
           </nav>
         </div>
       </header>

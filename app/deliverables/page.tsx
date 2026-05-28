@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
+import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
 import { DeliverablesHubClient } from "./DeliverablesHubClient";
 import "@/app/upload/erp-wizard.css";
 
@@ -19,7 +20,8 @@ function DeliverablesFallback() {
 }
 
 export default async function DeliverablesPage() {
-  await requireUserAndPaywall();
+  const { supabase, user } = await requireUserAndPaywall();
+  const snap = await getBillingSnapshot(supabase, user.id);
 
   return (
     <div className="erp-wizard-shell flex min-h-screen flex-col bg-[#0f2744]">
@@ -41,7 +43,14 @@ export default async function DeliverablesPage() {
       </header>
 
       <Suspense fallback={<DeliverablesFallback />}>
-        <DeliverablesHubClient />
+        <DeliverablesHubClient
+          reviewNavBilling={{
+            plan: snap.plan,
+            status: snap.status,
+            reviews_limit: snap.reviews_limit,
+            reviews_remaining: snap.reviews_remaining,
+          }}
+        />
       </Suspense>
     </div>
   );

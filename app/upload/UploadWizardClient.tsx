@@ -8,6 +8,10 @@ import { PostPaymentSessionRefresh } from "@/components/billing/PostPaymentSessi
 import { PreviewPaywallBlock } from "@/components/PreviewPaywallBlock";
 import { getPlanReviewLimit } from "@/lib/billing/planLimits";
 import {
+  reviewNavCtaFromSnapshot,
+  type ReviewNavCta,
+} from "@/lib/billing/reviewNavCta";
+import {
   createSupabaseBrowserClient,
   wizardFetch,
 } from "@/lib/supabaseClient";
@@ -17,6 +21,7 @@ import {
   DELIVERABLES_REVIEW_ID_KEY,
   PAID_RESUME_SESSION_KEY,
   tryParseWizardSnapshot,
+  UPLOAD_NEW_REVIEW_HREF,
   WIZARD_STATE_STORAGE_KEY,
   writeWizardResumeSnapshot,
   type SerializableWizardV1,
@@ -867,6 +872,10 @@ export default function UploadWizardClient({
   const [premierUsageWall, setPremierUsageWall] = useState<
     "checking" | "ok" | "blocked"
   >("checking");
+  const [reviewNavCta, setReviewNavCta] = useState<ReviewNavCta>({
+    label: "Run another review",
+    href: UPLOAD_NEW_REVIEW_HREF,
+  });
   const [previewUnlockBusy, setPreviewUnlockBusy] = useState(false);
   const [currentStep, setCurrentStep] = useState(() =>
     Math.min(6, Math.max(1, initialStep))
@@ -1075,12 +1084,20 @@ export default function UploadWizardClient({
       }
       if (userRow.is_admin) {
         setPremierUsageWall("ok");
+        setReviewNavCta({
+          label: "Run another review",
+          href: UPLOAD_NEW_REVIEW_HREF,
+        });
         return;
       }
       const plan = userRow.plan_type ?? null;
       const planLimit = getPlanReviewLimit(plan);
       if (planLimit == null) {
         setPremierUsageWall("ok");
+        setReviewNavCta({
+          label: "Run another review",
+          href: UPLOAD_NEW_REVIEW_HREF,
+        });
         return;
       }
 
@@ -1105,6 +1122,16 @@ export default function UploadWizardClient({
             ? ur.reviews_limit
             : planLimit;
         if (lim > 0) {
+          const remaining = Math.max(0, lim - used);
+          const billingInput = {
+            plan: plan ?? "none",
+            status: "active" as const,
+            reviews_limit: lim,
+            reviews_remaining: remaining,
+          };
+          if (!cancelled) {
+            setReviewNavCta(reviewNavCtaFromSnapshot(billingInput));
+          }
           if (used >= lim) {
             if (!cancelled) setPremierUsageWall("blocked");
             return;
@@ -1130,6 +1157,17 @@ export default function UploadWizardClient({
         return;
       }
       const n = count ?? 0;
+      const remaining = Math.max(0, planLimit - n);
+      if (!cancelled) {
+        setReviewNavCta(
+          reviewNavCtaFromSnapshot({
+            plan: plan ?? "none",
+            status: "active",
+            reviews_limit: planLimit,
+            reviews_remaining: remaining,
+          })
+        );
+      }
       setPremierUsageWall(n >= planLimit ? "blocked" : "ok");
     })();
     return () => {
@@ -2709,10 +2747,10 @@ export default function UploadWizardClient({
                   Dashboard
                 </Link>
                 <Link
-                  href="/pricing"
+                  href={reviewNavCta.href}
                   className="shrink-0 rounded-full bg-[#2563EB] px-2.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:px-4 sm:py-2 sm:text-sm"
                 >
-                  Buy another review
+                  {reviewNavCta.label}
                 </Link>
                 <button
                   type="button"
