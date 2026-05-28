@@ -873,7 +873,7 @@ export default function UploadWizardClient({
     "checking" | "ok" | "blocked"
   >("checking");
   const [reviewNavCta, setReviewNavCta] = useState<ReviewNavCta>({
-    label: "New review",
+    label: "Run a New Review",
     href: UPLOAD_NEW_REVIEW_HREF,
   });
   const [previewUnlockBusy, setPreviewUnlockBusy] = useState(false);
@@ -1085,7 +1085,7 @@ export default function UploadWizardClient({
       if (userRow.is_admin) {
         setPremierUsageWall("ok");
         setReviewNavCta({
-          label: "New review",
+          label: "Run a New Review",
           href: UPLOAD_NEW_REVIEW_HREF,
         });
         return;
@@ -1095,7 +1095,7 @@ export default function UploadWizardClient({
       if (planLimit == null) {
         setPremierUsageWall("ok");
         setReviewNavCta({
-          label: "New review",
+          label: "Run a New Review",
           href: UPLOAD_NEW_REVIEW_HREF,
         });
         return;

@@ -1,7 +1,7 @@
 import { UPLOAD_NEW_REVIEW_HREF } from "@/lib/wizard-snapshot";
 
 export type ReviewNavCta = {
-  label: "New review" | "Buy another review";
+  label: "Run a New Review" | "Buy another review";
   href: string;
 };
 
@@ -25,7 +25,7 @@ export function reviewNavCtaFromSnapshot(
     snap.reviews_remaining > 0
   ) {
     return {
-      label: "New review",
+      label: "Run a New Review",
       href: UPLOAD_NEW_REVIEW_HREF,
     };
   }

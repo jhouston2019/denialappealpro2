@@ -237,7 +237,7 @@ export default async function DashboardPage({
                     href={UPLOAD_NEW_REVIEW_HREF}
                     className="mt-5 inline-flex items-center justify-center rounded-full bg-[#2563EB] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:text-base"
                   >
-                    Start new review
+                    Run a New Review
                   </Link>
                 ) : (
                   <Link
