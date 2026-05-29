@@ -5,6 +5,7 @@ import {
   isCheckoutPlanType,
   planPriceFromStripe,
   resolveStripePriceId,
+  retrieveCheckoutPrice,
   type CheckoutPlanType,
   type PlanPriceDisplay,
 } from "@/lib/billing/stripePlanPrices";
@@ -34,13 +35,15 @@ export async function GET() {
     }
 
     try {
-      const price = await stripe.prices.retrieve(resolved.priceId);
+      const price = await retrieveCheckoutPrice(stripe, resolved.priceId);
       if (planType === "single" && price.type !== "one_time") {
         console.warn(`[plan-prices] single: expected one-time price`);
         missing.push(planType);
         continue;
       }
-      plans[planType] = planPriceFromStripe(planType, price);
+      plans[planType] = planPriceFromStripe(planType, price, {
+        resolvedFromEnv: resolved.envKey,
+      });
     } catch (err) {
       console.error(`[plan-prices] Failed to retrieve ${planType}:`, err);
       missing.push(planType);

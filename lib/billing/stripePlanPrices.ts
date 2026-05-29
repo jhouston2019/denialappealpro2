@@ -29,6 +29,35 @@ const SUBSCRIPTION_PLANS: readonly CheckoutPlanType[] = [
   "enterprise",
 ];
 
+function allowTestPriceFallbacks(): boolean {
+  return (
+    process.env.BYPASS_PAYMENT === "true" ||
+    process.env.NODE_ENV === "development"
+  );
+}
+
+/** Accepts a Stripe Price id (`price_…`) or Product id (`prod_…`, uses default_price). */
+export async function retrieveCheckoutPrice(
+  stripe: Stripe,
+  priceOrProductId: string
+): Promise<Stripe.Price> {
+  const id = priceOrProductId.trim();
+  if (id.startsWith("prod_")) {
+    const product = await stripe.products.retrieve(id, {
+      expand: ["default_price"],
+    });
+    const defaultPrice = product.default_price;
+    if (!defaultPrice) {
+      throw new Error(`Stripe product ${id} has no default_price`);
+    }
+    if (typeof defaultPrice === "string") {
+      return stripe.prices.retrieve(defaultPrice);
+    }
+    return defaultPrice;
+  }
+  return stripe.prices.retrieve(id);
+}
+
 export function isCheckoutPlanType(
   value: string
 ): value is CheckoutPlanType {
@@ -43,6 +72,10 @@ export function resolveStripePriceId(
     if (priceId) return { priceId, envKey };
   }
 
+  if (!allowTestPriceFallbacks()) {
+    return null;
+  }
+
   if (planType === "single") {
     const testOnce = process.env[STRIPE_PRICE_TEST_ONETIME_ENV]?.trim();
     if (testOnce) {
@@ -53,7 +86,6 @@ export function resolveStripePriceId(
     if (testSub) {
       return { priceId: testSub, envKey: STRIPE_PRICE_TEST_SUBSCRIPTION_ENV };
     }
-    // Same one-time test price as Single (copied to all plan env vars)
     for (const envKey of CHECKOUT_PLAN_PRICE_ENV_KEYS.single) {
       const priceId = process.env[envKey]?.trim();
       if (priceId) return { priceId, envKey };
@@ -116,11 +148,15 @@ export type PlanPriceDisplay = {
   amountFormatted: string;
   suffix: string;
   interval: Stripe.Price.Recurring.Interval | null;
+  /** Last 6 chars of resolved Stripe price id — for verifying distinct plans in /api/plan-prices */
+  priceIdHint?: string;
+  resolvedFromEnv?: string;
 };
 
 export function planPriceFromStripe(
   planType: CheckoutPlanType,
-  price: Stripe.Price
+  price: Stripe.Price,
+  meta?: { resolvedFromEnv?: string }
 ): PlanPriceDisplay {
   const amountCents = price.unit_amount ?? 0;
   const config = PLAN_CONFIG[planType];
@@ -139,6 +175,8 @@ export function planPriceFromStripe(
         ? "(one-time)"
         : `/${interval ?? "month"}`,
     interval,
+    priceIdHint: price.id.slice(-6),
+    resolvedFromEnv: meta?.resolvedFromEnv,
   };
 }
 

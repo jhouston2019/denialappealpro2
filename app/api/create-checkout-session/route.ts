@@ -7,6 +7,7 @@ import {
   missingPriceEnvHint,
   checkoutLineItemForPlan,
   resolveStripePriceId,
+  retrieveCheckoutPrice,
   validatePriceForCheckout,
 } from '@/lib/billing/stripePlanPrices';
 
@@ -112,7 +113,7 @@ export async function POST(request: NextRequest) {
 
     let stripePrice: Stripe.Price;
     try {
-      stripePrice = await stripe.prices.retrieve(resolved.priceId);
+      stripePrice = await retrieveCheckoutPrice(stripe, resolved.priceId);
     } catch (err) {
       console.error(
         `[create-checkout-session] Invalid price ${resolved.priceId} for ${planType}:`,
