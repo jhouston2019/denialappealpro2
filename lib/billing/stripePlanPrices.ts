@@ -18,10 +18,75 @@ export const CHECKOUT_PLAN_PRICE_ENV_KEYS: Record<
   readonly string[]
 > = {
   single: ["STRIPE_PRICE_SINGLE_REVIEW", "STRIPE_PRICE_INDIVIDUAL_149"],
-  essential: ["STRIPE_PRICE_ESSENTIAL", "STRIPE_PRICE_FIRM_499"],
-  professional: ["STRIPE_PRICE_PROFESSIONAL"],
-  enterprise: ["STRIPE_PRICE_ENTERPRISE", "STRIPE_PRICE_PRO_1499"],
+  essential: [
+    "STRIPE_PRICE_ESSENTIAL_PLAN",
+    "STRIPE_PRICE_ESSENTIAL",
+    "STRIPE_PRODUCT_ESSENTIAL",
+    "STRIPE_PRODUCT_ESSENTIAL_PLAN",
+    "STRIPE_PRICE_FIRM_499",
+  ],
+  professional: [
+    "STRIPE_PRICE_PROFESSIONAL_PLAN",
+    "STRIPE_PRICE_PROFESSIONAL",
+    "STRIPE_PRODUCT_PROFESSIONAL",
+    "STRIPE_PRODUCT_PROFESSIONAL_PLAN",
+  ],
+  enterprise: [
+    "STRIPE_PRICE_ENTERPRISE_PLAN",
+    "STRIPE_PRICE_ENTERPRISE",
+    "STRIPE_PRODUCT_ENTERPRISE",
+    "STRIPE_PRODUCT_ENTERPRISE_PLAN",
+    "STRIPE_PRICE_PRO_1499",
+  ],
 };
+
+const PLAN_ENV_NEEDLES: Record<CheckoutPlanType, readonly string[]> = {
+  single: ["SINGLE", "INDIVIDUAL"],
+  essential: ["ESSENTIAL", "FIRM"],
+  professional: ["PROFESSIONAL"],
+  enterprise: ["ENTERPRISE", "PRO_1499", "PRO1499"],
+};
+
+export type PlanPriceResolveError =
+  | {
+      reason: "env_not_set";
+      expectedKeys: readonly string[];
+      similarEnvKeys: string[];
+    }
+  | {
+      reason: "stripe_error";
+      envKey: string;
+      idHint: string;
+      message: string;
+    }
+  | {
+      reason: "invalid_price_type";
+      envKey: string;
+      message: string;
+    };
+
+/** Non-secret env keys that look related but are not in CHECKOUT_PLAN_PRICE_ENV_KEYS. */
+export function discoverSimilarStripeEnvKeys(
+  planType: CheckoutPlanType
+): string[] {
+  const known = new Set(
+    Object.values(CHECKOUT_PLAN_PRICE_ENV_KEYS).flatMap((keys) => keys)
+  );
+  const needles = PLAN_ENV_NEEDLES[planType];
+  const hits: string[] = [];
+
+  for (const key of Object.keys(process.env).sort()) {
+    if (!key.includes("STRIPE") || known.has(key)) continue;
+    const upper = key.toUpperCase();
+    const value = process.env[key]?.trim();
+    if (!value) continue;
+    if (needles.some((needle) => upper.includes(needle))) {
+      hits.push(key);
+    }
+  }
+
+  return hits;
+}
 
 const SUBSCRIPTION_PLANS: readonly CheckoutPlanType[] = [
   "essential",
