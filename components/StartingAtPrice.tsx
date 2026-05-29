@@ -9,7 +9,7 @@ export function StartingAtPrice() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/plan-prices");
+        const res = await fetch("/api/plan-prices", { cache: "no-store" });
         const data = await res.json();
         const single = data.plans?.single;
         if (!cancelled && single?.amountFormatted) {

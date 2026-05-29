@@ -14,6 +14,9 @@ import {
 
 const STRIPE_API_VERSION: Stripe.LatestApiVersion = "2025-11-17.clover";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET() {
   const secretKey = process.env.STRIPE_SECRET_KEY?.trim();
   if (!secretKey) {
@@ -69,12 +72,19 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json({
-    plans,
-    missing,
-    errors,
-    configured: Object.keys(plans).filter((k) =>
-      isCheckoutPlanType(k)
-    ) as CheckoutPlanType[],
-  });
+  return NextResponse.json(
+    {
+      plans,
+      missing,
+      errors,
+      configured: Object.keys(plans).filter((k) =>
+        isCheckoutPlanType(k)
+      ) as CheckoutPlanType[],
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
+    }
+  );
 }

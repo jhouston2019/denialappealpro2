@@ -21,7 +21,7 @@ export function PreviewPaywallBlock({
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/plan-prices");
+        const res = await fetch("/api/plan-prices", { cache: "no-store" });
         const data = await res.json();
         if (!cancelled && data.plans?.single) {
           setSinglePrice(data.plans.single);
