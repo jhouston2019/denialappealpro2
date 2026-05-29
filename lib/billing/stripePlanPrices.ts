@@ -7,6 +7,11 @@ export type CheckoutPlanType = Extract<
   "single" | "essential" | "professional" | "enterprise"
 >;
 
+/** Shared fallbacks for live/test — set once instead of four separate price IDs. */
+export const STRIPE_PRICE_TEST_ONETIME_ENV = "STRIPE_PRICE_TEST_ONETIME";
+export const STRIPE_PRICE_TEST_SUBSCRIPTION_ENV =
+  "STRIPE_PRICE_TEST_SUBSCRIPTION";
+
 /** Env keys tried in order (supports legacy Stripe product names). */
 export const CHECKOUT_PLAN_PRICE_ENV_KEYS: Record<
   CheckoutPlanType,
@@ -17,6 +22,12 @@ export const CHECKOUT_PLAN_PRICE_ENV_KEYS: Record<
   professional: ["STRIPE_PRICE_PROFESSIONAL"],
   enterprise: ["STRIPE_PRICE_ENTERPRISE", "STRIPE_PRICE_PRO_1499"],
 };
+
+const SUBSCRIPTION_PLANS: readonly CheckoutPlanType[] = [
+  "essential",
+  "professional",
+  "enterprise",
+];
 
 export function isCheckoutPlanType(
   value: string
@@ -31,12 +42,53 @@ export function resolveStripePriceId(
     const priceId = process.env[envKey]?.trim();
     if (priceId) return { priceId, envKey };
   }
+
+  if (planType === "single") {
+    const testOnce = process.env[STRIPE_PRICE_TEST_ONETIME_ENV]?.trim();
+    if (testOnce) {
+      return { priceId: testOnce, envKey: STRIPE_PRICE_TEST_ONETIME_ENV };
+    }
+  } else if (SUBSCRIPTION_PLANS.includes(planType)) {
+    const testSub = process.env[STRIPE_PRICE_TEST_SUBSCRIPTION_ENV]?.trim();
+    if (testSub) {
+      return { priceId: testSub, envKey: STRIPE_PRICE_TEST_SUBSCRIPTION_ENV };
+    }
+  }
+
   return null;
 }
 
 export function missingPriceEnvHint(planType: CheckoutPlanType): string {
   const keys = CHECKOUT_PLAN_PRICE_ENV_KEYS[planType].join(" or ");
-  return `Set ${keys}=price_… in Netlify environment variables (Stripe Dashboard → Products → Price ID), then redeploy.`;
+  if (planType === "single") {
+    return `Set ${keys} (one-time price) or ${STRIPE_PRICE_TEST_ONETIME_ENV}=price_… in Netlify, then redeploy.`;
+  }
+  return (
+    `Set ${keys} (monthly recurring price) or ${STRIPE_PRICE_TEST_SUBSCRIPTION_ENV}=price_… ` +
+    `for all subscription plans in Netlify, then redeploy. ` +
+    `Note: subscription checkout cannot use the same one-time price as Single — create a $0.51/month recurring price in Stripe.`
+  );
+}
+
+/** Stripe Checkout mode required for each plan (price object must match). */
+export function checkoutModeForPlan(
+  planType: CheckoutPlanType
+): Stripe.Checkout.SessionCreateParams["mode"] {
+  return planType === "single" ? "payment" : "subscription";
+}
+
+export function validatePriceForCheckout(
+  planType: CheckoutPlanType,
+  price: Stripe.Price
+): string | null {
+  const mode = checkoutModeForPlan(planType);
+  if (mode === "payment" && price.type !== "one_time") {
+    return `Price ${price.id} is recurring; Single checkout needs a one-time price in Stripe.`;
+  }
+  if (mode === "subscription" && !price.recurring) {
+    return `Price ${price.id} is one-time; ${planType} checkout needs a monthly recurring price in Stripe (e.g. $0.51/month).`;
+  }
+  return null;
 }
 
 export function formatUsdFromCents(cents: number): string {

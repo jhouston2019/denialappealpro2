@@ -6,6 +6,7 @@ import {
   isCheckoutPlanType,
   missingPriceEnvHint,
   resolveStripePriceId,
+  validatePriceForCheckout,
 } from '@/lib/billing/stripePlanPrices';
 
 const STRIPE_API_VERSION: Stripe.LatestApiVersion = '2025-11-17.clover';
@@ -104,6 +105,31 @@ export async function POST(request: NextRequest) {
           error: `Stripe price not configured for ${planType}`,
           details: missingPriceEnvHint(planType),
         },
+        { status: 500 }
+      );
+    }
+
+    let stripePrice: Stripe.Price;
+    try {
+      stripePrice = await stripe.prices.retrieve(resolved.priceId);
+    } catch (err) {
+      console.error(
+        `[create-checkout-session] Invalid price ${resolved.priceId} for ${planType}:`,
+        err
+      );
+      return NextResponse.json(
+        {
+          error: `Stripe price not found for ${planType}`,
+          details: `Check ${resolved.envKey}=${resolved.priceId} in Netlify matches a live-mode price in your Stripe Dashboard.`,
+        },
+        { status: 500 }
+      );
+    }
+
+    const priceMismatch = validatePriceForCheckout(planType, stripePrice);
+    if (priceMismatch) {
+      return NextResponse.json(
+        { error: priceMismatch, details: missingPriceEnvHint(planType) },
         { status: 500 }
       );
     }

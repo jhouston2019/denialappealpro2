@@ -5,6 +5,7 @@ import {
   isCheckoutPlanType,
   planPriceFromStripe,
   resolveStripePriceId,
+  validatePriceForCheckout,
   type CheckoutPlanType,
   type PlanPriceDisplay,
 } from "@/lib/billing/stripePlanPrices";
@@ -35,6 +36,12 @@ export async function GET() {
 
     try {
       const price = await stripe.prices.retrieve(resolved.priceId);
+      const mismatch = validatePriceForCheckout(planType, price);
+      if (mismatch) {
+        console.warn(`[plan-prices] ${planType}: ${mismatch}`);
+        missing.push(planType);
+        continue;
+      }
       plans[planType] = planPriceFromStripe(planType, price);
     } catch (err) {
       console.error(`[plan-prices] Failed to retrieve ${planType}:`, err);
