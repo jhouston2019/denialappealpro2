@@ -38,15 +38,6 @@ export default function SeedPage() {
             </ol>
           </div>
 
-          <div className="mt-6">
-            <Link
-              href="/examples"
-              className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-            >
-              View Example Reports →
-            </Link>
-          </div>
-
           <div className="mt-8 rounded-lg border border-slate-800 bg-slate-900/30 p-4">
             <p className="text-xs font-semibold text-slate-300">What migrations set up</p>
             <ul className="mt-2 space-y-1 text-xs text-slate-400">
