@@ -2,7 +2,7 @@ import type { Json } from "@/types/database.types";
 
 /** Session keys for wizard resume / deliverables (shared with legacy ERP deliverables helpers). */
 export const WIZARD_STATE_STORAGE_KEY = "dap_wizard_state" as const;
-export const DELIVERABLES_REVIEW_ID_KEY = "erp_deliverables_review_id" as const;
+export const DELIVERABLES_REVIEW_ID_KEY = "dap_deliverables_review_id" as const;
 /** Set after Stripe success so /upload can skip the usage wall for this session only. DAP2 wizard uses `dap_wizard_state` / `dap_wizard_resume` in `@/lib/dap-wizard-snapshot`. */
 export const PAID_RESUME_SESSION_KEY = "erp_paid_resume" as const;
 /** Checkout from pricing / buy-another — not a preview-unlock resume. */

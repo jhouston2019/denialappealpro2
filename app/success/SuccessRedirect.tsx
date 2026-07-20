@@ -3,7 +3,27 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabaseClient";
-import { tryParseWizardSnapshot, PAID_RESUME_SESSION_KEY, NEW_REVIEW_CHECKOUT_KEY, NEW_REVIEW_PLAN_KEY, clearCompletedReviewSession, WIZARD_STATE_STORAGE_KEY } from "@/lib/wizard-snapshot";
+import {
+  tryParseDapWizardSnapshot,
+  DAP_WIZARD_RESUME_KEY,
+  DAP_WIZARD_STATE_KEY,
+} from "@/lib/dap-wizard-snapshot";
+import {
+  clearCompletedReviewSession,
+  DELIVERABLES_REVIEW_ID_KEY,
+  NEW_REVIEW_CHECKOUT_KEY,
+  NEW_REVIEW_PLAN_KEY,
+  PAID_RESUME_SESSION_KEY,
+} from "@/lib/wizard-snapshot";
+
+function hasDapWizardStateInSession(): boolean {
+  if (typeof window === "undefined") return false;
+  for (const key of [DAP_WIZARD_STATE_KEY, DAP_WIZARD_RESUME_KEY] as const) {
+    const raw = window.sessionStorage.getItem(key);
+    if (tryParseDapWizardSnapshot(raw)) return true;
+  }
+  return false;
+}
 
 export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
   const router = useRouter();
@@ -29,60 +49,67 @@ export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
       }
 
       const { data } = await supabase.auth.refreshSession();
-      if (data.session) {
-        console.info(
-          "[TODO] Post-purchase welcome email: not implemented. Supabase Auth has no built-in marketing/welcome email API — add Resend, SendGrid, or an Edge Function with your template (keep idempotent if also triggered from webhooks)."
+      if (!data.session) {
+        router.replace(
+          "/create-account?session_id=" + encodeURIComponent(sessionId)
         );
-        const isNewReviewCheckout =
-          typeof window !== "undefined" &&
-          window.sessionStorage.getItem(NEW_REVIEW_CHECKOUT_KEY) === "true";
-        const newReviewPlan =
-          typeof window !== "undefined"
-            ? window.sessionStorage.getItem(NEW_REVIEW_PLAN_KEY)
-            : null;
+        return;
+      }
 
-        if (isNewReviewCheckout && typeof window !== "undefined") {
-          window.sessionStorage.removeItem(NEW_REVIEW_CHECKOUT_KEY);
-          window.sessionStorage.removeItem(NEW_REVIEW_PLAN_KEY);
-          clearCompletedReviewSession();
-          if (newReviewPlan === "single") {
-            router.replace("/upload?payment=success");
-          } else {
-            router.replace("/dashboard?payment=success");
-          }
-          return;
-        }
+      console.info(
+        "[TODO] Post-purchase welcome email: not implemented. Supabase Auth has no built-in marketing/welcome email API — add Resend, SendGrid, or an Edge Function with your template (keep idempotent if also triggered from webhooks)."
+      );
 
-        const w =
-          typeof window !== "undefined"
-            ? window.sessionStorage.getItem(WIZARD_STATE_STORAGE_KEY)
-            : null;
-        const hasWizardSnapshot = Boolean(tryParseWizardSnapshot(w));
-        const hasTextResume =
-          typeof window !== "undefined" &&
-          window.sessionStorage.getItem("erp_resume") === "true" &&
-          Boolean(
-            (window.sessionStorage.getItem("erp_extracted_text") || "").trim()
-          );
-        const resume = hasWizardSnapshot || hasTextResume;
-        if (resume && typeof window !== "undefined") {
-          window.sessionStorage.setItem(PAID_RESUME_SESSION_KEY, "true");
-        }
-        const { data: userData } = await supabase
-          .from("users")
-          .select("plan_type")
-          .eq("id", data.session.user.id)
-          .single();
-        const planType = userData?.plan_type;
-        if (resume) {
-          router.replace("/deliverables");
-        } else if (planType === "single") {
-          router.replace("/upload?payment=success");
+      const isNewReviewCheckout =
+        typeof window !== "undefined" &&
+        window.sessionStorage.getItem(NEW_REVIEW_CHECKOUT_KEY) === "true";
+      const newReviewPlan =
+        typeof window !== "undefined"
+          ? window.sessionStorage.getItem(NEW_REVIEW_PLAN_KEY)
+          : null;
+
+      if (isNewReviewCheckout && typeof window !== "undefined") {
+        window.sessionStorage.removeItem(NEW_REVIEW_CHECKOUT_KEY);
+        window.sessionStorage.removeItem(NEW_REVIEW_PLAN_KEY);
+        clearCompletedReviewSession();
+        if (newReviewPlan === "single") {
+          router.replace("/upload");
         } else {
           router.replace("/dashboard?payment=success");
         }
+        return;
+      }
+
+      const reviewId =
+        typeof window !== "undefined"
+          ? window.sessionStorage.getItem(DELIVERABLES_REVIEW_ID_KEY)?.trim() ||
+            null
+          : null;
+
+      if (reviewId) {
+        router.replace(
+          `/deliverables?reviewId=${encodeURIComponent(reviewId)}`
+        );
+        return;
+      }
+
+      if (hasDapWizardStateInSession() && typeof window !== "undefined") {
+        window.sessionStorage.setItem(PAID_RESUME_SESSION_KEY, "true");
+        router.replace("/upload?resumed=1");
+        return;
+      }
+
+      const { data: userData } = await supabase
+        .from("users")
+        .select("plan_type")
+        .eq("id", data.session.user.id)
+        .single();
+      const planType = userData?.plan_type;
+
+      if (planType === "single") {
+        router.replace("/upload");
       } else {
-        router.replace("/create-account?session_id=" + encodeURIComponent(sessionId));
+        router.replace("/dashboard?payment=success");
       }
     })();
   }, [router, sessionId]);
