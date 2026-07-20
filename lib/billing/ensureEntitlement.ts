@@ -10,10 +10,12 @@ import {
 } from "./stripeCheckoutSync";
 import { userHasPaidAccessForUserId } from "./paidAccess";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabaseService() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 function customerId(session: Stripe.Checkout.Session): string | null {
   const c = session.customer;
@@ -38,7 +40,7 @@ export async function ensureEntitlementAfterStripeCheckout(
     return;
   }
 
-  const { data: activeUsage } = await supabase
+  const { data: activeUsage } = await getSupabaseService()
     .from("user_review_usage")
     .select("id")
     .eq("user_id", userId)
@@ -71,7 +73,7 @@ export async function ensureEntitlementAfterStripeCheckout(
       ? reviewsLimit
       : getPlanReviewLimit(planTypeMeta);
 
-  const { data: plan, error: planErr } = await supabase
+  const { data: plan, error: planErr } = await getSupabaseService()
     .from("subscription_plans")
     .select("id, price")
     .eq("plan_name", planName)
@@ -95,16 +97,16 @@ export async function ensureEntitlementAfterStripeCheckout(
 
   if (planErr || !plan) {
     if (session.mode === "payment") {
-      await supabase.from("users").update({ plan_type: "single" }).eq("id", userId);
+      await getSupabaseService().from("users").update({ plan_type: "single" }).eq("id", userId);
       await syncUserPlanTypeToAuthMetadata(userId, "single");
       await provisionSingleReviewCredit(userId);
     } else if (planTypeMeta) {
-      await supabase.from("users").update({ plan_type: planTypeMeta }).eq("id", userId);
+      await getSupabaseService().from("users").update({ plan_type: planTypeMeta }).eq("id", userId);
       await syncUserPlanTypeToAuthMetadata(userId, planTypeMeta);
     }
 
     if (resolvedLimit != null && resolvedLimit > 0) {
-      const { data: existingUsage } = await supabase
+      const { data: existingUsage } = await getSupabaseService()
         .from("user_review_usage")
         .select("user_id")
         .eq("user_id", userId)
@@ -120,12 +122,12 @@ export async function ensureEntitlementAfterStripeCheckout(
       };
 
       if (existingUsage) {
-        await supabase
+        await getSupabaseService()
           .from("user_review_usage")
           .update(usagePayload)
           .eq("user_id", userId);
       } else {
-        await supabase.from("user_review_usage").insert({
+        await getSupabaseService().from("user_review_usage").insert({
           user_id: userId,
           ...usagePayload,
         });
@@ -134,7 +136,7 @@ export async function ensureEntitlementAfterStripeCheckout(
     return;
   }
 
-  await supabase.from("user_review_usage").insert({
+  await getSupabaseService().from("user_review_usage").insert({
     user_id: userId,
     plan_id: plan.id,
     reviews_used: 0,
@@ -146,7 +148,7 @@ export async function ensureEntitlementAfterStripeCheckout(
   });
 
   const cid = customerId(session);
-  await supabase.from("payment_transactions").insert({
+  await getSupabaseService().from("payment_transactions").insert({
     user_id: userId,
     stripe_payment_id: (session.payment_intent as string) || session.id,
     stripe_customer_id: cid,

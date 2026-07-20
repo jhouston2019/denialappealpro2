@@ -9,12 +9,13 @@ import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
 import { formatPlanDisplayName } from "@/lib/billing/planLimits";
 import { createSupabaseRouteHandlerClient } from "@/lib/supabaseServer";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-
-const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
+
   try {
     const authClient = await createSupabaseRouteHandlerClient();
     const {

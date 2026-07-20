@@ -6,14 +6,20 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-11-17.clover',
-});
-
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
+let stripeClient: Stripe | null = null;
 let supabase: ReturnType<typeof createClient> | null = null;
+
+function getStripe(): Stripe {
+  if (!stripeClient) {
+    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+      apiVersion: '2025-11-17.clover',
+    });
+  }
+  return stripeClient;
+}
 
 function getSupabaseClient() {
   if (!supabase && supabaseUrl && supabaseKey) {
@@ -51,7 +57,7 @@ async function issueStripeRefund(
   try {
     console.log(`[GUARANTEE] Issuing refund for ${paymentIntentId}: $${amount}`);
     
-    const refund = await stripe.refunds.create({
+    const refund = await getStripe().refunds.create({
       payment_intent: paymentIntentId,
       amount: Math.round(amount * 100), // Convert to cents
       reason: 'requested_by_customer',

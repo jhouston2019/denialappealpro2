@@ -11,15 +11,6 @@
 [functions]
   node_bundler = "esbuild"
 
-[functions."compare-estimates"]
-  timeout = 26
-
-[functions."analyze-estimate"]
-  timeout = 26
-
-[functions."estimate-ocr-preview"]
-  timeout = 26
-
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 

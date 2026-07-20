@@ -1,20 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
 import { createSupabaseRouteHandlerClient } from '@/lib/supabaseServer';
 import { getBillingSnapshot } from '@/lib/billing/getBillingSnapshot';
 import { incrementUserReviewUsage } from '@/lib/billing/incrementUserReviewUsage';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-11-17.clover',
-});
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2025-11-17.clover',
+  });
+
   try {
     const authClient = await createSupabaseRouteHandlerClient();
     const {
@@ -221,7 +223,7 @@ export async function POST(request: NextRequest) {
 
     // If overage, bill immediately
     if (isOverage) {
-      await billOverage(user.team_id, permission.overage_price);
+      await billOverage(supabase, stripe, user.team_id, permission.overage_price);
     }
 
     // Create report
@@ -286,7 +288,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function billOverage(teamId: string, overagePrice: number) {
+async function billOverage(
+  supabase: SupabaseClient,
+  stripe: Stripe,
+  teamId: string,
+  overagePrice: number
+) {
   try {
     // Get team and subscription
     const { data: team } = await supabase

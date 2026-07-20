@@ -8,9 +8,16 @@ import {
   reviewsRemaining,
 } from "@/lib/billing/planLimits";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-11-17.clover",
-});
+let stripeClient: Stripe | null = null;
+
+function getStripe(): Stripe {
+  if (!stripeClient) {
+    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: "2025-11-17.clover",
+    });
+  }
+  return stripeClient;
+}
 
 export type BillingSnapshot = {
   plan: string;
@@ -70,7 +77,7 @@ export async function getBillingSnapshot(
 
     if (t?.stripe_subscription_id) {
       try {
-        const sub = await stripe.subscriptions.retrieve(t.stripe_subscription_id);
+        const sub = await getStripe().subscriptions.retrieve(t.stripe_subscription_id);
         const cpe = (sub as { current_period_end?: number }).current_period_end;
         if (typeof cpe === "number") {
           renewal_date = new Date(cpe * 1000).toISOString();

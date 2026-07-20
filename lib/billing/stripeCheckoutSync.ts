@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { applyAdminAppMetadataForUserId } from "@/lib/auth/adminAppMetadata";
 import { getPlanReviewLimit } from "@/lib/billing/planLimits";
 import {
@@ -14,14 +14,27 @@ function billingPeriodEndOneMonthFromNow(): string {
   return d.toISOString();
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-11-17.clover",
-});
+let stripeClient: Stripe | null = null;
+let supabaseClient: SupabaseClient | null = null;
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getStripe(): Stripe {
+  if (!stripeClient) {
+    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: "2025-11-17.clover",
+    });
+  }
+  return stripeClient;
+}
+
+function getSupabaseService() {
+  if (!supabaseClient) {
+    supabaseClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return supabaseClient;
+}
 
 /**
  * Keep JWT `app_metadata.plan_type` in sync with `public.users` (edge middleware reads JWT only).
@@ -32,7 +45,7 @@ export async function syncUserPlanTypeToAuthMetadata(
   planType: string | null
 ): Promise<void> {
   const { data: existing, error: getErr } =
-    await supabase.auth.admin.getUserById(userId);
+    await getSupabaseService().auth.admin.getUserById(userId);
   if (getErr) {
     console.error(
       "[syncUserPlanTypeToAuthMetadata] getUserById failed:",
@@ -54,7 +67,7 @@ export async function syncUserPlanTypeToAuthMetadata(
     base.plan_type = planType;
   }
 
-  const { error: updErr } = await supabase.auth.admin.updateUserById(userId, {
+  const { error: updErr } = await getSupabaseService().auth.admin.updateUserById(userId, {
     app_metadata: base,
   });
   if (updErr) {
@@ -77,16 +90,17 @@ export async function ensureUserReviewUsageRow(
 ): Promise<void> {
   if (!planType || planType === "none") return;
 
-  const { data: plan } = await supabase
+  const { data: plan } = await getSupabaseService()
     .from("subscription_plans")
     .select("id, reviews_per_month")
     .eq("plan_type", planType)
     .maybeSingle();
 
   const configuredLimit = getPlanReviewLimit(planType);
-  const reviewsLimit = plan?.reviews_per_month ?? configuredLimit ?? 0;
+  const planRow = plan as { id?: string; reviews_per_month?: number | null } | null;
+  const reviewsLimit = planRow?.reviews_per_month ?? configuredLimit ?? 0;
 
-  if (!plan && configuredLimit == null) {
+  if (!planRow && configuredLimit == null) {
     console.warn(
       "[ensureUserReviewUsageRow] No subscription_plans row for plan_type:",
       planType
@@ -107,14 +121,14 @@ export async function ensureUserReviewUsageRow(
     is_active: true,
     updated_at: now.toISOString(),
   };
-  if (plan?.id) {
-    payload.plan_id = plan.id;
+  if (planRow?.id) {
+    payload.plan_id = planRow.id;
   }
   if (opts?.resetUsage) {
     payload.reviews_used = 0;
   }
 
-  const { data: existing } = await supabase
+  const { data: existing } = await getSupabaseService()
     .from("user_review_usage")
     .select("user_id, reviews_limit")
     .eq("user_id", userId)
@@ -127,7 +141,7 @@ export async function ensureUserReviewUsageRow(
       delete payload.billing_period_start;
       delete payload.billing_period_end;
     }
-    const { error } = await supabase
+    const { error } = await getSupabaseService()
       .from("user_review_usage")
       .update(payload)
       .eq("user_id", userId);
@@ -137,7 +151,7 @@ export async function ensureUserReviewUsageRow(
     return;
   }
 
-  const { error } = await supabase.from("user_review_usage").insert({
+  const { error } = await getSupabaseService().from("user_review_usage").insert({
     user_id: userId,
     reviews_used: 0,
     ...payload,
@@ -159,11 +173,13 @@ export async function provisionSingleReviewCredit(
   const periodEnd = new Date(now);
   periodEnd.setDate(periodEnd.getDate() + 30);
 
-  const { data: plan } = await supabase
+  const { data: plan } = await getSupabaseService()
     .from("subscription_plans")
     .select("id")
     .eq("plan_type", "single")
     .maybeSingle();
+
+  const planRow = plan as { id?: string } | null;
 
   const payload: Record<string, unknown> = {
     reviews_used: 0,
@@ -173,18 +189,18 @@ export async function provisionSingleReviewCredit(
     is_active: true,
     updated_at: now.toISOString(),
   };
-  if (plan?.id) {
-    payload.plan_id = plan.id;
+  if (planRow?.id) {
+    payload.plan_id = planRow.id;
   }
 
-  const { data: existing } = await supabase
+  const { data: existing } = await getSupabaseService()
     .from("user_review_usage")
     .select("user_id")
     .eq("user_id", userId)
     .maybeSingle();
 
   if (existing) {
-    const { error } = await supabase
+    const { error } = await getSupabaseService()
       .from("user_review_usage")
       .update(payload)
       .eq("user_id", userId);
@@ -194,7 +210,7 @@ export async function provisionSingleReviewCredit(
     return;
   }
 
-  const { error } = await supabase.from("user_review_usage").insert({
+  const { error } = await getSupabaseService().from("user_review_usage").insert({
     user_id: userId,
     ...payload,
   });
@@ -247,19 +263,19 @@ export async function handleSubscriptionUpdate(
   const userId = await ensureUserForStripeSubscription(subscription);
   if (!userId) return;
 
-  const { data: existingTeam } = await supabase
+  const { data: existingTeam } = await getSupabaseService()
     .from("teams")
     .select("*")
     .eq("stripe_subscription_id", subscription.id)
     .maybeSingle();
 
   if (existingTeam) {
-    const { data: teamMembers } = await supabase
+    const { data: teamMembers } = await getSupabaseService()
       .from("users")
       .select("id")
       .eq("team_id", existingTeam.id);
 
-    await supabase
+    await getSupabaseService()
       .from("teams")
       .update({
         plan_type: planType,
@@ -269,7 +285,7 @@ export async function handleSubscriptionUpdate(
       })
       .eq("id", existingTeam.id);
 
-    await supabase
+    await getSupabaseService()
       .from("users")
       .update({ plan_type: planType })
       .eq("team_id", existingTeam.id);
@@ -283,10 +299,10 @@ export async function handleSubscriptionUpdate(
       ...(teamMembers ?? []).map((m) => m.id),
     ]);
     for (const id of adminIds) {
-      await applyAdminAppMetadataForUserId(supabase, id);
+      await applyAdminAppMetadataForUserId(getSupabaseService(), id);
     }
   } else {
-    const { data: team, error: teamError } = await supabase
+    const { data: team, error: teamError } = await getSupabaseService()
       .from("teams")
       .insert({
         name: `${planType.charAt(0).toUpperCase() + planType.slice(1)} Team`,
@@ -305,7 +321,7 @@ export async function handleSubscriptionUpdate(
       return;
     }
 
-    await supabase
+    await getSupabaseService()
       .from("users")
       .update({
         team_id: team.id,
@@ -344,14 +360,14 @@ export async function syncStripeCheckoutSession(
         ? (session.customer as Stripe.Customer).id
         : null;
   if (stripeCustomerId) {
-    await supabase
+    await getSupabaseService()
       .from("users")
       .update({ stripe_customer_id: stripeCustomerId })
       .eq("id", userId);
   }
 
   if (metadata?.plan_type === "single") {
-    await supabase
+    await getSupabaseService()
       .from("users")
       .update({ plan_type: "single" })
       .eq("id", userId);
@@ -367,7 +383,7 @@ export async function syncStripeCheckoutSession(
     const subField = session.subscription;
     const subscription: Stripe.Subscription =
       typeof subField === "string"
-        ? await stripe.subscriptions.retrieve(subField)
+        ? await getStripe().subscriptions.retrieve(subField)
         : (subField as Stripe.Subscription);
     await handleSubscriptionUpdate(subscription);
 
@@ -380,7 +396,7 @@ export async function syncStripeCheckoutSession(
       sessionPlanFromCheckout === "enterprise" ||
       sessionPlanFromCheckout === "premier"
     ) {
-      await supabase
+      await getSupabaseService()
         .from("users")
         .update({
           plan_type: sessionPlanFromCheckout as
@@ -395,7 +411,7 @@ export async function syncStripeCheckoutSession(
     }
 
     // Create usage row if it doesn't exist (use final plan_type on user after subscription + checkout updates)
-    const { data: userAfterSub } = await supabase
+    const { data: userAfterSub } = await getSupabaseService()
       .from("users")
       .select("plan_type")
       .eq("id", userId)
@@ -419,14 +435,14 @@ export async function syncStripeCheckoutSession(
 export async function collectUserIdsForStripeSubscription(
   subscription: Stripe.Subscription
 ): Promise<string[]> {
-  const { data: team } = await supabase
+  const { data: team } = await getSupabaseService()
     .from("teams")
     .select("id")
     .eq("stripe_subscription_id", subscription.id)
     .maybeSingle();
 
   if (team) {
-    const { data: members } = await supabase
+    const { data: members } = await getSupabaseService()
       .from("users")
       .select("id")
       .eq("team_id", team.id);
@@ -444,7 +460,7 @@ export async function deactivateUserReviewUsageForUserIds(
   userIds: string[]
 ): Promise<void> {
   if (userIds.length === 0) return;
-  const { error } = await supabase
+  const { error } = await getSupabaseService()
     .from("user_review_usage")
     .update({
       is_active: false,
@@ -472,7 +488,7 @@ export async function resetUserReviewUsageOnSubscriptionRenewal(
 
   const start = new Date().toISOString();
   const end = billingPeriodEndOneMonthFromNow();
-  const { error } = await supabase
+  const { error } = await getSupabaseService()
     .from("user_review_usage")
     .update({
       reviews_used: 0,
