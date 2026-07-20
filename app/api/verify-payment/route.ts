@@ -7,16 +7,22 @@ import { confirmPaidAccessReady } from "@/lib/billing/confirmEntitlement";
 import { checkoutSessionBelongsToUser } from "@/lib/billing/stripeLinkUser";
 import { createSupabaseRouteHandlerClient } from "@/lib/supabaseServer";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-11-17.clover",
-});
-
-const supabaseService = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+export const dynamic = "force-dynamic";
 
 export type PostPaymentDestination = "upload" | "dashboard";
+
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2025-11-17.clover",
+  });
+}
+
+function getSupabaseService() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 function getPostPaymentDestination(
   checkoutSession: Stripe.Checkout.Session
@@ -26,6 +32,7 @@ function getPostPaymentDestination(
 }
 
 async function checkoutPaymentAlreadyRecorded(
+  supabaseService: ReturnType<typeof getSupabaseService>,
   userId: string,
   checkoutSession: Stripe.Checkout.Session
 ): Promise<boolean> {
@@ -42,6 +49,9 @@ async function checkoutPaymentAlreadyRecorded(
 }
 
 async function runVerify(request: NextRequest) {
+  const stripe = getStripe();
+  const supabaseService = getSupabaseService();
+
   const authClient = await createSupabaseRouteHandlerClient();
   const {
     data: { session: authSession },
@@ -193,6 +203,7 @@ async function runVerify(request: NextRequest) {
   const { data: alreadyPaid } = await authClient.rpc("user_has_paid_access");
   const paidRpc = alreadyPaid === true;
   const recorded = await checkoutPaymentAlreadyRecorded(
+    supabaseService,
     authUserId,
     checkoutSession
   );

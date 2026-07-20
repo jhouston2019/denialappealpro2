@@ -11,6 +11,8 @@ import {
   validatePriceForCheckout,
 } from '@/lib/billing/stripePlanPrices';
 
+export const dynamic = 'force-dynamic';
+
 const STRIPE_API_VERSION: Stripe.LatestApiVersion = '2025-11-17.clover';
 
 function maskKeyPrefix(value: string | undefined, expectedPrefix: string) {

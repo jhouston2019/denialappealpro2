@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 import {
   ensureUserReviewUsageRow,
@@ -13,19 +13,29 @@ import {
 } from "@/lib/billing/stripeLinkUser";
 import type { Database } from "@/lib/supabase-types";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-11-17.clover",
-});
+export const dynamic = "force-dynamic";
 
-const supabaseService = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: { autoRefreshToken: false, persistSession: false },
-  }
-);
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2025-11-17.clover",
+  });
+}
 
-async function upsertPending(sessionId: string, userId: string) {
+function getSupabaseService() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: { autoRefreshToken: false, persistSession: false },
+    }
+  );
+}
+
+async function upsertPending(
+  supabaseService: SupabaseClient,
+  sessionId: string,
+  userId: string
+) {
   const { error } = await supabaseService.from("processed_sessions").upsert(
     {
       session_id: sessionId,
@@ -40,7 +50,11 @@ async function upsertPending(sessionId: string, userId: string) {
   }
 }
 
-async function markCompleted(sessionId: string, userId: string) {
+async function markCompleted(
+  supabaseService: SupabaseClient,
+  sessionId: string,
+  userId: string
+) {
   const now = new Date().toISOString();
   const { error } = await supabaseService.from("processed_sessions").upsert(
     {
@@ -56,7 +70,7 @@ async function markCompleted(sessionId: string, userId: string) {
   }
 }
 
-async function markFailed(sessionId: string) {
+async function markFailed(supabaseService: SupabaseClient, sessionId: string) {
   const { error } = await supabaseService
     .from("processed_sessions")
     .update({ status: "failed" })
@@ -71,6 +85,7 @@ type UsersPlanType = NonNullable<
 >;
 
 async function resolveSubscriptionForPlan(
+  stripe: Stripe,
   session: Stripe.Checkout.Session
 ): Promise<Stripe.Subscription | null> {
   if (session.mode !== "subscription") return null;
@@ -130,6 +145,9 @@ async function withOkTrue(res: NextResponse): Promise<NextResponse> {
 async function createSessionFromStripe(
   request: NextRequest
 ): Promise<NextResponse> {
+  const stripe = getStripe();
+  const supabaseService = getSupabaseService();
+
   let body: { session_id?: string };
   try {
     body = await request.json();
@@ -174,7 +192,7 @@ async function createSessionFromStripe(
     );
   }
 
-  const subscription = await resolveSubscriptionForPlan(checkoutSession);
+  const subscription = await resolveSubscriptionForPlan(stripe, checkoutSession);
   const resolvedPlanType = planTypeForCheckoutUser(
     checkoutSession,
     subscription
@@ -293,7 +311,7 @@ async function createSessionFromStripe(
       stripe_customer_id: cid ?? null,
       idempotentCookie: true,
     });
-    await markCompleted(sessionId, userId);
+    await markCompleted(supabaseService, sessionId, userId);
     console.log("SESSION_FINALIZED", {
       session_id: sessionId,
       user_id: userId,
@@ -347,7 +365,7 @@ async function createSessionFromStripe(
     }
   );
 
-  await upsertPending(sessionId, userId);
+  await upsertPending(supabaseService, sessionId, userId);
 
   const { data: linkData, error: glErr } =
     await supabaseService.auth.admin.generateLink({
@@ -367,7 +385,7 @@ async function createSessionFromStripe(
       "[create-session-from-stripe] generateLink:",
       glErr?.message ?? "no token"
     );
-    await markFailed(sessionId);
+    await markFailed(supabaseService, sessionId);
     return NextResponse.json({
       success: true,
       userId,
@@ -383,11 +401,11 @@ async function createSessionFromStripe(
   const established = !vErr;
   if (vErr) {
     console.warn("[create-session-from-stripe] verifyOtp:", vErr.message);
-    await markFailed(sessionId);
+    await markFailed(supabaseService, sessionId);
   }
 
   if (established) {
-    await markCompleted(sessionId, userId);
+    await markCompleted(supabaseService, sessionId, userId);
     console.log("SESSION_FINALIZED", {
       session_id: sessionId,
       user_id: userId,

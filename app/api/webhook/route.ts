@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import {
   collectUserIdsForStripeSubscription,
   deactivateUserReviewUsageForUserIds,
@@ -10,18 +10,20 @@ import {
   syncUserPlanTypeToAuthMetadata,
 } from '@/lib/billing/stripeCheckoutSync';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-11-17.clover',
-});
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2025-11-17.clover',
+  });
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
   if (!webhookSecret) {
     console.error('STRIPE_WEBHOOK_SECRET is not configured');
     return NextResponse.json(
@@ -83,15 +85,26 @@ export async function POST(request: NextRequest) {
         break;
 
       case 'customer.subscription.deleted':
-        await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
+        await handleSubscriptionDeleted(
+          supabase,
+          event.data.object as Stripe.Subscription
+        );
         break;
 
       case 'invoice.payment_succeeded':
-        await handleInvoicePaymentSucceeded(event.data.object as Stripe.Invoice);
+        await handleInvoicePaymentSucceeded(
+          stripe,
+          supabase,
+          event.data.object as Stripe.Invoice
+        );
         break;
 
       case 'invoice.payment_failed':
-        await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);
+        await handleInvoicePaymentFailed(
+          stripe,
+          supabase,
+          event.data.object as Stripe.Invoice
+        );
         break;
 
       default:
@@ -112,7 +125,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   await syncStripeCheckoutSession(session);
 }
 
-async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+async function handleSubscriptionDeleted(
+  supabase: SupabaseClient,
+  subscription: Stripe.Subscription
+) {
   const userIds = await collectUserIdsForStripeSubscription(subscription);
   await deactivateUserReviewUsageForUserIds(userIds);
 
@@ -165,7 +181,11 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   }
 }
 
-async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
+async function handleInvoicePaymentSucceeded(
+  stripe: Stripe,
+  supabase: SupabaseClient,
+  invoice: Stripe.Invoice
+) {
   const invoiceAny = invoice as { subscription?: string | { id: string } | null };
   const subscriptionId = invoiceAny.subscription;
 
@@ -198,8 +218,12 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   }
 }
 
-async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
-  const invoiceAny = invoice as any;
+async function handleInvoicePaymentFailed(
+  stripe: Stripe,
+  supabase: SupabaseClient,
+  invoice: Stripe.Invoice
+) {
+  const invoiceAny = invoice as { subscription?: string | { id: string } | null };
   const subscriptionId = invoiceAny.subscription;
 
   if (subscriptionId) {
