@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { AnalysisResult, ComparisonResult } from "@/lib/estimate-json-parse";
+import type { AnalysisResult, ComparisonResult } from "@/lib/review-json-types";
 import { labelForStoredLetterType } from "@/lib/review-letter-labels";
 import {
   buildLetterPlaceholderValueMap,

@@ -47,7 +47,7 @@ export default async function UploadRoutePage({
 
   const parsed = parseInt(sp.step ?? "1", 10);
   const initialStep = Number.isFinite(parsed)
-    ? Math.min(6, Math.max(1, parsed))
+    ? Math.min(4, Math.max(1, parsed))
     : 1;
   const startFreshReview =
     (sp.new === "1" || sp.new === "true") && !resumeExistingReview;

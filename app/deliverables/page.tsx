@@ -3,12 +3,12 @@ import { Suspense } from "react";
 import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
 import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
 import { DeliverablesHubClient } from "./DeliverablesHubClient";
-import "@/app/upload/erp-wizard.css";
+import "@/app/upload/dap-wizard.css";
 
 export const metadata = {
-  title: "Complete review report | Estimate Review Pro",
+  title: "Complete review report | Denial Appeal Pro",
   description:
-    "View your full estimate review report with analysis, comparison, strategy, summary, and letter deliverables.",
+    "View your full denial appeal report with analysis, comparison, strategy, summary, and letter deliverables.",
 };
 
 function DeliverablesFallback() {
@@ -24,19 +24,19 @@ export default async function DeliverablesPage() {
   const snap = await getBillingSnapshot(supabase, user.id);
 
   return (
-    <div className="erp-wizard-shell flex min-h-screen flex-col bg-[#0f2744]">
+    <div className="dap-wizard-shell flex min-h-screen flex-col bg-[#0f2744]">
       <header className="sticky top-0 z-[100] border-b border-[#1e3f6e] bg-[#091c33] text-white">
         <div className="mx-auto flex min-h-12 max-w-6xl flex-col gap-2 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:px-6 sm:py-0">
           <Link
             href="/"
             className="flex min-w-0 items-center gap-2"
-            aria-label="Estimate Review Pro home"
+            aria-label="Denial Appeal Pro home"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#f0a050]">
               <span className="text-xs font-black text-white">ER</span>
             </div>
             <span className="truncate text-xs font-semibold text-[#e8f0f8] sm:text-sm">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
         </div>

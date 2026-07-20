@@ -340,7 +340,7 @@ function buildCoverSection(claimMeta) {
   const paras = [];
 
   paras.push(new Paragraph({
-    children: [new TextRun({ text: "Estimate Review Pro", bold: true, font: FONT, size: 36, color: COLOR_NAVY })],
+    children: [new TextRun({ text: "Denial Appeal Pro", bold: true, font: FONT, size: 36, color: COLOR_NAVY })],
     spacing: { after: 60 },
   }));
   paras.push(new Paragraph({

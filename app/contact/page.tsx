@@ -5,9 +5,9 @@ import { ContactForm } from "./contact-form";
 const OWNER_EMAIL = "info@axis-strategic-labs.com";
 
 export const metadata: Metadata = {
-  title: "Contact | Estimate Review Pro",
+  title: "Contact | Denial Appeal Pro",
   description:
-    "Get help with Estimate Review Pro. Contact Axis Strategic Labs for support and technical issues.",
+    "Get help with Denial Appeal Pro. Contact Axis Strategic Labs for support and technical issues.",
 };
 
 export default function ContactPage() {
@@ -20,7 +20,7 @@ export default function ContactPage() {
               <span className="text-xs font-black text-white">ER</span>
             </div>
             <span className="text-sm font-semibold text-slate-50">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <nav className="flex gap-3 text-xs font-medium text-slate-200">
@@ -49,7 +49,7 @@ export default function ContactPage() {
         </p>
         <ContactForm />
         <p className="mt-8 text-xs text-slate-500">
-          Axis Strategic Labs is the team behind Estimate Review Pro. We aim to
+          Axis Strategic Labs is the team behind Denial Appeal Pro. We aim to
           respond to support requests as soon as we can.
         </p>
       </main>

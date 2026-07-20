@@ -1,14 +1,14 @@
-const letterTypeStoredLabel: Record<string, string> = {
-  SUPPLEMENT_DEMAND: "Supplement demand letter",
+const LETTER_TYPE_LABELS: Record<string, string> = {
+  SUPPLEMENT_DEMAND: "Supplement demand",
   APPEAL: "Appeal letter",
   DISPUTE: "Dispute letter",
-  REINSPECTION_REQUEST: "Re-inspection request",
+  REINSPECTION_REQUEST: "Reinspection request",
   APPRAISAL_INVOCATION: "Appraisal invocation",
-  CUSTOM_NARRATIVE: "Custom / narrative",
   CUSTOM: "Custom letter",
+  CUSTOM_NARRATIVE: "Custom narrative",
 };
 
-export function labelForStoredLetterType(code: string | null): string {
+export function labelForStoredLetterType(code: string | null | undefined): string {
   if (!code?.trim()) return "—";
-  return letterTypeStoredLabel[code] ?? code;
+  return LETTER_TYPE_LABELS[code.trim()] ?? code.trim();
 }

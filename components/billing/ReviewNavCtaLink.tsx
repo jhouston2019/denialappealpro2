@@ -26,7 +26,7 @@ export function ReviewNavCtaLink({
         : variant === "wizard"
         ? "shrink-0 rounded-full bg-[#2563EB] px-2.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:px-4 sm:py-2 sm:text-sm"
         : variant === "ghost-cta"
-          ? "erp-btn-cta"
+          ? "dap-btn-cta"
           : "rounded-full bg-[#2563EB] px-3 py-1.5 text-xs font-semibold text-white shadow-md shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:px-4 sm:py-2 sm:text-sm";
 
   return (

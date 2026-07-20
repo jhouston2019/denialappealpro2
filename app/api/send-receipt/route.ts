@@ -46,9 +46,9 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({
           from:
             process.env.RESEND_FROM_EMAIL ||
-            "Estimate Review Pro <onboarding@resend.dev>",
+            "Denial Appeal Pro <onboarding@resend.dev>",
           to: [email],
-          subject: "Your Estimate Review Pro access is ready",
+          subject: "Your Denial Appeal Pro access is ready",
           text: `Thanks for your purchase. Continue to your workspace: ${appUrl}\n`,
         }),
       });

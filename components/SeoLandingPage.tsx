@@ -49,7 +49,7 @@ export function SeoLandingPage({
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2563EB]">
               <span className="text-xs font-black text-white">ER</span>
             </div>
-            <span className="text-white font-semibold">Estimate Review Pro</span>
+            <span className="text-white font-semibold">Denial Appeal Pro</span>
           </Link>
           <Link 
             href="/pricing"
@@ -139,7 +139,7 @@ export function SeoLandingPage({
       <footer className="bg-[#0F172A] text-white py-8">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <p className="text-slate-400">
-            © {new Date().getFullYear()} Estimate Review Pro. All rights reserved.
+            © {new Date().getFullYear()} Denial Appeal Pro. All rights reserved.
           </p>
           <div className="mt-4 space-x-6">
             <Link href="/pricing" className="text-slate-400 hover:text-white transition">

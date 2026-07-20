@@ -12,7 +12,7 @@ export default function RegisterPage() {
               <span className="text-sm font-black text-white">ER</span>
             </div>
             <span className="text-sm font-semibold text-slate-50">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <Link

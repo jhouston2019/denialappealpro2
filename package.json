@@ -1,5 +1,5 @@
 {
-  "name": "estimatereviewpro",
+  "name": "denialappealpro",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,10 +10,6 @@
     "lint:case": "git ls-files | sort",
     "netlify:dev": "netlify dev",
     "netlify:deploy": "netlify deploy --prod",
-    "test:safety": "node netlify/functions/test-safety.js",
-    "test:premium": "node netlify/functions/test-premium-safety.js",
-    "test:functions": "netlify functions:invoke test-safety",
-    "test:all": "npm run test:safety && npm run test:premium",
     "test:check-stripe": "node scripts/check-stripe-keys.mjs",
     "test:seed-user": "node scripts/seed-test-user.mjs",
     "test:apply-billing-migration": "node scripts/apply-billing-migration.mjs",

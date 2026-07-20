@@ -89,13 +89,9 @@ export function buildLetterPlaceholderValueMap(
     if (t) m.set(token, t);
   };
   setIf("[INSURED NAME]", fields.insured);
-  setIf("[POLICY NUMBER]", fields.policy);
   setIf("[CLAIM NUMBER]", fields.claim);
-  setIf("[DATE OF LOSS]", fields.dol);
-  setIf("[ADJUSTER NAME]", fields.adjuster);
-  setIf("[CARRIER NAME]", fields.carrier);
   setIf("[DISPUTED AMOUNT]", fields.amount);
-  setIf("[RESPONSE DEADLINE]", fields.deadline);
+  setIf("[RESPONSE DEADLINE]", fields.responseDeadline);
 
   if (isRecord(analysisRaw)) {
     for (const [k, token] of ANALYSIS_KEYS) {

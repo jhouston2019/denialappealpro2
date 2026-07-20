@@ -2,7 +2,7 @@ import {
   letterPlaceholdersFromClaimMeta,
   type ClaimMetaSlice,
   type LetterPlaceholderFields,
-} from "@/app/upload/step6-letter-panel";
+} from "@/lib/estimate-letter-placeholders";
 
 function isRecord(x: unknown): x is Record<string, unknown> {
   return typeof x === "object" && x !== null && !Array.isArray(x);

@@ -1,4 +1,4 @@
-import type { AnalysisResult, ComparisonResult } from "@/lib/estimate-json-parse";
+import type { AnalysisResult, ComparisonResult } from "@/lib/review-json-types";
 import { toSupabaseJsonValue } from "@/lib/wizard-snapshot";
 import type { WizardClaimMeta } from "@/lib/wizard-deliverables";
 import { createSupabaseBrowserClient } from "@/lib/supabaseClient";

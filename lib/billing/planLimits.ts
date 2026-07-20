@@ -28,7 +28,7 @@ export const PLAN_CONFIG: Record<BillablePlanType, PlanConfig> = {
   },
   professional: {
     displayName: "Professional",
-    reviewsPerPeriod: 20,
+    reviewsPerPeriod: 25,
     billingCadence: "monthly",
   },
   premier: {
@@ -38,7 +38,7 @@ export const PLAN_CONFIG: Record<BillablePlanType, PlanConfig> = {
   },
   enterprise: {
     displayName: "Enterprise",
-    reviewsPerPeriod: 50,
+    reviewsPerPeriod: 75,
     billingCadence: "monthly",
   },
 };

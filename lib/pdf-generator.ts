@@ -1,6 +1,6 @@
 /**
  * PDF Generation Utility with Watermark and Claim Information
- * Generates professional estimate review reports with header and watermark
+ * Generates professional denial appeal reports with header and watermark
  */
 
 export interface ClaimInformation {
@@ -30,14 +30,14 @@ export function generatePDFHeader(data: PDFHeaderData): string {
     <div style="position: relative; padding: 30px; background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: white; margin-bottom: 30px; border-radius: 8px;">
       <!-- Watermark -->
       <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.1; font-size: 72px; font-weight: bold; white-space: nowrap; pointer-events: none;">
-        ESTIMATE REVIEW PRO
+        DENIAL APPEAL PRO
       </div>
       
       <!-- Header Content -->
       <div style="position: relative; z-index: 1;">
         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
           <div>
-            <h1 style="margin: 0 0 10px 0; font-size: 28px; font-weight: bold;">Estimate Review Pro</h1>
+            <h1 style="margin: 0 0 10px 0; font-size: 28px; font-weight: bold;">Denial Appeal Pro</h1>
             <p style="margin: 0; font-size: 14px; opacity: 0.9;">Professional Estimate Analysis Report</p>
           </div>
           <div style="text-align: right;">
@@ -99,7 +99,7 @@ export function generatePDFFooter(
           <p style="margin: 5px 0 0 0;">This report is provided for informational purposes only and does not constitute legal, financial, or professional advice.</p>
         </div>
         <div style="text-align: right;">
-          <p style="margin: 0; font-weight: 600;">Estimate Review Pro</p>
+          <p style="margin: 0; font-weight: 600;">Denial Appeal Pro</p>
           <p style="margin: 5px 0 0 0;">Page ${pageNumber} of ${totalPages}</p>
         </div>
       </div>
@@ -125,7 +125,7 @@ export function generatePDFHTML(
   // Create watermark text with claim information
   const watermarkText = headerData.claimNumber 
     ? `${headerData.claimNumber} - CONFIDENTIAL`
-    : 'ESTIMATE REVIEW PRO - CONFIDENTIAL';
+    : 'DENIAL APPEAL PRO - CONFIDENTIAL';
   
   const watermarkSubtext = headerData.propertyAddress 
     ? headerData.propertyAddress.substring(0, 50)
@@ -136,7 +136,7 @@ export function generatePDFHTML(
     <html>
     <head>
       <meta charset="UTF-8">
-      <title>Estimate Review Report - ${headerData.claimNumber || headerData.reportId}</title>
+      <title>Denial Appeal Report - ${headerData.claimNumber || headerData.reportId}</title>
       <style>
         @page {
           margin: 0;
@@ -296,7 +296,7 @@ export function generatePDFHTML(
       
       <!-- Footer watermark -->
       <div class="watermark-footer">
-        ${headerData.claimNumber || 'N/A'} | ${headerData.propertyAddress || 'Property Address Not Specified'} | Estimate Review Pro
+        ${headerData.claimNumber || 'N/A'} | ${headerData.propertyAddress || 'Property Address Not Specified'} | Denial Appeal Pro
       </div>
       
       ${generatePDFHeader(headerData)}

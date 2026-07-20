@@ -13,18 +13,18 @@ type Props = {
 };
 
 const CORE_FEATURES: readonly string[] = [
-  "Scope gap and omission detection",
-  "Pricing discrepancy flags",
-  "Carrier vs. contractor comparison",
-  "Strategy recommendations",
-  "AI-generated dispute letter",
+  "AI-generated appeal letters",
+  "PDF and EOB extraction",
+  "CARC/RARC code intelligence",
+  "Regulatory citations (NCCI, CMS, ERISA, ACA)",
   "PDF and Word export",
-  "Review dashboard with full history",
+  "Appeal history",
 ];
 
 const SINGLE_FEATURES: readonly string[] = [
-  "1 estimate review",
+  "1 appeal",
   ...CORE_FEATURES,
+  "No subscription required",
 ];
 
 function Check() {
@@ -176,12 +176,11 @@ export default function PricingPageClient({ userEmail }: Props) {
       <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-16">
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl">
-            Find What the Carrier Missed — In Minutes
+            Turn Denials Into Revenue — In Minutes
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300 sm:text-xl">
-            {isLoggedIn
-              ? "Upgrade your plan or buy more reviews"
-              : "Start with a single review or subscribe"}
+            AI-powered appeal generation that extracts denial details, builds legally
+            grounded letters, and gets your claims submission-ready fast.
           </p>
           {isLoggedIn && userEmail ? (
             <p className="mt-2 text-sm text-slate-500">
@@ -191,7 +190,7 @@ export default function PricingPageClient({ userEmail }: Props) {
         </div>
 
         <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
-          <div className="relative rounded-lg border-2 border-[#2563EB] bg-[#F8FAFC] p-8">
+          <div className="rounded-lg border border-slate-800 bg-[#F8FAFC] p-8">
             <div className="mb-6">
               <h2 className="mb-2 text-2xl font-bold text-slate-900">Single</h2>
               <PlanPriceLine
@@ -219,7 +218,7 @@ export default function PricingPageClient({ userEmail }: Props) {
               disabled={loading === "single"}
               className="w-full rounded-lg bg-[#2563EB] px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#1E40AF] disabled:opacity-50"
             >
-              {loading === "single" ? "Loading..." : "Start Review"}
+              {loading === "single" ? "Loading..." : "Start Single Appeal"}
             </button>
           </div>
 
@@ -237,8 +236,10 @@ export default function PricingPageClient({ userEmail }: Props) {
 
             <ul className="mb-8 space-y-3">
               {[
-                "10 reviews per month, unused roll over",
+                "10 appeals per month",
+                "Unused appeals roll over (up to 1 month)",
                 ...CORE_FEATURES,
+                "Priority processing",
               ].map((t) => (
                 <li
                   key={t}
@@ -262,7 +263,10 @@ export default function PricingPageClient({ userEmail }: Props) {
             </button>
           </div>
 
-          <div className="rounded-lg border border-slate-800 bg-[#F8FAFC] p-8">
+          <div className="relative rounded-lg border-2 border-[#2563EB] bg-[#F8FAFC] p-8">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#2563EB] px-4 py-1 text-xs font-semibold text-white">
+              Most Popular
+            </div>
             <div className="mb-6">
               <h2 className="mb-2 text-2xl font-bold text-slate-900">
                 Professional
@@ -276,8 +280,12 @@ export default function PricingPageClient({ userEmail }: Props) {
 
             <ul className="mb-8 space-y-3">
               {[
-                "20 reviews per month, unused roll over",
+                "25 appeals per month",
+                "Unused appeals roll over (up to 1 month)",
                 ...CORE_FEATURES,
+                "Priority processing",
+                "Bulk PDF upload (up to 100 files)",
+                "CSV / Excel batch processing",
               ].map((t) => (
                 <li
                   key={t}
@@ -314,8 +322,14 @@ export default function PricingPageClient({ userEmail }: Props) {
 
             <ul className="mb-8 space-y-3">
               {[
-                "50 reviews per month, unused roll over",
+                "75 appeals per month",
+                "Unused appeals roll over (up to 1 month)",
                 ...CORE_FEATURES,
+                "Priority processing",
+                "Bulk PDF upload (up to 100 files)",
+                "CSV / Excel batch processing",
+                "Dedicated account support",
+                "Custom payer templates",
               ].map((t) => (
                 <li
                   key={t}
@@ -339,11 +353,15 @@ export default function PricingPageClient({ userEmail }: Props) {
             </button>
           </div>
         </div>
+
+        <p className="mt-10 text-center text-sm text-slate-400">
+          No contracts. Cancel anytime. Appeals generated in under 60 seconds.
+        </p>
       </main>
 
       <footer className="border-t border-slate-800/50 bg-[#0F172A]/95">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} Estimate Review Pro. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Denial Appeal Pro. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/pricing" className="transition hover:text-slate-300">
               Pricing

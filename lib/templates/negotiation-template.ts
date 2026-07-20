@@ -57,14 +57,14 @@ function buildExecutiveDeltaSummary(
   
   const content = `
 ═══════════════════════════════════════════════════════════════
-📘 ESTIMATE REVIEW PRO
+📘 DENIAL APPEAL PRO
 Field Negotiation Brief
 ═══════════════════════════════════════════════════════════════
 
 Claim Number: ${metadata.claimNumber}
 Property: ${metadata.propertyAddress}
 Date of Loss: ${metadata.dateOfLoss}
-Estimate Reviewed: ${metadata.estimateName}
+Denial Appealed: ${metadata.estimateName}
 ${metadata.expertReportReviewed ? `Expert Report: ${metadata.expertReportReviewed}\n` : ''}
 
 EXECUTIVE DELTA SUMMARY

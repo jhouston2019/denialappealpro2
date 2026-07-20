@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { applyPlaceholdersToLetter } from "@/app/upload/step6-letter-panel";
+import { applyPlaceholdersToLetter } from "@/lib/estimate-letter-placeholders";
 import { buildPlaceholderFieldsFromStoredJson } from "@/lib/letter-placeholder-extract";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
 import {

@@ -79,13 +79,13 @@ export default async function DashboardPage({
           <Link
             href="/"
             className="flex min-w-0 items-center gap-2"
-            aria-label="Estimate Review Pro home"
+            aria-label="Denial Appeal Pro home"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#1e3a8a] shadow-lg shadow-[#1e3a8a]/30">
               <span className="text-xs font-black text-white">ER</span>
             </div>
             <span className="truncate text-xs font-semibold text-slate-50 sm:text-sm">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <nav className="flex w-full min-w-0 flex-wrap items-center justify-end gap-2 text-[11px] font-medium text-slate-200 sm:ml-auto sm:w-auto sm:gap-3 sm:text-xs">
@@ -113,7 +113,7 @@ export default async function DashboardPage({
             Dashboard
           </p>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-50 sm:text-3xl">
-            Your estimate reviews
+            Your denial appeals
           </h1>
           <p className="mt-2 max-w-xl text-sm text-slate-300">
             Upload new estimates, download AI reports, and re‑run analysis as
@@ -257,7 +257,7 @@ export default async function DashboardPage({
                   >
                     <div className="space-y-1">
                       <p className="text-xs font-medium text-slate-100">
-                        {review.insured_name?.trim() || "Estimate Review"}
+                        {review.insured_name?.trim() || "Denial Appeal"}
                       </p>
                       <p className="text-[11px] text-slate-400">
                         Created{" "}

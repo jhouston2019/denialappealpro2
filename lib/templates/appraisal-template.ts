@@ -49,7 +49,7 @@ function buildAppraisalCoverPage(metadata: ReportMetadata): FormattedSection {
   
   const content = `
 ═══════════════════════════════════════════════════════════════
-📘 ESTIMATE REVIEW PRO
+📘 DENIAL APPEAL PRO
 Appraisal & Litigation Exhibit Package
 ═══════════════════════════════════════════════════════════════
 

@@ -119,7 +119,7 @@ export default function ResetPasswordPage() {
               <span className="text-sm font-black text-white">ER</span>
             </div>
             <span className="truncate text-sm font-semibold text-slate-50">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <Link

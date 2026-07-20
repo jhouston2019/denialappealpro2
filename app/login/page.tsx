@@ -12,7 +12,7 @@ export default function LoginPage() {
               <span className="text-sm font-black text-white">ER</span>
             </div>
             <span className="text-sm font-semibold text-slate-50">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <Link
@@ -33,7 +33,7 @@ export default function LoginPage() {
             Welcome back
           </h1>
           <p className="mt-2 text-xs text-slate-300">
-            Access your estimate reviews, PDF reports, and billing in one
+            Access your denial appeals, PDF reports, and billing in one
             secure dashboard.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function LoginPage() {
         </Suspense>
 
         <p className="mt-6 text-center text-[11px] text-slate-400">
-          New to Estimate Review Pro?{" "}
+          New to Denial Appeal Pro?{" "}
           <Link
             href="/register"
             className="font-semibold text-blue-300 hover:underline hover:underline-offset-4"

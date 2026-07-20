@@ -21,7 +21,7 @@ export default function PrintStyles({ claimNumber, propertyAddress }: PrintStyle
         
         /* Print watermark - diagonal across page */
         body::before {
-          content: "${claimNumber || 'CONFIDENTIAL'} - ${propertyAddress?.substring(0, 30) || 'ESTIMATE REVIEW PRO'}";
+          content: "${claimNumber || 'CONFIDENTIAL'} - ${propertyAddress?.substring(0, 30) || 'DENIAL APPEAL PRO'}";
           position: fixed;
           top: 50%;
           left: 50%;

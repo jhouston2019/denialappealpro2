@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     const from =
       process.env.RESEND_FROM_EMAIL ||
-      "Estimate Review Pro <onboarding@resend.dev>";
+      "Denial Appeal Pro <onboarding@resend.dev>";
 
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
         from,
         to: [OWNER_EMAIL],
         reply_to: email,
-        subject: `[Estimate Review Pro] Message from ${name}`,
+        subject: `[Denial Appeal Pro] Message from ${name}`,
         text: `From: ${name} <${email}>\n\n${message}\n`,
       }),
     });

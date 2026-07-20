@@ -691,7 +691,7 @@ function generateExcelExport(report: Report, analysis: any, auditMetadata: any) 
     <body>
       <!-- Watermark Header -->
       <div class="watermark-header">
-        <h1 style="margin: 0;">ESTIMATE REVIEW PRO - CONFIDENTIAL</h1>
+        <h1 style="margin: 0;">DENIAL APPEAL PRO - CONFIDENTIAL</h1>
         <p style="margin: 5px 0 0 0;">Professional Estimate Analysis Report</p>
       </div>
       
@@ -983,7 +983,7 @@ function generateCSVExport(report: Report, analysis: any, auditMetadata: any) {
 
   // Watermark header with claim information
   csv += '=================================================================\n';
-  csv += 'ESTIMATE REVIEW PRO - CONFIDENTIAL REPORT\n';
+  csv += 'DENIAL APPEAL PRO - CONFIDENTIAL REPORT\n';
   csv += '=================================================================\n';
   csv += `CLAIM NUMBER: ${propertyDetails.claim_number || 'N/A'}\n`;
   csv += `PROPERTY ADDRESS: ${escapeCsv(propertyDetails.address) || 'N/A'}\n`;
@@ -1029,7 +1029,7 @@ function generateCSVExport(report: Report, analysis: any, auditMetadata: any) {
   csv += '\n';
 
   // Header section
-  csv += 'ESTIMATE REVIEW REPORT\n';
+  csv += 'DENIAL APPEAL REPORT\n';
   csv += `Report ID,${report.id}\n`;
   csv += `Estimate Name,${escapeCsv(report.estimate_name)}\n`;
   csv += `Created,${report.created_at}\n`;
@@ -1139,7 +1139,7 @@ function generateCSVExport(report: Report, analysis: any, auditMetadata: any) {
   csv += '=================================================================\n';
   csv += 'This report is provided for informational purposes only.\n';
   csv += 'Does not constitute legal, financial, or professional advice.\n';
-  csv += 'Estimate Review Pro - Professional Estimate Analysis\n';
+  csv += 'Denial Appeal Pro - Professional Appeal Analysis\n';
   csv += '=================================================================\n';
 
   return new NextResponse(csv, {

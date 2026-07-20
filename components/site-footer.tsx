@@ -10,7 +10,7 @@ export function SiteFooter() {
     >
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 sm:flex-row sm:gap-6">
         <span className="text-slate-600">
-          © {new Date().getFullYear()} Estimate Review Pro
+          © {new Date().getFullYear()} Denial Appeal Pro
         </span>
         <span className="hidden text-slate-700 sm:inline" aria-hidden>
           |

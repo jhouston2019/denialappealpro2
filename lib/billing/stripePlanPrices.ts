@@ -17,23 +17,27 @@ export const CHECKOUT_PLAN_PRICE_ENV_KEYS: Record<
   CheckoutPlanType,
   readonly string[]
 > = {
-  single: ["STRIPE_PRICE_SINGLE_REVIEW", "STRIPE_PRICE_INDIVIDUAL_149"],
+  single: [
+    "STRIPE_PRICE_SINGLE_APPEAL",
+    "STRIPE_PRICE_SINGLE_REVIEW",
+    "STRIPE_PRICE_INDIVIDUAL_149",
+  ],
   essential: [
-    "STRIPE_PRICE_ESSENTIAL_PLAN",
     "STRIPE_PRICE_ESSENTIAL",
+    "STRIPE_PRICE_ESSENTIAL_PLAN",
     "STRIPE_PRODUCT_ESSENTIAL",
     "STRIPE_PRODUCT_ESSENTIAL_PLAN",
     "STRIPE_PRICE_FIRM_499",
   ],
   professional: [
-    "STRIPE_PRICE_PROFESSIONAL_PLAN",
     "STRIPE_PRICE_PROFESSIONAL",
+    "STRIPE_PRICE_PROFESSIONAL_PLAN",
     "STRIPE_PRODUCT_PROFESSIONAL",
     "STRIPE_PRODUCT_PROFESSIONAL_PLAN",
   ],
   enterprise: [
-    "STRIPE_PRICE_ENTERPRISE_PLAN",
     "STRIPE_PRICE_ENTERPRISE",
+    "STRIPE_PRICE_ENTERPRISE_PLAN",
     "STRIPE_PRODUCT_ENTERPRISE",
     "STRIPE_PRODUCT_ENTERPRISE_PLAN",
     "STRIPE_PRICE_PRO_1499",
@@ -41,7 +45,7 @@ export const CHECKOUT_PLAN_PRICE_ENV_KEYS: Record<
 };
 
 const PLAN_ENV_NEEDLES: Record<CheckoutPlanType, readonly string[]> = {
-  single: ["SINGLE", "INDIVIDUAL"],
+  single: ["SINGLE_APPEAL", "SINGLE", "INDIVIDUAL"],
   essential: ["ESSENTIAL", "FIRM"],
   professional: ["PROFESSIONAL"],
   enterprise: ["ENTERPRISE", "PRO_1499", "PRO1499"],
@@ -167,7 +171,7 @@ export function missingPriceEnvHint(planType: CheckoutPlanType): string {
   }
   return (
     `Set ${keys}, ${STRIPE_PRICE_TEST_SUBSCRIPTION_ENV}, or the same one-time price as ` +
-    `STRIPE_PRICE_SINGLE_REVIEW in Netlify, then redeploy.`
+    `STRIPE_PRICE_SINGLE_APPEAL in Netlify, then redeploy.`
   );
 }
 

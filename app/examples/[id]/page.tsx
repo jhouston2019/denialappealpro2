@@ -99,7 +99,7 @@ export default async function ExampleReportDetailPage({
               <span className="text-xs font-black text-white">ER</span>
             </div>
             <span className="text-sm font-semibold text-slate-50">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <nav className="flex items-center gap-4 text-xs font-medium text-slate-200">
@@ -555,7 +555,7 @@ export default async function ExampleReportDetailPage({
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-xs text-slate-400">
-              © 2024 Estimate Review Pro. All rights reserved.
+              © 2024 Denial Appeal Pro. All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-xs">
               <Link href="/pricing" className="text-slate-400 hover:text-slate-200">

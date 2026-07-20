@@ -45,7 +45,7 @@ export default async function CreateAccountPage({
               <span className="text-sm font-black text-white">ER</span>
             </div>
             <span className="text-sm font-semibold text-white">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <nav className="flex items-center gap-6 text-sm font-medium">
@@ -88,7 +88,7 @@ export default async function CreateAccountPage({
 
       <footer className="border-t border-slate-800/50 bg-[#0F172A]/95">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-slate-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} Estimate Review Pro. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Denial Appeal Pro. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/pricing" className="transition hover:text-slate-300">
               Pricing

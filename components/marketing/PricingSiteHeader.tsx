@@ -15,7 +15,7 @@ export function PricingSiteHeader({ userEmail }: Props) {
             <span className="text-sm font-black text-white">ER</span>
           </div>
           <span className="text-sm font-semibold text-white">
-            Estimate Review Pro
+            Denial Appeal Pro
           </span>
         </Link>
         <nav className="flex items-center gap-4 text-sm font-medium sm:gap-6">

@@ -28,7 +28,7 @@ export default async function AdminPage() {
               <span className="text-xs font-black text-white">ER</span>
             </div>
             <span className="text-sm font-semibold text-slate-50">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <div className="flex items-center gap-2">

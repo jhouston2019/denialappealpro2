@@ -136,7 +136,7 @@ export function ContactForm() {
           {errText}{" "}
           <a
             className="font-medium text-blue-300 underline hover:text-blue-200"
-            href={`mailto:${OWNER_EMAIL}?subject=${encodeURIComponent("Estimate Review Pro — support")}`}
+            href={`mailto:${OWNER_EMAIL}?subject=${encodeURIComponent("Denial Appeal Pro — support")}`}
           >
             Email {OWNER_EMAIL}
           </a>

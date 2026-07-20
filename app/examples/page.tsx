@@ -78,7 +78,7 @@ export default async function ExamplesPage() {
               <span className="text-xs font-black text-white">ER</span>
             </div>
             <span className="text-sm font-semibold text-slate-50">
-              Estimate Review Pro
+              Denial Appeal Pro
             </span>
           </Link>
           <nav className="flex items-center gap-4 text-xs font-medium text-slate-200">
@@ -316,7 +316,7 @@ export default async function ExamplesPage() {
             Example reports use fictional data for demonstration purposes.
           </p>
           <p className="mt-2 text-xs text-slate-500">
-            © 2024 Estimate Review Pro. All rights reserved.
+            © 2024 Denial Appeal Pro. All rights reserved.
           </p>
         </div>
       </footer>

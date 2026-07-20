@@ -3,8 +3,8 @@ import {
   parseComparisonResult,
   type AnalysisResult,
   type ComparisonResult,
-} from "@/lib/estimate-json-parse";
-import { letterPlaceholdersFromClaimMeta } from "@/app/upload/step6-letter-panel";
+} from "@/lib/review-json-types";
+import { letterPlaceholdersFromClaimMeta } from "@/lib/estimate-letter-placeholders";
 import type { SerializableWizardV1 } from "@/lib/wizard-snapshot";
 import { writeWizardResumeSnapshot } from "@/lib/wizard-snapshot";
 import { createSupabaseBrowserClient } from "@/lib/supabaseClient";
@@ -203,7 +203,7 @@ export function deliverablesFromSnapshot(
 }
 
 export function deliverablesTitle(d: WizardDeliverables): string {
-  return d.claimMeta.insuredName?.trim() || "Estimate Review";
+  return d.claimMeta.insuredName?.trim() || "Denial Appeal";
 }
 
 export function safeDeliverablesFileName(title: string): string {
@@ -211,7 +211,7 @@ export function safeDeliverablesFileName(title: string): string {
     title
       .replace(/[^a-z0-9]+/gi, "-")
       .replace(/^-+|-+$/g, "")
-      .slice(0, 64) || "estimate-review"
+      .slice(0, 64) || "denial-appeal"
   );
 }
 

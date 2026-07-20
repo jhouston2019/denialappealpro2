@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Estimate Review Pro",
+  title: "Denial Appeal Pro",
   description:
-    "AI-powered estimate review & comparison for property insurance claims.",
+    "AI-powered denial appeal & comparison for property insurance claims.",
 };
 
 export default function RootLayout({

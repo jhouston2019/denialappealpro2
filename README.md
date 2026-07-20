@@ -1,4 +1,4 @@
-# 📊 ESTIMATE REVIEW PRO
+# 📊 DENIAL APPEAL PRO
 
 **Claims Intelligence Platform**
 
@@ -112,7 +112,7 @@ npm run test:safety
 5. Copy the **`whsec_…`** signing secret from the Stripe CLI output into `.env.local` as **`STRIPE_WEBHOOK_SECRET`**, then restart `npm run dev`.
 
 6. **Log in** at `/login` with:
-   - **Email:** `dev-test@estimatereviewpro.local`
+   - **Email:** `dev-test@denialappealpro.local`
    - **Password:** `DevTestPassword123!`  
    (unless you changed `TEST_USER_*` in `.env.local`.)
 
@@ -227,7 +227,7 @@ npm run test:safety
 ### Expected Output
 
 ```
-🧪 ESTIMATE REVIEW PRO - SAFETY TEST SUITE
+🧪 DENIAL APPEAL PRO - SAFETY TEST SUITE
 
 ✅ Valid Property Estimate
 ✅ Valid Auto Estimate
@@ -280,13 +280,13 @@ npm run test:safety
 - Ideal for: Single claims, property owners
 
 **Enterprise Plan**: $299/month
-- 20 estimate reviews per month
+- 20 denial appeals per month
 - All features included
 - Priority support
 - Ideal for: Public adjusters, contractors
 
 **Litigation Plan**: $499/month
-- Unlimited estimate reviews
+- Unlimited denial appeals
 - All features included
 - Expert witness support
 - Ideal for: Attorneys, law firms
@@ -563,7 +563,7 @@ Proprietary - All Rights Reserved
 
 ## 🎉 FINAL NOTES
 
-**Estimate Review Pro** transforms insurance claim negotiations by providing:
+**Denial Appeal Pro** transforms insurance claim negotiations by providing:
 
 1. **Irrefutable Evidence** - Market data, code citations, formula-driven calculations ✅
 2. **Negotiation Leverage** - Clean deviation tables, audit stamps, litigation exhibits ✅

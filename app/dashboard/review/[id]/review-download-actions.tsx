@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
-import type { AnalysisResult, ComparisonResult } from "@/lib/estimate-json-parse";
+import type { AnalysisResult, ComparisonResult } from "@/lib/review-json-types";
 import {
   buildAnalysisExportPlainText,
   buildComparisonPlainText,
@@ -263,7 +263,7 @@ export function ReviewDownloadActions({
   }, [doDocx, newLetterText, safeBaseFileName]);
 
   const btnClass = lightPanel
-    ? "erp-btn-ghost-panel disabled:cursor-not-allowed disabled:opacity-50"
+    ? "dap-btn-ghost-panel disabled:cursor-not-allowed disabled:opacity-50"
     : "rounded-lg border border-slate-600 bg-slate-800/80 px-4 py-2.5 text-left text-sm font-medium text-slate-100 transition hover:border-slate-500 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
