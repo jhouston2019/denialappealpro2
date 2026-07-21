@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EOB Denial Codes Explained (CARC and RARC) | Denial Appeal Pro</title>
+  <meta name="description" content="Understand EOB denial codes including CARC and RARC codes on your Explanation of Benefits. Learn what each code means and how to appeal the denial.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .content ul { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+    .content ul li { font-size: 1.05rem; color: var(--gray-600);
+                     line-height: 1.8; margin-bottom: 0.5rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a CARC code on an EOB?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CARC stands for Claim Adjustment Reason Code. It is a standardized two-digit code on your Explanation of Benefits that tells you why a claim or line item was adjusted or denied. CARC codes are maintained by the Washington Publishing Company and used across all payers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between CARC and RARC codes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CARC codes identify the category of adjustment such as medical necessity or timely filing. RARC codes provide supplemental detail explaining the specific reason within that category. A CARC 50 denial might include RARC N130 explaining which coverage policy was applied."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the most common EOB denial codes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The five most common CARC codes are 50 (medical necessity), 97 (bundled/included service), 29 (timely filing), 197 (missing authorization), and 4 (modifier issue). These five codes account for over 40% of all claim denials."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where do I find denial codes on my EOB?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Look in the remarks, adjustment, or reason code section of your EOB, typically near each line item showing the billed amount, allowed amount, and patient responsibility. The CARC code appears as a two-digit number, often prefixed with CO, OA, or PI indicating the adjustment group."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="index.html">Appeal Guides</a> / EOB Codes</p>
+    <p class="hero-eyebrow">Remittance Code Reference</p>
+    <h1>EOB Denial Codes Explained</h1>
+    <p class="hero-sub">Your EOB lists cryptic two-digit codes next to every adjusted line item. Those CARC and RARC codes are the payer telling you exactly why they kept your money — and exactly what you need to fight the denial.</p>
+    <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+  </section>
+
+  <div class="content">
+    <h2>CARC Codes: The Primary Denial Reason</h2>
+    <p>Claim Adjustment Reason Codes appear on every EOB and electronic remittance advice. Each code maps to a specific denial category maintained by the Washington Publishing Company. When you see CO-50 on a line item, the payer denied it for medical necessity. CO-97 means bundling. CO-29 means timely filing. Identifying the CARC code is the first step in every appeal because it tells you what documentation and argument you need.</p>
+
+    <h2>RARC Codes: The Supplemental Detail</h2>
+    <p>Remittance Advice Remark Codes add context to the CARC code. A CARC 50 denial might carry RARC N130 citing a specific medical policy, or RARC M15 indicating frequency limits were exceeded. RARC codes help you pinpoint the exact payer rule applied to your claim so your appeal can address that specific rule rather than the general denial category.</p>
+
+    <div class="callout">
+      <p>Five CARC codes — 50, 97, 29, 197, and 4 — account for over 40% of all denials. Learn these five and you can classify most denials on your desk within seconds.</p>
+    </div>
+
+    <h2>Most Common EOB Denial Codes</h2>
+    <ul>
+      <li>CARC 50 — Not medically necessary per payer policy</li>
+      <li>CARC 97 — Service bundled into another procedure payment</li>
+      <li>CARC 29 — Claim filed after the timely filing deadline</li>
+      <li>CARC 197 — Prior authorization or precertification missing</li>
+      <li>CARC 4 — Modifier missing, invalid, or inconsistent with procedure</li>
+    </ul>
+
+    <h2>From Code to Appeal Action</h2>
+    <p>Once you identify the CARC code, match it to the correct appeal strategy and documentation checklist. Medical necessity denials need clinical records. Bundling denials need operative notes. Timely filing denials need submission proof. Every code has a defined appeal path — the code itself is your roadmap to recovered revenue.</p>
+
+    <div class="cta-block">
+      <h2>Turn Your EOB Code Into an Appeal Letter</h2>
+      <p>Upload your EOB or denial letter and Denial Appeal Pro identifies the denial code and generates a targeted appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

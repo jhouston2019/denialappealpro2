@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insurance Denial Appeal Guides | Denial Appeal Pro</title>
+  <meta name="description" content="15 expert guides covering every type of insurance claim denial — CARC codes, appeal letters, NCCI bundling, and more. Start your appeal in under 60 seconds.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .content ul { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+    .content ul li { font-size: 1.05rem; color: var(--gray-600);
+                     line-height: 1.8; margin-bottom: 0.5rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    .card-grid { display: grid;
+                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                 gap: 1.5rem; margin: 2rem 0; }
+    .card { background: var(--gray-50); border: 1px solid var(--gray-200);
+            border-radius: 12px; padding: 1.5rem;
+            text-decoration: none; display: block;
+            transition: border-color 0.2s; }
+    .card:hover { border-color: var(--accent); }
+    .card h3 { font-size: 1rem; font-weight: 600;
+               color: var(--primary); margin-bottom: 0.5rem; }
+    .card p { font-size: 0.9rem; color: var(--gray-600);
+              margin: 0; line-height: 1.5; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Insurance Denial Appeal Guides",
+    "description": "15 guides for every type of insurance claim denial",
+    "numberOfItems": 15,
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "How to Appeal an Insurance Claim Denial", "url": "https://denialappealpro.com/appeals/seo/how-to-appeal-insurance-claim-denial.html" },
+      { "@type": "ListItem", "position": 2, "name": "CARC Code 97 Appeal Letter", "url": "https://denialappealpro.com/appeals/seo/carc-code-97-appeal-letter.html" },
+      { "@type": "ListItem", "position": 3, "name": "CARC 50 Medical Necessity Denial Appeal", "url": "https://denialappealpro.com/appeals/seo/carc-50-medical-necessity-denial.html" },
+      { "@type": "ListItem", "position": 4, "name": "CARC 29 Timely Filing Denial Appeal", "url": "https://denialappealpro.com/appeals/seo/carc-29-timely-filing-appeal.html" },
+      { "@type": "ListItem", "position": 5, "name": "CARC 197 Authorization Denial Appeal", "url": "https://denialappealpro.com/appeals/seo/carc-197-authorization-denial-appeal.html" },
+      { "@type": "ListItem", "position": 6, "name": "Insurance Claim Denial Appeal Letter Template", "url": "https://denialappealpro.com/appeals/seo/insurance-claim-denial-appeal-letter-template.html" },
+      { "@type": "ListItem", "position": 7, "name": "How to Write a Medical Necessity Appeal Letter", "url": "https://denialappealpro.com/appeals/seo/how-to-write-medical-necessity-appeal-letter.html" },
+      { "@type": "ListItem", "position": 8, "name": "NCCI Bundling Denial Appeal", "url": "https://denialappealpro.com/appeals/seo/ncci-bundling-denial-appeal.html" },
+      { "@type": "ListItem", "position": 9, "name": "How to Fight an Insurance Claim Denial", "url": "https://denialappealpro.com/appeals/seo/how-to-fight-insurance-claim-denial.html" },
+      { "@type": "ListItem", "position": 10, "name": "EOB Denial Codes Explained", "url": "https://denialappealpro.com/appeals/seo/eob-denial-codes-explained.html" },
+      { "@type": "ListItem", "position": 11, "name": "Insurance Denied My Claim — What Do I Do", "url": "https://denialappealpro.com/appeals/seo/insurance-denied-medical-claim-what-to-do.html" },
+      { "@type": "ListItem", "position": 12, "name": "Appeal Letter for Denied Medical Claim", "url": "https://denialappealpro.com/appeals/seo/appeal-letter-for-denied-medical-claim.html" },
+      { "@type": "ListItem", "position": 13, "name": "How to Reduce Insurance Claim Denials", "url": "https://denialappealpro.com/appeals/seo/reduce-insurance-claim-denials.html" },
+      { "@type": "ListItem", "position": 14, "name": "AI Appeal Letter Generator", "url": "https://denialappealpro.com/appeals/seo/ai-appeal-letter-generator.html" },
+      { "@type": "ListItem", "position": 15, "name": "Insurance Denial Appeal Success Rate", "url": "https://denialappealpro.com/appeals/seo/insurance-denial-appeal-success-rate.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-eyebrow">Denial Appeal Resource Center</p>
+    <h1>15 Guides for Every Type of Denial</h1>
+    <p class="hero-sub">From CARC codes to appeal letter templates — actionable guides for billing professionals, revenue cycle teams, and patients facing a denied claim.</p>
+    <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+  </section>
+
+  <div class="content">
+    <p>Every year, payers deny roughly 15% of submitted claims — costing your practice thousands in lost revenue per month. These 15 guides cover the most common denial types, CARC codes, and appeal strategies so you can recover payment faster.</p>
+
+    <div class="card-grid">
+      <a href="how-to-appeal-insurance-claim-denial.html" class="card">
+        <h3>How to Appeal an Insurance Claim Denial</h3>
+        <p>Step-by-step process for billing professionals filing their first appeal after a denial.</p>
+      </a>
+      <a href="carc-code-97-appeal-letter.html" class="card">
+        <h3>CARC Code 97 Appeal Letter</h3>
+        <p>Write a targeted appeal when a payer bundles or denies a procedure as included in another service.</p>
+      </a>
+      <a href="carc-50-medical-necessity-denial.html" class="card">
+        <h3>CARC 50 Medical Necessity Denial</h3>
+        <p>Overturn medical necessity denials with clinical documentation and payer-specific language.</p>
+      </a>
+      <a href="carc-29-timely-filing-appeal.html" class="card">
+        <h3>CARC 29 Timely Filing Denial Appeal</h3>
+        <p>Challenge late-filing denials when you have proof the claim was submitted on time.</p>
+      </a>
+      <a href="carc-197-authorization-denial-appeal.html" class="card">
+        <h3>CARC 197 Authorization Denial Appeal</h3>
+        <p>Appeal precertification and prior auth denials with authorization records and retro auth requests.</p>
+      </a>
+      <a href="insurance-claim-denial-appeal-letter-template.html" class="card">
+        <h3>Appeal Letter Template</h3>
+        <p>Ready-to-use structure for writing a professional insurance claim denial appeal letter.</p>
+      </a>
+      <a href="how-to-write-medical-necessity-appeal-letter.html" class="card">
+        <h3>Medical Necessity Appeal Letter</h3>
+        <p>Build a clinical argument that connects diagnosis, treatment, and payer coverage criteria.</p>
+      </a>
+      <a href="ncci-bundling-denial-appeal.html" class="card">
+        <h3>NCCI Bundling Denial Appeal</h3>
+        <p>Dispute NCCI edit denials with modifier justification and medical record support.</p>
+      </a>
+      <a href="how-to-fight-insurance-claim-denial.html" class="card">
+        <h3>How to Fight an Insurance Claim Denial</h3>
+        <p>Practical tactics for patients and office staff pushing back on a denied claim.</p>
+      </a>
+      <a href="eob-denial-codes-explained.html" class="card">
+        <h3>EOB Denial Codes Explained</h3>
+        <p>Decode CARC and RARC codes on your Explanation of Benefits remittance.</p>
+      </a>
+      <a href="insurance-denied-medical-claim-what-to-do.html" class="card">
+        <h3>Insurance Denied My Claim — What Do I Do</h3>
+        <p>Immediate action steps when you receive a denial and need to know what happens next.</p>
+      </a>
+      <a href="appeal-letter-for-denied-medical-claim.html" class="card">
+        <h3>Appeal Letter for Denied Medical Claim</h3>
+        <p>What to include in the letter itself — structure, attachments, and submission method.</p>
+      </a>
+      <a href="reduce-insurance-claim-denials.html" class="card">
+        <h3>Reduce Insurance Claim Denials</h3>
+        <p>Revenue cycle strategies to cut denial rates before claims ever reach the payer.</p>
+      </a>
+      <a href="ai-appeal-letter-generator.html" class="card">
+        <h3>AI Appeal Letter Generator</h3>
+        <p>Generate a submission-ready appeal letter from your denial letter in under 60 seconds.</p>
+      </a>
+      <a href="insurance-denial-appeal-success-rate.html" class="card">
+        <h3>Insurance Appeal Success Rate</h3>
+        <p>Data on how often appeals succeed and when filing one is worth your time.</p>
+      </a>
+    </div>
+
+    <div class="callout">
+      <p>Upload your denial letter and Denial Appeal Pro generates a complete, payer-ready appeal in under 60 seconds — no template editing required.</p>
+    </div>
+
+    <div class="cta-block">
+      <h2>Turn Your Denial Into a Submitted Appeal Today</h2>
+      <p>Stop reading guides and start recovering revenue. Upload your denial letter and get a submission-ready appeal letter in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>
