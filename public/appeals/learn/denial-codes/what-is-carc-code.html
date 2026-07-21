@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a CARC Code? | Denial Appeal Pro</title>
+  <meta name="description" content="A CARC code is a Claim Adjustment Reason Code on your EOB that explains why a claim or line item was denied or adjusted. Learn what CARC codes mean and how to respond.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Where do I find CARC codes on my EOB?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CARC codes appear in the claim adjustment or remark section of your remittance advice or EOB, usually next to each denied or reduced line item. Look for a two- or three-digit number paired with a group code such as CO, PR, or OA."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many CARC codes are there?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The X12 standard defines more than 300 CARC codes. In daily billing, roughly 15 to 20 codes account for the majority of denials, including codes 97, 50, 29, and 197."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is a CARC code the same as a denial reason?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A CARC code is the standardized denial or adjustment reason assigned by the payer. It tells you the category of the problem — bundling, medical necessity, timely filing — but you often need the accompanying RARC remark code for full context."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I appeal any CARC code denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most CARC codes can be appealed when you have supporting documentation or can correct a billing error. Some PR-group codes reflect legitimate patient cost-sharing and are not appealable to the payer, though the underlying service denial may still be."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Denial Codes</p>
+    <p class="hero-eyebrow">Denial Codes</p>
+    <h1>What Is a CARC Code?</h1>
+    <p class="hero-sub">Every denied line on your remittance advice carries a two- or three-digit CARC code — the payer's standardized answer to why payment was reduced, shifted, or eliminated entirely.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A Claim Adjustment Reason Code — a standardized number on an EOB that tells a provider exactly why a claim or line item was adjusted or denied.</p>
+    </div>
+
+    <h2>What a CARC Code Means</h2>
+    <p>CARC stands for Claim Adjustment Reason Code. These codes are maintained under the X12 HIPAA standard and appear on every 835 remittance advice and patient EOB when a payer changes what they will pay on a claim. Each code maps to a specific reason — for example, code 97 means the service was bundled into another procedure, and code 50 means the payer rejected it for lack of medical necessity. CARC codes are always paired with a group code (CO, PR, OA, or PI) that tells you who is financially responsible for the adjusted amount.</p>
+
+    <h2>Why CARC Codes Matter</h2>
+    <p>Without CARC codes, every denial would arrive as a vague payment reduction with no actionable explanation. Revenue cycle teams rely on these codes to route claims to the right work queue — authorization denials go to precert staff, bundling denials go to coding, and timely filing denials go to claims submission. Industry data shows that just 5 CARC codes — including 97, 50, and 29 — drive more than 40% of all commercial claim denials. Identifying the code correctly is the first step toward recovery.</p>
+
+    <h2>How CARC Codes Affect Your Claim</h2>
+    <p>A CARC code determines whether you should appeal, rebill, collect from the patient, or write off the balance. A CO-97 adjustment means the payer considers the service included in another payment and you cannot bill the patient for that amount — your path forward is an appeal with modifier documentation or a corrected claim. A PR-1 code means the patient owes a deductible, which is not appealable but confirms the claim was processed. Misreading the group code attached to the CARC is one of the most common reasons providers either appeal unnecessarily or miss recoverable denials worth $200 to $2,000 per line item.</p>
+
+    <div class="callout">
+      <p>Always read the CARC code together with its group code (CO, PR, OA). The number tells you why payment changed; the group code tells you whether an appeal, a patient statement, or a write-off is the correct next step.</p>
+    </div>
+
+    <h2>What to Do About a CARC Code</h2>
+    <p>When you receive a remittance with a CARC code, look up the code definition, check for any accompanying RARC remark codes, and match the denial to your internal appeal playbook. Pull the original claim, the clinical documentation, and any authorization records relevant to that code. Submit a first-level appeal within the payer's deadline — typically 30 to 180 days from the denial date — with documentation that directly addresses the reason the CARC code describes. If you are unsure which code is driving the denial, upload your EOB to Denial Appeal Pro for an instant decode and appeal letter mapped to your specific CARC code.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Where do I find CARC codes on my EOB?</h3>
+    <p>CARC codes appear in the claim adjustment or remark section of your remittance advice or EOB, usually next to each denied or reduced line item. Look for a two- or three-digit number paired with a group code such as CO, PR, or OA.</p>
+
+    <h3>How many CARC codes are there?</h3>
+    <p>The X12 standard defines more than 300 CARC codes. In daily billing, roughly 15 to 20 codes account for the majority of denials, including codes 97, 50, 29, and 197.</p>
+
+    <h3>Is a CARC code the same as a denial reason?</h3>
+    <p>A CARC code is the standardized denial or adjustment reason assigned by the payer. It tells you the category of the problem — bundling, medical necessity, timely filing — but you often need the accompanying RARC remark code for full context.</p>
+
+    <h3>Can I appeal any CARC code denial?</h3>
+    <p>Most CARC codes can be appealed when you have supporting documentation or can correct a billing error. Some PR-group codes reflect legitimate patient cost-sharing and are not appealable to the payer, though the underlying service denial may still be.</p>
+
+    <div class="cta-block">
+      <h2>Decode Your CARC Code and Appeal</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies your CARC code and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

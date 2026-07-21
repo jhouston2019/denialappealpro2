@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Medical Necessity? | Denial Appeal Pro</title>
+  <meta name="description" content="Medical necessity is the payer's determination that a service is appropriate and required for the patient's condition. Learn why CARC 50 denials happen and how to appeal them.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary); margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What CARC code indicates a medical necessity denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CARC code 50 is the standard code for medical necessity denials. It indicates the payer determined the service was not medically necessary based on the information submitted with the claim. RARC codes may provide additional detail about the specific medical policy applied."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who decides medical necessity — the doctor or the insurer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The treating physician determines what care the patient needs clinically. The insurer applies its coverage policies and medical necessity criteria during claims adjudication. When these differ, the provider must demonstrate through documentation and appeal that the service meets the payer's published coverage standards."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What documentation proves medical necessity?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Progress notes linking diagnosis to treatment, diagnostic test results supporting the clinical decision, physician attestation letters, references to LCD or NCD coverage criteria, and peer-reviewed literature when applicable. The documentation must map specific patient findings to each coverage requirement in the payer's policy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can medical necessity denials be appealed successfully?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Medical necessity appeals have among the highest overturn rates when supported by strong clinical documentation — often exceeding 60% at external review. Success depends on connecting the patient's specific clinical findings to the payer's published coverage criteria, not on generic statements that the service was appropriate."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Appeal Process</p>
+    <p class="hero-eyebrow">Appeal Process</p>
+    <h1>What Is Medical Necessity?</h1>
+    <p class="hero-sub">Medical necessity denials account for roughly 12% of all claim denials — the payer's judgment that your service wasn't required, even when your physician ordered it based on clinical findings.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The payer's determination that a service is appropriate and required for the diagnosis and treatment of the patient's condition.</p>
+    </div>
+
+    <h2>What Medical Necessity Means</h2>
+    <p>Medical necessity is the standard insurers use to decide whether a healthcare service qualifies for coverage and payment. A service is medically necessary when it is appropriate for the patient's diagnosis, consistent with accepted clinical standards, and not primarily for the convenience of the patient or provider. Payers encode medical necessity rules into automated edits, Local Coverage Determinations, National Coverage Determinations, and internal medical policies that run during claims adjudication.</p>
+    <p>When submitted claim data does not align with these rules — wrong diagnosis code pairing, exceeded frequency limits, or missing documentation triggers — the payer issues a medical necessity denial, typically coded as CARC 50.</p>
+
+    <h2>Why Medical Necessity Matters</h2>
+    <p>Medical necessity is the most contested area in claims appeals because it sits at the intersection of clinical judgment and payer policy. A physician may order an MRI based on symptoms and exam findings, while the payer's algorithm denies it because the diagnosis code does not match the imaging policy's approved code list. Neither party is necessarily wrong — they are applying different frameworks to the same claim.</p>
+    <p>For revenue cycle teams, medical necessity denials represent high-dollar, high-volume recoverable revenue. Imaging, DME, specialty pharmacy, and surgical procedures are frequent targets.</p>
+
+    <h2>How Medical Necessity Affects Your Claim</h2>
+    <p>A medical necessity denial zeroes out payment for the affected line item or entire claim. The remittance advice shows CARC 50 with an adjustment group indicating whether the amount is a contractual write-off or billable to the patient. Appealing requires clinical documentation that maps the patient's condition to the payer's coverage criteria — not a restatement that the physician ordered the service. Peer-to-peer review and independent medical review are common escalation paths for persistent medical necessity denials.</p>
+
+    <div class="callout">
+      <p>Quote the payer's own medical policy in your appeal. Map each coverage requirement to a specific finding in the patient's record — generic statements that the service was clinically appropriate lose CARC 50 appeals.</p>
+    </div>
+
+    <h2>What to Do About a Medical Necessity Denial</h2>
+    <p>Identify the specific medical policy or LCD the payer applied. Pull progress notes, diagnostic results, and treatment history that demonstrate the patient meets each coverage criterion. Draft an appeal letter that quotes the policy language and connects patient findings to each requirement. Attach all referenced documentation. Request peer-to-peer review if the payer offers it. Escalate to independent medical review if internal appeals fail. Track outcomes by payer and service type to identify patterns in medical necessity denials.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What CARC code indicates a medical necessity denial?</h3>
+    <p>CARC code 50 is the standard code for medical necessity denials. It indicates the payer determined the service was not medically necessary based on the information submitted with the claim. RARC codes may provide additional detail about the specific medical policy applied.</p>
+
+    <h3>Who decides medical necessity — the doctor or the insurer?</h3>
+    <p>The treating physician determines what care the patient needs clinically. The insurer applies its coverage policies and medical necessity criteria during claims adjudication. When these differ, the provider must demonstrate through documentation and appeal that the service meets the payer's published coverage standards.</p>
+
+    <h3>What documentation proves medical necessity?</h3>
+    <p>Progress notes linking diagnosis to treatment, diagnostic test results supporting the clinical decision, physician attestation letters, references to LCD or NCD coverage criteria, and peer-reviewed literature when applicable. The documentation must map specific patient findings to each coverage requirement in the payer's policy.</p>
+
+    <h3>Can medical necessity denials be appealed successfully?</h3>
+    <p>Yes. Medical necessity appeals have among the highest overturn rates when supported by strong clinical documentation — often exceeding 60% at external review. Success depends on connecting the patient's specific clinical findings to the payer's published coverage criteria, not on generic statements that the service was appropriate.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your CARC 50 Denial in 60 Seconds</h2>
+      <p>Upload your medical necessity denial and Denial Appeal Pro generates a clinical appeal letter mapped to your coverage criteria — free to try.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

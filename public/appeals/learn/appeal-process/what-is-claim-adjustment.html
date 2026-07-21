@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Claim Adjustment? | Denial Appeal Pro</title>
+  <meta name="description" content="A claim adjustment is any change a payer makes to the billed amount — including payment reductions, denials, and patient responsibility assignments. Learn how to read adjustment codes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary); margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are the three claim adjustment group codes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The three primary adjustment group codes are CO for contractual obligation, PR for patient responsibility, and OA for other adjustments. CO means the provider cannot bill the patient for the adjusted amount. PR means the patient owes the amount. OA covers adjustments outside CO and PR categories."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is every claim adjustment a denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Contractual adjustments where the payer pays the contracted rate are normal and expected — they are not denials. A denial occurs when the payer reduces payment to zero or assigns the full amount to an adjustment category that prevents provider collection. The CARC code determines whether the adjustment is appealable."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I appeal a claim adjustment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can appeal adjustments that result from incorrect payer processing — wrong CARC code, missing authorization data, bundling errors, or medical necessity disputes. You cannot appeal standard contractual rate adjustments where the payer paid the contracted amount correctly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many adjustments appear on a typical claim?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A typical adjudicated claim carries 2 to 3 adjustments per line item — one for the contractual rate difference, and potentially additional adjustments for deductibles, coinsurance, or denial reasons. Complex surgical claims with multiple line items may show 5 or more adjustments across the claim."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Appeal Process</p>
+    <p class="hero-eyebrow">Appeal Process</p>
+    <h1>What Is a Claim Adjustment?</h1>
+    <p class="hero-sub">The average adjudicated claim carries 2 to 3 adjustments per line item — each one a CARC-coded change to your billed amount that determines whether you collect, write off, or bill the patient.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">Any change a payer makes to the billed amount — including payment reductions, denials, and patient responsibility assignments.</p>
+    </div>
+
+    <h2>What a Claim Adjustment Means</h2>
+    <p>A claim adjustment is any modification the payer applies to the amount you billed before issuing payment. Adjustments appear on remittance advice with a dollar amount, an adjustment group code, and a Claim Adjustment Reason Code. The group code tells you who bears the financial impact: CO for contractual write-offs the provider absorbs, PR for amounts transferred to patient responsibility, and OA for other adjustments that fall outside standard categories.</p>
+    <p>Not every adjustment is a denial. When a payer pays your contracted rate on a $200 billed charge with a $140 allowed amount, the $60 contractual adjustment is expected. A denial adjustment zeroes out payment entirely and requires investigation.</p>
+
+    <h2>Why Claim Adjustments Matter</h2>
+    <p>Adjustments are the language of claims adjudication. Every dollar difference between what you billed and what you received is explained through an adjustment with a specific CARC code. Billing teams that treat all adjustments as routine write-offs miss appealable denials buried among normal contractual adjustments. Separating expected contractual adjustments from incorrect denials is the foundation of effective denial management.</p>
+    <p>Adjustment patterns by payer also reveal systemic issues — repeated CARC 97 bundling edits from one payer suggest a modifier or coding problem worth addressing at submission, not just at appeal.</p>
+
+    <h2>How Claim Adjustments Affect Your Claim</h2>
+    <p>Each adjustment reduces the claim balance by its stated amount and assigns the remaining balance to a responsibility category. A CO adjustment with CARC 50 means the provider writes off the amount and cannot bill the patient. A PR adjustment with CARC 1 means the patient owes a deductible. Multiple adjustments can stack on a single line item — contractual rate reduction plus coinsurance plus a separate denial adjustment. The net payment is what remains after all adjustments are applied.</p>
+
+    <div class="callout">
+      <p>Not every adjustment is appealable. Focus appeal effort on adjustments with denial CARC codes that zero out payment — not on standard contractual rate differences where the payer paid correctly at the contracted amount.</p>
+    </div>
+
+    <h2>What to Do About Claim Adjustments</h2>
+    <p>Review every adjustment on remittance advice at posting. Categorize each by group code and CARC code. Route denial-type adjustments to your appeal queue with the appropriate template and documentation checklist. Accept contractual adjustments that reflect correct contracted rates. Transfer PR adjustments to patient billing. Track adjustment patterns by payer and CARC code monthly to identify root causes — authorization gaps, coding errors, or timely filing misses — that generate repeatable denials.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What are the three claim adjustment group codes?</h3>
+    <p>The three primary adjustment group codes are CO for contractual obligation, PR for patient responsibility, and OA for other adjustments. CO means the provider cannot bill the patient for the adjusted amount. PR means the patient owes the amount. OA covers adjustments outside CO and PR categories.</p>
+
+    <h3>Is every claim adjustment a denial?</h3>
+    <p>No. Contractual adjustments where the payer pays the contracted rate are normal and expected — they are not denials. A denial occurs when the payer reduces payment to zero or assigns the full amount to an adjustment category that prevents provider collection. The CARC code determines whether the adjustment is appealable.</p>
+
+    <h3>Can I appeal a claim adjustment?</h3>
+    <p>You can appeal adjustments that result from incorrect payer processing — wrong CARC code, missing authorization data, bundling errors, or medical necessity disputes. You cannot appeal standard contractual rate adjustments where the payer paid the contracted amount correctly.</p>
+
+    <h3>How many adjustments appear on a typical claim?</h3>
+    <p>A typical adjudicated claim carries 2 to 3 adjustments per line item — one for the contractual rate difference, and potentially additional adjustments for deductibles, coinsurance, or denial reasons. Complex surgical claims with multiple line items may show 5 or more adjustments across the claim.</p>
+
+    <div class="cta-block">
+      <h2>Appeal the Adjustment That Denied Your Claim</h2>
+      <p>Upload your remittance advice and Denial Appeal Pro identifies the CARC code and generates a targeted appeal letter — free to try.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

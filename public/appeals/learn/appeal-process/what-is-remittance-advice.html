@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Remittance Advice (EOB)? | Denial Appeal Pro</title>
+  <meta name="description" content="Remittance advice is the document sent by a payer with payment that explains how each claim was processed, paid, denied, and coded. Learn how to read your ERA or EOB.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary); margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between an EOB and remittance advice?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An Explanation of Benefits is the patient-facing version of the payment explanation. Remittance advice is the provider-facing document — either paper or electronic ERA — that accompanies the actual payment. Both contain the same CARC codes, adjustment amounts, and denial reasons, but remittance advice includes provider-specific payment and adjustment detail."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is an ERA in medical billing?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An Electronic Remittance Advice is the HIPAA-standard 835 transaction that payers send electronically to providers. It replaces paper remittance advice and auto-posts payment and adjustment data into practice management systems. Over 90% of claim payments now arrive as ERAs rather than paper checks with remittance stubs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where do I find CARC codes on remittance advice?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CARC codes appear in the adjustment segment of each claim line on the remittance advice. Look for the reason code field next to each adjustment amount — it shows the two- or three-digit CARC code and the adjustment group code indicating whether the amount is a contractual obligation, patient responsibility, or other adjustment."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long should I keep remittance advice records?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medicare requires providers to retain remittance advice and related billing records for a minimum of 7 years. Most commercial payers follow similar retention standards. Keep remittance advice linked to the original claim and any subsequent appeal correspondence for the full retention period."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Appeal Process</p>
+    <p class="hero-eyebrow">Appeal Process</p>
+    <h1>What Is Remittance Advice (EOB)?</h1>
+    <p class="hero-sub">Every denied claim starts on the remittance advice — the 835 ERA document where CARC codes, adjustment amounts, and appeal deadlines first appear before your team ever opens the denial queue.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The document sent by a payer with payment that explains how each claim was processed, what was paid, what was denied, and the reason codes.</p>
+    </div>
+
+    <h2>What Remittance Advice Means</h2>
+    <p>Remittance advice is the payer's itemized explanation of how claims were adjudicated and paid. It accompanies every payment — whether by check or electronic funds transfer — and lists each claim with billed amounts, allowed amounts, payment amounts, and adjustments. For providers, remittance advice arrives as an Electronic Remittance Advice in HIPAA 835 format or as a paper remittance stub. For patients, the equivalent document is the Explanation of Benefits.</p>
+    <p>Every line item on a remittance advice includes Claim Adjustment Reason Codes that explain why amounts were reduced, denied, or reassigned to patient responsibility. This is the primary source document for denial management.</p>
+
+    <h2>Why Remittance Advice Matters</h2>
+    <p>You cannot appeal a denial you have not identified. Remittance advice is where denials first become visible in the revenue cycle — at payment posting, not at patient billing. Billing teams that auto-post ERAs without reviewing adjustment codes miss appealable denials that sit in the system until write-off. With over 90% of payments now arriving electronically as 835 transactions, the remittance advice is the first and most reliable trigger for appeal workflow.</p>
+    <p>Remittance advice also contains appeal filing deadlines, payer contact information, and claim reference numbers needed for appeal submission.</p>
+
+    <h2>How Remittance Advice Affects Your Claim</h2>
+    <p>Each remittance advice entry shows the final adjudication outcome for a submitted claim: paid in full, paid with contractual adjustment, denied with zero payment, or partially paid with patient responsibility assigned. Adjustment group codes — CO, PR, OA — determine whether the remaining balance can be billed to the patient or must be written off. CARC codes on the remittance advice define the specific denial reason and dictate which appeal strategy to use. The remittance date starts the appeal deadline clock.</p>
+
+    <div class="callout">
+      <p>Review every CARC code at posting — not at month-end reconciliation. The appeal deadline starts when the remittance advice is issued, and delays in identifying denials directly reduce the time available to build your appeal.</p>
+    </div>
+
+    <h2>What to Do With Remittance Advice</h2>
+    <p>Configure your practice management system to flag non-zero CARC codes during ERA auto-posting. Route flagged claims to a denial work queue sorted by dollar amount and appeal deadline. Match each CARC code to an appeal template and documentation checklist. Extract appeal deadlines and calendar them immediately. Retain remittance advice linked to the original claim, appeal letters, and payer responses for the full 7-year retention period. Reconcile payment totals against the remittance advice batch to catch underpayments before they become aged receivables.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What is the difference between an EOB and remittance advice?</h3>
+    <p>An Explanation of Benefits is the patient-facing version of the payment explanation. Remittance advice is the provider-facing document — either paper or electronic ERA — that accompanies the actual payment. Both contain the same CARC codes, adjustment amounts, and denial reasons, but remittance advice includes provider-specific payment and adjustment detail.</p>
+
+    <h3>What is an ERA in medical billing?</h3>
+    <p>An Electronic Remittance Advice is the HIPAA-standard 835 transaction that payers send electronically to providers. It replaces paper remittance advice and auto-posts payment and adjustment data into practice management systems. Over 90% of claim payments now arrive as ERAs rather than paper checks with remittance stubs.</p>
+
+    <h3>Where do I find CARC codes on remittance advice?</h3>
+    <p>CARC codes appear in the adjustment segment of each claim line on the remittance advice. Look for the reason code field next to each adjustment amount — it shows the two- or three-digit CARC code and the adjustment group code indicating whether the amount is a contractual obligation, patient responsibility, or other adjustment.</p>
+
+    <h3>How long should I keep remittance advice records?</h3>
+    <p>Medicare requires providers to retain remittance advice and related billing records for a minimum of 7 years. Most commercial payers follow similar retention standards. Keep remittance advice linked to the original claim and any subsequent appeal correspondence for the full retention period.</p>
+
+    <div class="cta-block">
+      <h2>Turn Your Remittance Advice Into an Appeal</h2>
+      <p>Upload your ERA or denial letter and Denial Appeal Pro reads the CARC code and generates a targeted appeal — free to try.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

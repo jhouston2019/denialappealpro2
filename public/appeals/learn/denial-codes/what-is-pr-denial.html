@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a PR Denial? | Denial Appeal Pro</title>
+  <meta name="description" content="A PR denial is a Patient Responsibility adjustment — deductible, copay, or coinsurance owed after insurance processes the claim. Learn what PR denials mean on your EOB.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does PR mean on an EOB?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PR stands for Patient Responsibility. It indicates the adjusted amount is owed by the patient — typically a deductible, copay, coinsurance, or non-covered service charge."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is a PR denial something I should appeal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PR-1, PR-2, and PR-3 for deductible, coinsurance, and copay are not appealable to the payer — they are legitimate patient cost-sharing. PR adjustments paired with denial CARC codes like 96 or 50 may warrant appealing the underlying denial."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the common PR CARC codes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PR-1 is deductible, PR-2 is coinsurance, PR-3 is copay, and PR-96 is non-covered charge passed to the patient. Each maps to a specific patient billing scenario."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I bill the patient after a PR adjustment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Bill the patient when the PR adjustment reflects legitimate cost-sharing on a paid claim, or when a non-covered service waiver was signed before treatment. Verify the insurance portion paid before sending a patient statement."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Denial Codes</p>
+    <p class="hero-eyebrow">Denial Codes</p>
+    <h1>What Is a PR Denial?</h1>
+    <p class="hero-sub">PR shifts dollars to the patient — deductible, copay, coinsurance — and knowing which PR codes are collectible versus which signal a deniable underlying claim saves your team hours of misdirected appeals.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A Patient Responsibility denial — the amount the patient owes after insurance processes the claim (deductible, copay, coinsurance).</p>
+    </div>
+
+    <h2>What a PR Denial Means</h2>
+    <p>PR is a claim adjustment group code standing for Patient Responsibility. It appears on remittance advices before CARC numbers — PR-1, PR-2, PR-3 — and indicates the adjusted amount belongs to the patient, not the provider or payer. PR-1 maps to deductible, PR-2 to coinsurance, and PR-3 to copay. When paired with denial CARC codes like PR-96, the patient may owe the full non-covered charge. PR adjustments confirm the claim was processed and the insurance portion was calculated — the remaining balance is the patient's contractual cost-sharing under their plan.</p>
+
+    <h2>Why PR Denials Matter</h2>
+    <p>PR adjustments are not denials in the traditional sense — they often mean the claim was paid and the patient owes their share. Misinterpreting PR-1 as a denial and submitting an appeal wastes staff time and delays patient billing. Conversely, treating a PR-96 non-covered charge as simple patient billing when the service was actually covered under the plan means lost revenue. Patient responsibility collections account for an estimated 30% to 35% of provider revenue, making accurate PR code interpretation critical for cash flow. High-deductible plans have pushed average patient responsibility per claim above $150 for commercial members.</p>
+
+    <h2>How PR Denials Affect Your Claim</h2>
+    <p>PR adjustments reduce the payer's payment and create a patient balance. On a $400 claim with $320 allowed, PR-2 coinsurance at 20% means the payer pays $256 and the patient owes $64. The claim is successfully processed — your action is patient billing, not an appeal. When PR appears with a denial CARC code and zero insurance payment, the entire charge may shift to the patient. This is appropriate for genuinely non-covered services with a signed waiver, but inappropriate when the payer incorrectly denied a covered service. Always check whether insurance paid anything before sending the patient a statement for the full amount.</p>
+
+    <div class="callout">
+      <p>PR-1, PR-2, and PR-3 on a paid claim mean collect from the patient — do not appeal. PR paired with a denial CARC code and $0 insurance payment means investigate before billing the patient.</p>
+    </div>
+
+    <h2>What to Do About a PR Denial</h2>
+    <p>Check whether the claim was paid or denied. If paid with PR cost-sharing, post the patient balance and send a statement showing the allowed amount, insurance payment, and patient responsibility. Verify the deductible and coinsurance calculations against the patient's plan benefits. If PR-96 or another denial CARC appears with zero insurance payment, review whether the service is truly non-covered or whether an appeal to the payer should precede patient billing. For PR adjustments you believe are incorrect — wrong deductible applied, out-of-network rate when provider is in-network — contact payer provider services before billing the patient. Denial Appeal Pro distinguishes between collectible PR balances and PR codes masking appealable denials.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What does PR mean on an EOB?</h3>
+    <p>PR stands for Patient Responsibility. It indicates the adjusted amount is owed by the patient — typically a deductible, copay, coinsurance, or non-covered service charge.</p>
+
+    <h3>Is a PR denial something I should appeal?</h3>
+    <p>PR-1, PR-2, and PR-3 for deductible, coinsurance, and copay are not appealable to the payer — they are legitimate patient cost-sharing. PR adjustments paired with denial CARC codes like 96 or 50 may warrant appealing the underlying denial.</p>
+
+    <h3>What are the common PR CARC codes?</h3>
+    <p>PR-1 is deductible, PR-2 is coinsurance, PR-3 is copay, and PR-96 is non-covered charge passed to the patient. Each maps to a specific patient billing scenario.</p>
+
+    <h3>When should I bill the patient after a PR adjustment?</h3>
+    <p>Bill the patient when the PR adjustment reflects legitimate cost-sharing on a paid claim, or when a non-covered service waiver was signed before treatment. Verify the insurance portion paid before sending a patient statement.</p>
+
+    <div class="cta-block">
+      <h2>Not Sure If Your PR Code Is Appealable?</h2>
+      <p>Upload your EOB and Denial Appeal Pro tells you whether to collect from the patient or appeal the payer in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>
