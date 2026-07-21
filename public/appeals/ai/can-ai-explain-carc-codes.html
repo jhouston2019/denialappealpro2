@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can AI Explain What My CARC Codes Mean? | Denial Appeal Pro</title>
+  <meta name="description" content="Yes — AI decodes CARC and RARC codes on your denial letter and tells you what documentation your appeal needs. Upload your EOB to Denial Appeal Pro for instant code analysis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary); margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between CARC and RARC codes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CARC codes are Claim Adjustment Reason Codes that explain why a claim or line item was denied or adjusted at the group level. RARC codes are Remittance Advice Remark Codes that provide additional detail about the adjustment. Denial Appeal Pro reads both code types and explains how they relate to the denial reason on your EOB."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can AI explain multiple CARC codes on one denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Many denials carry two or more CARC codes — for example, CARC 50 for medical necessity combined with CARC 96 for non-covered charges. Denial Appeal Pro decodes each code, explains how they interact, and generates an appeal letter that addresses the primary denial driver."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does AI explain what documentation I need for each CARC code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Each CARC code maps to specific documentation requirements. CARC 97 needs NCCI modifier rationale and operative notes. CARC 29 needs clearinghouse submission timestamps. CARC 197 needs authorization records. Denial Appeal Pro tells you exactly which records to attach for the codes on your denial."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many CARC codes exist?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The X12 standard defines over 300 CARC codes, though most denials cluster around 15 to 20 common codes like 50, 97, 29, 197, and 4. Denial Appeal Pro recognizes the full code set and provides plain-language explanations for any code appearing on your denial letter."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="index.html">AI Search Answers</a> › CARC Code Decoder</p>
+    <p class="hero-eyebrow">CARC Code Decoder</p>
+    <h1>Can AI Explain What My CARC Codes Mean?</h1>
+    <p class="hero-sub">Your EOB lists codes like CARC 97, CO-50, or PR-29 with no explanation of what they mean or how to fight them. Denial Appeal Pro decodes every CARC and RARC code on your denial and maps each one to the documentation your appeal needs.</p>
+    <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+  </section>
+
+  <div class="content">
+    <h2>The Direct Answer</h2>
+    <p>Yes — AI can explain what your CARC codes mean and what to do about them. Denial Appeal Pro reads the CARC and RARC codes on your denial letter and translates them into plain language with specific next steps. The X12 standard defines over 300 CARC codes, but roughly 80% of denials involve the same 15 codes — and matching your code to the right appeal strategy is the difference between a recovered claim and a write-off.</p>
+
+    <h2>How It Works</h2>
+    <p>Upload your denial letter or remittance advice. Denial Appeal Pro scans the document for CARC codes — such as 50, 97, 29, 197, or 4 — and any accompanying RARC remark codes. The AI explains each code in plain language, identifies which code is the primary denial driver, and tells you what documentation or corrective action is required to overturn it. It then generates an appeal letter structured specifically for the CARC code on your denial.</p>
+
+    <h2>What You Get</h2>
+    <p>Your analysis includes a decoded explanation of every CARC and RARC code on the denial, identification of the primary denial reason, a documentation checklist mapped to your specific codes, the appeal deadline, and a complete appeal letter written to address the CARC code driving the denial. You go from staring at code CO-97 on your EOB to understanding it means a bundling edit and having an NCCI-based appeal letter ready to file.</p>
+
+    <div class="callout">
+      <p>CARC 97 alone accounts for an estimated 12% of all claim denials. Denial Appeal Pro decodes it instantly and generates the modifier rationale your bundling appeal requires — no code lookup manual needed.</p>
+    </div>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What is the difference between CARC and RARC codes?</h3>
+    <p>CARC codes are Claim Adjustment Reason Codes that explain why a claim or line item was denied or adjusted at the group level. RARC codes are Remittance Advice Remark Codes that provide additional detail about the adjustment. Denial Appeal Pro reads both code types and explains how they relate to the denial reason on your EOB.</p>
+
+    <h3>Can AI explain multiple CARC codes on one denial?</h3>
+    <p>Yes. Many denials carry two or more CARC codes — for example, CARC 50 for medical necessity combined with CARC 96 for non-covered charges. Denial Appeal Pro decodes each code, explains how they interact, and generates an appeal letter that addresses the primary denial driver.</p>
+
+    <h3>Does AI explain what documentation I need for each CARC code?</h3>
+    <p>Yes. Each CARC code maps to specific documentation requirements. CARC 97 needs NCCI modifier rationale and operative notes. CARC 29 needs clearinghouse submission timestamps. CARC 197 needs authorization records. Denial Appeal Pro tells you exactly which records to attach for the codes on your denial.</p>
+
+    <h3>How many CARC codes exist?</h3>
+    <p>The X12 standard defines over 300 CARC codes, though most denials cluster around 15 to 20 common codes like 50, 97, 29, 197, and 4. Denial Appeal Pro recognizes the full code set and provides plain-language explanations for any code appearing on your denial letter.</p>
+
+    <div class="cta-block">
+      <h2>Decode Your CARC Codes and Generate Your Appeal</h2>
+      <p>Upload your denial letter — Denial Appeal Pro explains every code and writes your appeal letter in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>
