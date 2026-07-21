@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Overpayment? | Denial Appeal Pro</title>
+  <meta name="description" content="Overpayment occurs when an insurer pays more than the contracted rate for a service. Learn why providers must return overpayments within 60 days under Medicare rules.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I identify a payer overpayment?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Compare the allowed and paid amounts on the remittance advice against your contracted fee schedule. If the payer paid more than the contracted rate without a documented reason, the excess is an overpayment that must be returned."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Medicare overpayment return deadline?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Under Medicare rules, providers must report and return overpayments within 60 days of identification. Failure to return overpayments within this window can result in False Claims Act liability, civil monetary penalties, and exclusion from federal programs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I keep an overpayment if the payer made a mistake?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Regardless of which party caused the error, providers are legally obligated to return overpayments once identified. Keeping an overpayment — even one caused by payer error — creates compliance risk and potential fraud liability."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do overpayments relate to claim denials?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Overpayments and denials are opposite revenue cycle problems. A denial means you received too little; an overpayment means you received too much. Both require active payment review — denials need appeals, and overpayments need timely return to avoid penalties."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Revenue Cycle</p>
+    <p class="hero-eyebrow">Revenue Cycle</p>
+    <h1>What Is Overpayment?</h1>
+    <p class="hero-sub">When a payer sends more than your contracted rate, it is not a windfall — it is a compliance obligation with a 60-day clock under Medicare rules and serious penalties for providers who fail to return it.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">When an insurer pays more than the contracted rate — providers are legally required to return overpayments within 60 days of identification under Medicare rules.</p>
+    </div>
+
+    <h2>What Overpayment Means</h2>
+    <p>An overpayment occurs when a payer reimburses a provider more than the contracted or expected amount for a service. Overpayments can result from duplicate claim processing, incorrect fee schedule application, payer system errors, or billing for services that were later determined not to have been rendered. Unlike underpayments, which represent lost revenue, overpayments create a legal obligation — the provider must identify and return the excess funds. Under the Affordable Care Act and CMS regulations, Medicare overpayments must be reported and returned within 60 days of identification. Commercial payers also have recoupment rights and will offset future payments to recover overpaid amounts.</p>
+
+    <h2>Why Overpayment Matters</h2>
+    <p>Failure to return overpayments is not a billing oversight — it is a compliance violation with serious consequences. The False Claims Act imposes penalties of up to $25,000 per claim plus treble damages for knowingly retaining overpayments. CMS can exclude providers from Medicare and Medicaid programs. Beyond legal risk, unreturned overpayments distort your financial reporting and create reconciliation problems when payers eventually recoup through payment offsets. A practice that discovers a $50,000 overpayment pattern and fails to self-report within 60 days faces exponentially greater liability than one that proactively identifies and returns the funds.</p>
+
+    <h2>How Overpayment Affects Your Practice</h2>
+    <p>Overpayment management requires the same payment review rigor as denial management, but with opposite action — return rather than recover. Practices without automated payment variance detection may accumulate overpayments across hundreds of claims before discovery. When payers eventually recoup through future payment reductions, the financial impact arrives without warning and disrupts cash flow forecasting. Overpayment exposure increases when billing staff post remittances without comparing paid amounts to contracted rates. The same review process that catches underpayments for appeal also catches overpayments for return — making comprehensive payment posting a dual-purpose revenue cycle control.</p>
+
+    <div class="callout">
+      <p>The 60-day Medicare overpayment return rule starts the clock when you identify the overpayment — not when the payment was received. Delayed payment review extends your compliance exposure.</p>
+    </div>
+
+    <h2>What to Do About Overpayments</h2>
+    <p>Implement payment posting procedures that compare every allowed amount against your contracted fee schedule. Flag both underpayments and overpayments for review before posting is finalized. Establish a documented overpayment return process with clear timelines and responsible staff. For Medicare overpayments, use the appropriate refund mechanism — voluntary refund via overpayment notification or self-reported refund. Track the 60-day deadline from the date of identification, not receipt. While your team manages overpayment compliance, use Denial Appeal Pro to handle the opposite problem — denied and underpaid claims that need appeals to recover revenue you are rightfully owed.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>How do I identify a payer overpayment?</h3>
+    <p>Compare the allowed and paid amounts on the remittance advice against your contracted fee schedule. If the payer paid more than the contracted rate without a documented reason, the excess is an overpayment that must be returned.</p>
+
+    <h3>What is the Medicare overpayment return deadline?</h3>
+    <p>Under Medicare rules, providers must report and return overpayments within 60 days of identification. Failure to return overpayments within this window can result in False Claims Act liability, civil monetary penalties, and exclusion from federal programs.</p>
+
+    <h3>Can I keep an overpayment if the payer made a mistake?</h3>
+    <p>No. Regardless of which party caused the error, providers are legally obligated to return overpayments once identified. Keeping an overpayment — even one caused by payer error — creates compliance risk and potential fraud liability.</p>
+
+    <h3>How do overpayments relate to claim denials?</h3>
+    <p>Overpayments and denials are opposite revenue cycle problems. A denial means you received too little; an overpayment means you received too much. Both require active payment review — denials need appeals, and overpayments need timely return to avoid penalties.</p>
+
+    <div class="cta-block">
+      <h2>Recover Underpaid and Denied Claims</h2>
+      <p>Upload your denial letter and Denial Appeal Pro generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Superbill? | Denial Appeal Pro</title>
+  <meta name="description" content="A superbill is a detailed receipt listing diagnosis codes, procedure codes, and charges that patients use to file their own insurance claims. Learn how superbills fit into the revenue cycle.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What information is included on a superbill?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A superbill typically includes the provider name and NPI, practice address, patient name and date of birth, date of service, ICD-10 diagnosis codes, CPT or HCPCS procedure codes, charges for each service, and the amount paid at the time of visit."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When do patients need a superbill?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Patients need a superbill when their provider does not bill insurance directly — common with out-of-network providers, cash-pay practices, and some mental health clinicians. The patient submits the superbill to their insurer for out-of-network reimbursement."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is a superbill the same as an CMS-1500 claim form?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. A superbill is a simplified receipt designed for patient submission. A CMS-1500 is the standard professional claim form used by providers and billing staff to submit claims electronically or on paper directly to payers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can superbill errors cause claim denials?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Incorrect diagnosis codes, wrong CPT codes, missing NPI, or incomplete patient information on a superbill will cause the patient's out-of-network claim to be denied. Accurate superbill generation requires the same coding precision as direct billing."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Revenue Cycle</p>
+    <p class="hero-eyebrow">Revenue Cycle</p>
+    <h1>What Is a Superbill?</h1>
+    <p class="hero-sub">When a provider does not bill insurance directly, the superbill becomes the patient's only tool for getting reimbursed — and every coding error on that form becomes the patient's denial to fight.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A detailed receipt provided by a provider listing diagnosis codes, procedure codes, and charges — used by patients to file their own insurance claims when the provider does not bill directly.</p>
+    </div>
+
+    <h2>What a Superbill Means</h2>
+    <p>A superbill is an itemized statement that a healthcare provider gives to a patient so the patient can submit an out-of-network or self-filed insurance claim. It contains all the information an insurer needs to process a claim: provider name, NPI number, practice address, patient demographics, dates of service, ICD-10 diagnosis codes, CPT or HCPCS procedure codes, and the charges for each service. Superbills are common in mental health practices, concierge medicine, out-of-network specialty care, and any setting where the provider collects payment upfront and the patient seeks reimbursement from their insurer. The superbill essentially packages clinical and billing data into a patient-friendly format that replaces a direct provider-to-payer claim submission.</p>
+
+    <h2>Why Superbills Matter</h2>
+    <p>Superbill accuracy directly determines whether a patient's out-of-network claim is paid or denied. An estimated 35 percent of patient-submitted out-of-network claims are denied on first submission, often due to superbill errors such as incorrect CPT codes, missing modifiers, or wrong diagnosis pointers. For the provider, superbill quality affects patient satisfaction and retention — patients who receive repeated claim denials due to billing form errors may leave the practice. For practices transitioning to or from direct billing, superbill workflows represent a distinct revenue cycle path where the provider generates the document but bears no direct responsibility for claim follow-up — yet still suffers reputational consequences when denials occur.</p>
+
+    <h2>How Superbills Affect Your Practice</h2>
+    <p>Providers who rely on superbills operate outside the standard claims submission and denial management workflow. There is no 835 remittance advice, no CARC code, and no direct appeal path — the patient must handle denials independently. This creates a support burden when patients return with questions about denied claims. Superbill-based practices still need accurate charge capture, correct coding, and valid NPI information — the same front-end revenue cycle disciplines that prevent denials in direct billing. Practices offering both direct billing and superbill options must maintain two parallel revenue paths with different error profiles and recovery mechanisms.</p>
+
+    <div class="callout">
+      <p>A superbill with incorrect codes creates a denial the patient must fight alone. Investing in superbill accuracy protects patient relationships and reduces support calls about unpaid claims.</p>
+    </div>
+
+    <h2>What to Do About Superbill Accuracy</h2>
+    <p>Generate superbills from your EHR rather than manually to ensure diagnosis and procedure codes match the clinical documentation. Include all required fields — provider NPI, taxonomy code, diagnosis pointers, and units of service. Provide patients with brief instructions on how to submit the superbill to their insurer, including the payer's out-of-network claims address. For practices that also bill insurance directly, use the same coding standards for superbills and electronic claims. When patients report denials on superbill-submitted claims, help them identify the error and provide a corrected superbill. For your own direct-billed claims that receive denials, use Denial Appeal Pro to generate submission-ready appeals.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What information is included on a superbill?</h3>
+    <p>A superbill typically includes the provider name and NPI, practice address, patient name and date of birth, date of service, ICD-10 diagnosis codes, CPT or HCPCS procedure codes, charges for each service, and the amount paid at the time of visit.</p>
+
+    <h3>When do patients need a superbill?</h3>
+    <p>Patients need a superbill when their provider does not bill insurance directly — common with out-of-network providers, cash-pay practices, and some mental health clinicians. The patient submits the superbill to their insurer for out-of-network reimbursement.</p>
+
+    <h3>Is a superbill the same as an CMS-1500 claim form?</h3>
+    <p>No. A superbill is a simplified receipt designed for patient submission. A CMS-1500 is the standard professional claim form used by providers and billing staff to submit claims electronically or on paper directly to payers.</p>
+
+    <h3>Can superbill errors cause claim denials?</h3>
+    <p>Yes. Incorrect diagnosis codes, wrong CPT codes, missing NPI, or incomplete patient information on a superbill will cause the patient's out-of-network claim to be denied. Accurate superbill generation requires the same coding precision as direct billing.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Direct-Billed Claim Denials</h2>
+      <p>For claims you bill directly, upload your denial letter and Denial Appeal Pro generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

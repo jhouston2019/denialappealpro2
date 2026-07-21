@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Medicaid? | Denial Appeal Pro</title>
+  <meta name="description" content="Medicaid is a joint federal and state program providing health coverage to low-income individuals with state-specific rules. Learn how Medicaid claims and appeals work.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Medicaid the same in every state?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. While federal law sets minimum standards, each state administers its own Medicaid program with different eligibility rules, covered benefits, prior authorization requirements, and appeal procedures. Always check your state's specific Medicaid manual."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a Medicaid Managed Care Organization?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A Medicaid Managed Care Organization, or MCO, is a private health plan contracted by the state to administer Medicaid benefits. Most Medicaid beneficiaries receive coverage through an MCO rather than fee-for-service Medicaid, and MCOs apply their own prior auth and network rules."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I appeal a Medicaid claim denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medicaid appeals are handled at the state level. You typically file a fair hearing request with your state Medicaid agency within 90 days of the denial notice. If your coverage is through a managed care plan, you must first exhaust the plan's internal appeal before requesting a state fair hearing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Medicaid pay less than Medicare?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medicaid reimbursement rates are generally lower than Medicare and commercial payers. State fee schedules vary widely, and some providers limit Medicaid participation due to payment rates that may not cover the cost of delivering care."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Payers and Plans</p>
+    <p class="hero-eyebrow">Payers and Plans</p>
+    <h1>What Is Medicaid?</h1>
+    <p class="hero-sub">Medicaid covers more than 80 million low-income Americans through 56 distinct state programs — each with its own eligibility rules, covered benefits, and denial appeal procedures.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A joint federal and state program providing health coverage to low-income individuals — each state administers its own program with different coverage rules.</p>
+    </div>
+
+    <h2>What Medicaid Means</h2>
+    <p>Medicaid is a jointly funded federal and state health insurance program that provides coverage to eligible low-income adults, children, pregnant women, elderly individuals, and people with disabilities. Unlike Medicare, which is uniform nationwide, Medicaid is administered separately by each state and the District of Columbia, resulting in significant variation in eligibility thresholds, covered services, and payment rates. Most states deliver Medicaid benefits through Managed Care Organizations that contract with the state to provide coverage, while some services remain in traditional fee-for-service Medicaid. Federal law establishes baseline requirements, but states have broad flexibility to design their programs within those parameters.</p>
+
+    <h2>Why Medicaid Matters</h2>
+    <p>Medicaid's state-by-state structure means denial and appeal procedures differ depending on where the beneficiary lives and whether coverage is fee-for-service or managed care. A prior authorization requirement valid in one state may not apply in another, and appeal deadlines range from 30 to 90 days depending on the state agency. Providers who serve Medicaid populations must navigate state-specific provider manuals, billing codes, and medical necessity criteria that have no single national standard. Understanding whether a denial came from the state agency or a managed care plan determines which appeal pathway and governing regulations apply to your claim.</p>
+
+    <h2>How Medicaid Affects Your Claim</h2>
+    <p>Medicaid claims are adjudicated against state-specific fee schedules, coverage limitations, and prior authorization requirements that differ from Medicare and commercial payers. Common Medicaid denial reasons include services exceeding frequency limits defined in the state plan, missing prior authorization for specialty services, and provider enrollment or credentialing issues. Managed care denials add another layer, as MCOs apply their own medical policies on top of state Medicaid rules. Medicaid timely filing limits can be as short as 90 days from the date of service in some states, making prompt claim submission and denial follow-up critical for payment recovery.</p>
+
+    <div class="callout">
+      <p>Identify whether your Medicaid denial came from fee-for-service Medicaid or a Managed Care Organization. Each has a different appeal process, and exhausting the MCO internal appeal is usually required before requesting a state fair hearing.</p>
+    </div>
+
+    <h2>What to Do About a Medicaid Denial</h2>
+    <p>Determine whether the denial originated from your state Medicaid agency or a managed care plan, then locate the applicable state provider manual and coverage policy for the denied service. Gather clinical documentation supporting medical necessity under your state's Medicaid criteria and verify that prior authorization was obtained if required. File an appeal or fair hearing request within your state's deadline, typically 30 to 90 days from the denial notice. Include the state plan amendment or provider bulletin that supports coverage for the service in question. Upload your Medicaid denial to Denial Appeal Pro for analysis mapped to your state's coverage rules and appeal letter generation.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Is Medicaid the same in every state?</h3>
+    <p>No. While federal law sets minimum standards, each state administers its own Medicaid program with different eligibility rules, covered benefits, prior authorization requirements, and appeal procedures. Always check your state's specific Medicaid manual.</p>
+
+    <h3>What is a Medicaid Managed Care Organization?</h3>
+    <p>A Medicaid Managed Care Organization, or MCO, is a private health plan contracted by the state to administer Medicaid benefits. Most Medicaid beneficiaries receive coverage through an MCO rather than fee-for-service Medicaid, and MCOs apply their own prior auth and network rules.</p>
+
+    <h3>How do I appeal a Medicaid claim denial?</h3>
+    <p>Medicaid appeals are handled at the state level. You typically file a fair hearing request with your state Medicaid agency within 90 days of the denial notice. If your coverage is through a managed care plan, you must first exhaust the plan's internal appeal before requesting a state fair hearing.</p>
+
+    <h3>Does Medicaid pay less than Medicare?</h3>
+    <p>Medicaid reimbursement rates are generally lower than Medicare and commercial payers. State fee schedules vary widely, and some providers limit Medicaid participation due to payment rates that may not cover the cost of delivering care.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your Medicaid Denial</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies your payer type and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

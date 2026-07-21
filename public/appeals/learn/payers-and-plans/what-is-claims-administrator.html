@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Claims Administrator? | Denial Appeal Pro</title>
+  <meta name="description" content="A claims administrator processes claims for a health plan — for self-funded plans this is often a third-party administrator not the insurer itself. Learn how to identify your claims administrator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is the claims administrator the same as the insurance company?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not always. For fully insured plans, the insurance company is both the insurer and the claims administrator. For self-funded plans, a third-party administrator processes claims on behalf of the employer, who holds financial risk. The TPA name may appear on the ID card instead of the employer."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a third-party administrator?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A third-party administrator, or TPA, is a company hired by an employer to manage claims processing, provider networks, prior authorization, and member services for a self-funded health plan. Common TPAs include major insurers operating their administrative services division."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who do I send an appeal to — the TPA or the employer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Send appeals to the claims administrator listed on the denial notice, which is typically the TPA. The TPA processes appeals on behalf of the plan sponsor. For ERISA plans, appeals are decided by the plan fiduciary, though the TPA handles day-to-day review."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can a TPA deny a claim the employer would have paid?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The TPA adjudicates claims according to the plan document and medical policies established by the plan sponsor. If the TPA misapplied plan terms, the denial can be overturned on appeal. The employer plan sponsor retains ultimate authority over benefit design and appeal outcomes."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Payers and Plans</p>
+    <p class="hero-eyebrow">Payers and Plans</p>
+    <h1>What Is a Claims Administrator?</h1>
+    <p class="hero-sub">Roughly 80% of self-funded employer plans route claims through a third-party administrator — meaning the company name on the denial letter may not be the entity that actually decided to deny your claim.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The entity responsible for processing claims for a health plan — for self-funded plans this is often a third-party administrator not the insurer itself.</p>
+    </div>
+
+    <h2>What a Claims Administrator Means</h2>
+    <p>A claims administrator is the organization responsible for receiving, adjudicating, and paying health insurance claims on behalf of a health plan. For fully insured plans, the insurance company serves as both the insurer and the claims administrator. For self-funded employer plans, the claims administrator role is typically outsourced to a third-party administrator — often a major insurer's administrative services division operating under a different legal entity. The claims administrator handles day-to-day operations including claims processing, prior authorization review, provider credentialing, member services, and appeals intake, while the plan sponsor or insurer holds financial responsibility depending on plan structure.</p>
+
+    <h2>Why a Claims Administrator Matters</h2>
+    <p>Confusing the claims administrator with the plan sponsor or insurer is one of the most common mistakes in denial management. When a patient presents an ID card showing a well-known insurer logo, providers assume they are billing a fully insured plan subject to state insurance regulations. In reality, the logo may represent a TPA administering a self-funded ERISA plan with different appeal rights, no state external review, and medical policies set by the employer rather than the insurer's standard fully insured product. Knowing who actually processed your denial — and under whose authority — determines where to send appeals, which regulations apply, and who bears financial accountability for the claim.</p>
+
+    <h2>How a Claims Administrator Affects Your Claim</h2>
+    <p>The claims administrator receives your submitted claim, runs it through eligibility verification, prior authorization checks, and medical policy review, then issues payment or denial through an 835 remittance advice. Denial notices come from the claims administrator's address and reference its medical policies — which for self-funded plans may differ from the TPA's fully insured product policies for the same service. Appeal submissions must be directed to the claims administrator identified on the denial notice, using the appeal address and fax numbers specified in the adverse determination letter. Sending an appeal to the wrong entity or the employer directly rather than the designated TPA can result in missed deadlines and lost appeal rights.</p>
+
+    <div class="callout">
+      <p>The name on the denial letter is your claims administrator — send all appeals and correspondence to that entity using the contact information specified in the adverse determination notice.</p>
+    </div>
+
+    <h2>What to Do About a Claims Administrator Denial</h2>
+    <p>Identify the claims administrator from the denial notice and confirm whether it is acting as insurer or TPA for this specific plan. Request the plan document or Summary Plan Description to understand the plan sponsor, coverage terms, and appeal procedures. File your appeal with the claims administrator within the deadline stated on the denial notice, addressed to the appeals department specified in the letter. Include clinical documentation and plan language citations relevant to the denial reason. If the TPA upholds the denial for a self-funded plan, evaluate ERISA appeal escalation options. Upload your denial to Denial Appeal Pro to identify your claims administrator, plan type, and generate a properly addressed appeal letter.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Is the claims administrator the same as the insurance company?</h3>
+    <p>Not always. For fully insured plans, the insurance company is both the insurer and the claims administrator. For self-funded plans, a third-party administrator processes claims on behalf of the employer, who holds financial risk. The TPA name may appear on the ID card instead of the employer.</p>
+
+    <h3>What is a third-party administrator?</h3>
+    <p>A third-party administrator, or TPA, is a company hired by an employer to manage claims processing, provider networks, prior authorization, and member services for a self-funded health plan. Common TPAs include major insurers operating their administrative services division.</p>
+
+    <h3>Who do I send an appeal to — the TPA or the employer?</h3>
+    <p>Send appeals to the claims administrator listed on the denial notice, which is typically the TPA. The TPA processes appeals on behalf of the plan sponsor. For ERISA plans, appeals are decided by the plan fiduciary, though the TPA handles day-to-day review.</p>
+
+    <h3>Can a TPA deny a claim the employer would have paid?</h3>
+    <p>The TPA adjudicates claims according to the plan document and medical policies established by the plan sponsor. If the TPA misapplied plan terms, the denial can be overturned on appeal. The employer plan sponsor retains ultimate authority over benefit design and appeal outcomes.</p>
+
+    <div class="cta-block">
+      <h2>Appeal to the Right Administrator</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies your claims administrator and generates a properly addressed appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

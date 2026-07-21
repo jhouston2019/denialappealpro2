@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a PPO? | Denial Appeal Pro</title>
+  <meta name="description" content="A PPO is a health plan that allows members to see any provider but pays more for in-network care — out-of-network claims are paid at a reduced rate not denied outright.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do PPO plans require referrals?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. PPO plans allow members to see specialists and other providers without a referral from a primary care physician. This is one of the main advantages of PPO coverage over HMO plans."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much less does a PPO pay for out-of-network care?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Out-of-network PPO claims are typically paid at a reduced rate compared to in-network services, with the member responsible for the difference through balance billing. The exact reimbursement level varies by plan."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can a PPO deny out-of-network claims entirely?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PPO plans generally pay something for out-of-network covered services rather than denying them outright. However, the service must still be a covered benefit, and medical necessity or prior authorization denials can still apply."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is a PPO more expensive than an HMO?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PPO plans typically have higher monthly premiums and out-of-pocket costs than HMO plans. In exchange, members get broader provider choice and do not need referrals for specialist care."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Payers and Plans</p>
+    <p class="hero-eyebrow">Payers and Plans</p>
+    <h1>What Is a PPO?</h1>
+    <p class="hero-sub">PPO plans cover roughly 60% of employer-sponsored health plans and pay out-of-network claims at a reduced rate rather than denying them — but the payment gap can still leave providers with significant unpaid balances.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A health plan that allows members to see any provider but pays more for in-network care — out-of-network claims are paid at a reduced rate not denied outright.</p>
+    </div>
+
+    <h2>What a PPO Means</h2>
+    <p>A PPO, or Preferred Provider Organization, is a type of health insurance plan that contracts with a network of preferred providers while still offering partial coverage for out-of-network care. Members can see any licensed provider without a referral, giving them more flexibility than HMO plans. In-network providers agree to negotiated reimbursement rates, and members pay lower copays and coinsurance when using network providers. Out-of-network services receive a reduced benefit level rather than a full denial, with the member responsible for the remaining cost through balance billing.</p>
+
+    <h2>Why a PPO Matters</h2>
+    <p>PPO plan structure affects how providers should approach claim submission, patient cost discussions, and denial appeals. Because PPO plans pay out-of-network claims at a reduced rate rather than denying them completely, providers often receive partial payment that appears as a claim adjustment rather than a hard denial. This distinction matters for revenue cycle management — a reduced payment is not the same as a denial and may not trigger the same appeal workflow. PPO members who choose out-of-network providers face higher out-of-pocket costs, which can lead to patient billing disputes and bad debt when the payment gap is substantial.</p>
+
+    <h2>How a PPO Affects Your Claim</h2>
+    <p>PPO claims are adjudicated at the in-network contracted rate or the out-of-network allowed amount depending on provider network status. In-network claims process at negotiated fee schedule rates with standard copay and coinsurance applied. Out-of-network claims are paid based on the plan's usual, customary, and reasonable rate or a percentage of the Medicare fee schedule, whichever the plan specifies. Common PPO denial reasons include medical necessity determinations, missing prior authorization for certain services, and benefit exclusions — not network status itself. A provider treating a PPO member out-of-network should verify the expected allowed amount before rendering care to avoid unexpected write-offs.</p>
+
+    <div class="callout">
+      <p>A PPO out-of-network payment reduction is not a denial — it is a benefit-level adjustment. Before appealing, confirm whether the claim was denied or simply paid at the lower out-of-network rate.</p>
+    </div>
+
+    <h2>What to Do About a PPO Denial</h2>
+    <p>Determine whether the issue is a true denial for medical necessity or authorization, or an out-of-network payment reduction that requires a different response. For medical necessity denials, obtain the payer's coverage policy and submit an appeal with clinical documentation supporting the service. For out-of-network payment disputes, review the plan's out-of-network benefit language and calculate whether the allowed amount meets reasonable reimbursement standards. Consider negotiating with the patient for the balance or filing an appeal if the plan miscalculated the allowed amount. Upload your PPO denial or underpayment to Denial Appeal Pro for instant analysis and appeal letter generation.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Do PPO plans require referrals?</h3>
+    <p>No. PPO plans allow members to see specialists and other providers without a referral from a primary care physician. This is one of the main advantages of PPO coverage over HMO plans.</p>
+
+    <h3>How much less does a PPO pay for out-of-network care?</h3>
+    <p>Out-of-network PPO claims are typically paid at a reduced rate compared to in-network services, with the member responsible for the difference through balance billing. The exact reimbursement level varies by plan.</p>
+
+    <h3>Can a PPO deny out-of-network claims entirely?</h3>
+    <p>PPO plans generally pay something for out-of-network covered services rather than denying them outright. However, the service must still be a covered benefit, and medical necessity or prior authorization denials can still apply.</p>
+
+    <h3>Is a PPO more expensive than an HMO?</h3>
+    <p>PPO plans typically have higher monthly premiums and out-of-pocket costs than HMO plans. In exchange, members get broader provider choice and do not need referrals for specialist care.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your PPO Denial</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies the denial type and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

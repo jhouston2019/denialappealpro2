@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Charge Capture? | Denial Appeal Pro</title>
+  <meta name="description" content="Charge capture is the process of recording all billable services rendered so they can be submitted for payment. Learn why missed charge capture is a primary source of lost revenue.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Who is responsible for charge capture?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Charge capture is a shared responsibility. Providers document services in the clinical record, coders translate documentation into billable codes, and billing staff verify that all charges are present before claim submission. Breakdowns at any step cause revenue leakage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What causes missed charge capture?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common causes include incomplete provider documentation, services performed but not entered into the EHR, failure to capture ancillary services like injections or supplies, and charges lost during EHR workflow transitions between clinical and billing modules."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much revenue is lost to charge capture errors?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Industry estimates suggest practices lose 1 to 5 percent of total revenue to missed charge capture. For a practice generating $3 million in charges annually, that represents $30,000 to $150,000 in services delivered but never billed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does charge capture relate to denials?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Incomplete charge capture can cause denials when submitted claims do not match the services documented in the medical record. Payers deny claims where the billed codes cannot be supported by clinical documentation — making accurate capture essential for both revenue and compliance."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Revenue Cycle</p>
+    <p class="hero-eyebrow">Revenue Cycle</p>
+    <h1>What Is Charge Capture?</h1>
+    <p class="hero-sub">You cannot bill for what you do not record — charge capture is the first revenue gate in your practice, and every missed service is money you earned but never asked for.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The process of recording all billable services rendered so they can be submitted for payment — missed charge capture is a primary source of lost revenue.</p>
+    </div>
+
+    <h2>What Charge Capture Means</h2>
+    <p>Charge capture is the process of identifying, documenting, and recording every billable service a provider delivers during a patient encounter. It bridges clinical care and revenue generation — without accurate charge capture, services that were performed never enter the billing pipeline. Charge capture includes the evaluation and management visit, procedures, diagnostic tests, supplies, injections, and any ancillary services rendered during the encounter. In modern practices, charge capture typically occurs within the EHR, where provider documentation is translated into CPT and HCPCS codes that billing staff submit on claims. The accuracy and completeness of this step determines whether your practice bills for everything it delivers.</p>
+
+    <h2>Why Charge Capture Matters</h2>
+    <p>Missed charge capture is one of the most invisible forms of revenue loss because it never appears as a denial — the claim for the missing service simply never exists. Studies estimate that 1 to 5 percent of billable services go unrecorded across medical practices. For a group generating $4 million in annual charges, that translates to $40,000 to $200,000 in unbilled services every year. Unlike denials, which at least create a record of the attempted revenue, charge capture failures leave no trace in your billing system. The service was delivered, the provider's time was spent, but no claim was ever created to recover the cost.</p>
+
+    <h2>How Charge Capture Affects Your Practice</h2>
+    <p>Charge capture gaps distort your understanding of practice productivity and payer reimbursement. If a provider consistently fails to capture ancillary procedures, their relative value unit totals understate their actual clinical output. Payer contract negotiations suffer when charge data does not reflect the full scope of services delivered. Compliance risk increases when billed charges exceed documented services — but the opposite problem, documented services without corresponding charges, represents pure revenue loss with no compliance upside. Charge capture errors also contribute to denials when claims are submitted for services that lack adequate documentation in the medical record.</p>
+
+    <div class="callout">
+      <p>Missed charge capture and claim denials are two sides of revenue leakage. Charge capture failures mean you never bill for the service; denials mean you bill but the payer refuses to pay. Both require active management.</p>
+    </div>
+
+    <h2>What to Do About Charge Capture Gaps</h2>
+    <p>Audit a sample of recent encounters by comparing clinical documentation against submitted charges. Look for services documented in the note but absent from the claim — injections, EKGs, wound care supplies, and prolonged service codes are common misses. Implement charge lag monitoring and flag encounters where charges are not entered within 24 hours of service. Train providers on documentation requirements that support complete billing. For claims that are submitted but denied due to documentation gaps, use Denial Appeal Pro to generate targeted appeals that address the specific denial reason.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Who is responsible for charge capture?</h3>
+    <p>Charge capture is a shared responsibility. Providers document services in the clinical record, coders translate documentation into billable codes, and billing staff verify that all charges are present before claim submission. Breakdowns at any step cause revenue leakage.</p>
+
+    <h3>What causes missed charge capture?</h3>
+    <p>Common causes include incomplete provider documentation, services performed but not entered into the EHR, failure to capture ancillary services like injections or supplies, and charges lost during EHR workflow transitions between clinical and billing modules.</p>
+
+    <h3>How much revenue is lost to charge capture errors?</h3>
+    <p>Industry estimates suggest practices lose 1 to 5 percent of total revenue to missed charge capture. For a practice generating $3 million in charges annually, that represents $30,000 to $150,000 in services delivered but never billed.</p>
+
+    <h3>How does charge capture relate to denials?</h3>
+    <p>Incomplete charge capture can cause denials when submitted claims do not match the services documented in the medical record. Payers deny claims where the billed codes cannot be supported by clinical documentation — making accurate capture essential for both revenue and compliance.</p>
+
+    <div class="cta-block">
+      <h2>Recover Revenue From Denied Claims</h2>
+      <p>Upload your denial letter and Denial Appeal Pro generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

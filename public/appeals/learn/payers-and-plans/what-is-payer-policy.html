@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Payer Policy? | Denial Appeal Pro</title>
+  <meta name="description" content="A payer policy is an insurer's written coverage guidelines for specific services — the primary document to cite in a medical necessity appeal. Learn how to use payer policies effectively.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Where do I find a payer's medical policy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most insurers publish medical policies on their provider portal websites. Search by CPT code, procedure name, or diagnosis. Policies are typically organized by clinical category such as surgery, imaging, or durable medical equipment."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can a payer change its policy after denying my claim?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Payers must apply the policy in effect at the time the service was rendered, not a retroactively changed version. Request the policy effective date and archive a copy when filing your appeal to prevent the payer from citing updated criteria."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between a payer policy and a plan document?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The plan document defines what benefits the member is entitled to under their coverage contract. The payer medical policy defines the clinical criteria the insurer uses to determine whether a specific service meets medical necessity for payment."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I use a payer policy in an appeal letter?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Quote the specific policy criteria and map your patient's clinical documentation to each requirement. Show that the patient meets every listed indication for coverage, not just some of them. This structured approach is far more persuasive than general medical necessity arguments."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Payers and Plans</p>
+    <p class="hero-eyebrow">Payers and Plans</p>
+    <h1>What Is a Payer Policy?</h1>
+    <p class="hero-sub">Successful medical necessity appeals cite the payer's own coverage policy 70% of the time — turning the insurer's written criteria against the denial by showing the patient meets every listed indication.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">An insurer's written coverage guidelines for specific services — the primary document to cite in a medical necessity appeal.</p>
+    </div>
+
+    <h2>What a Payer Policy Means</h2>
+    <p>A payer policy, also called a medical policy or coverage policy, is a formal document published by a health insurance company that defines the clinical criteria a service must meet to be considered medically necessary and eligible for payment. These policies specify covered indications, required diagnostic prerequisites, frequency limits, age restrictions, and documentation standards for procedures ranging from advanced imaging to specialty pharmaceuticals. Payer policies are developed by the insurer's medical affairs team using clinical evidence reviews and are updated periodically as new research and treatment guidelines emerge. Each major payer maintains hundreds of individual policies organized by clinical specialty and service type.</p>
+
+    <h2>Why a Payer Policy Matters</h2>
+    <p>Payer policies are the rulebook the insurer uses to justify denials — and the most powerful weapon in overturning them. When a claim is denied for medical necessity, the payer's decision is based on its policy criteria, not a subjective clinical judgment. An appeal that cites the payer's own policy language and demonstrates the patient meets each listed indication forces the reviewer to reconcile the denial with the insurer's published standards. Appeals that ignore payer policy and rely on general clinical arguments alone succeed at significantly lower rates. Obtaining and analyzing the applicable policy before writing an appeal letter is the highest-leverage step in the medical necessity appeal process.</p>
+
+    <h2>How a Payer Policy Affects Your Claim</h2>
+    <p>During claims adjudication and prior authorization review, payer clinical staff compare the submitted diagnosis, procedure codes, and clinical documentation against the relevant medical policy criteria. A claim fails when documentation does not satisfy one or more policy requirements — even if the treating physician considers the service medically appropriate. Denial notices for medical necessity often reference the specific policy number and section that was not met. CARC code 50 is frequently assigned to medical necessity denials rooted in payer policy criteria. Understanding which policy section triggered the denial tells you exactly what additional documentation or clinical evidence is needed to overturn it on appeal.</p>
+
+    <div class="callout">
+      <p>Download and archive the payer policy effective on the date of service before filing your appeal. Payers sometimes update policies retroactively, and having the original version protects your argument.</p>
+    </div>
+
+    <h2>What to Do About a Payer Policy Denial</h2>
+    <p>Locate the payer's medical policy for the denied service on the insurer's provider portal and identify the specific criteria listed for coverage. Compare each criterion against your patient's clinical record to find where documentation supports coverage and where gaps exist. Structure your appeal letter by addressing each policy requirement individually with supporting clinical evidence — lab results, imaging findings, treatment history, and physician notes. Quote the policy language directly and explain how the patient's clinical presentation satisfies each indication. Upload your medical necessity denial to Denial Appeal Pro to automatically match your denial to the applicable payer policy and generate a criteria-mapped appeal letter.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Where do I find a payer's medical policy?</h3>
+    <p>Most insurers publish medical policies on their provider portal websites. Search by CPT code, procedure name, or diagnosis. Policies are typically organized by clinical category such as surgery, imaging, or durable medical equipment.</p>
+
+    <h3>Can a payer change its policy after denying my claim?</h3>
+    <p>Payers must apply the policy in effect at the time the service was rendered, not a retroactively changed version. Request the policy effective date and archive a copy when filing your appeal to prevent the payer from citing updated criteria.</p>
+
+    <h3>What is the difference between a payer policy and a plan document?</h3>
+    <p>The plan document defines what benefits the member is entitled to under their coverage contract. The payer medical policy defines the clinical criteria the insurer uses to determine whether a specific service meets medical necessity for payment.</p>
+
+    <h3>How do I use a payer policy in an appeal letter?</h3>
+    <p>Quote the specific policy criteria and map your patient's clinical documentation to each requirement. Show that the patient meets every listed indication for coverage, not just some of them. This structured approach is far more persuasive than general medical necessity arguments.</p>
+
+    <div class="cta-block">
+      <h2>Appeal With the Payer's Own Policy</h2>
+      <p>Upload your medical necessity denial and Denial Appeal Pro matches it to the payer policy and generates a criteria-mapped appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

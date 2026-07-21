@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Medicare? | Denial Appeal Pro</title>
+  <meta name="description" content="Medicare is the federal health insurance program for people 65 and older and certain disabled individuals. Learn how Medicare claims, denials, and appeals work.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are the different parts of Medicare?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medicare Part A covers hospital stays, Part B covers outpatient and physician services, Part C is Medicare Advantage offered by private plans, and Part D covers prescription drugs. Original Medicare refers to Parts A and B together."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I appeal a Medicare claim denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medicare appeals follow a five-level process starting with a redetermination request to the Medicare Administrative Contractor within 120 days of the denial. Each level escalates to a Qualified Independent Contractor, ALJ hearing, Medicare Appeals Council, and finally federal court."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who processes Medicare claims?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medicare Administrative Contractors, or MACs, process and pay Original Medicare claims in specific geographic jurisdictions. Each MAC applies CMS national coverage determinations and local coverage determinations when adjudicating claims."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Medicare require prior authorization?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Original Medicare generally does not require prior authorization for most services, though CMS has expanded prior auth requirements for certain items like power wheelchairs and repetitive scheduled non-emergent ambulance transport. Medicare Advantage plans impose their own prior auth rules."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Payers and Plans</p>
+    <p class="hero-eyebrow">Payers and Plans</p>
+    <h1>What Is Medicare?</h1>
+    <p class="hero-sub">Medicare insures more than 65 million Americans through a federal program with its own coverage manuals, fee schedules, and a five-level appeal process that differs from every commercial payer.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The federal health insurance program for people 65 and older and certain disabled individuals — administered by CMS with its own coverage rules and appeal process.</p>
+    </div>
+
+    <h2>What Medicare Means</h2>
+    <p>Medicare is the federally funded health insurance program established in 1965 and administered by the Centers for Medicare and Medicaid Services. It provides coverage for Americans age 65 and older, people with End-Stage Renal Disease, and certain individuals under 65 who receive Social Security Disability Insurance for 24 months. Original Medicare consists of Part A for inpatient hospital services and Part B for outpatient care, physician visits, and durable medical equipment. Medicare sets national coverage policies through National Coverage Determinations and allows Medicare Administrative Contractors to issue Local Coverage Determinations that define medical necessity in specific regions.</p>
+
+    <h2>Why Medicare Matters</h2>
+    <p>Medicare operates under an entirely different regulatory framework than commercial insurance. Its appeal process has five distinct levels, its fee schedules are set by CMS rather than negotiated with providers, and its coverage decisions are driven by NCDs, LCDs, and the Medicare Benefit Policy Manual. Providers who treat Medicare beneficiaries must understand these rules because Medicare denial patterns — particularly around medical necessity, frequency limits, and incident-to billing — require documentation strategies that differ from commercial payer appeals. Medicare also serves as the benchmark payer that influences coverage decisions across the entire healthcare system.</p>
+
+    <h2>How Medicare Affects Your Claim</h2>
+    <p>When a provider submits a claim to Medicare, a Medicare Administrative Contractor adjudicates it against CMS coverage policies and the Medicare Physician Fee Schedule. Common Medicare denial reasons include services not deemed reasonable and necessary under Social Security Act Section 1862, frequency edits that exceed LCD limits, and missing Advance Beneficiary Notices for services Medicare may not cover. Medicare appeal deadlines are strict — redetermination requests must be filed within 120 days of the initial determination date. Missing a level in the five-step appeal chain can permanently foreclose payment on claims worth hundreds to thousands of dollars per service line.</p>
+
+    <div class="callout">
+      <p>Medicare appeals follow a mandatory five-level escalation. Always file at Level 1 redetermination before advancing — skipping a level invalidates your appeal and resets the clock.</p>
+    </div>
+
+    <h2>What to Do About a Medicare Denial</h2>
+    <p>Review the remittance advice for denial reason codes and cross-reference the applicable NCD or LCD for the denied service. Gather clinical documentation that demonstrates medical necessity under Medicare's coverage criteria, including physician notes, diagnostic results, and treatment history. Submit a redetermination request to your MAC within 120 days, citing the specific Medicare policy language that supports payment. If redetermination is unfavorable, escalate through each appeal level while preserving all evidence in the administrative record. Upload your Medicare denial to Denial Appeal Pro for an instant analysis mapped to CMS coverage policies and appeal letter generation.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What are the different parts of Medicare?</h3>
+    <p>Medicare Part A covers hospital stays, Part B covers outpatient and physician services, Part C is Medicare Advantage offered by private plans, and Part D covers prescription drugs. Original Medicare refers to Parts A and B together.</p>
+
+    <h3>How do I appeal a Medicare claim denial?</h3>
+    <p>Medicare appeals follow a five-level process starting with a redetermination request to the Medicare Administrative Contractor within 120 days of the denial. Each level escalates to a Qualified Independent Contractor, ALJ hearing, Medicare Appeals Council, and finally federal court.</p>
+
+    <h3>Who processes Medicare claims?</h3>
+    <p>Medicare Administrative Contractors, or MACs, process and pay Original Medicare claims in specific geographic jurisdictions. Each MAC applies CMS national coverage determinations and local coverage determinations when adjudicating claims.</p>
+
+    <h3>Does Medicare require prior authorization?</h3>
+    <p>Original Medicare generally does not require prior authorization for most services, though CMS has expanded prior auth requirements for certain items like power wheelchairs and repetitive scheduled non-emergent ambulance transport. Medicare Advantage plans impose their own prior auth rules.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your Medicare Denial</h2>
+      <p>Upload your denial letter and Denial Appeal Pro maps your denial to CMS policies and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

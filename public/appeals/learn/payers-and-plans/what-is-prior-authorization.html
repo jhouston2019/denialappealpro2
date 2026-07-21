@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Prior Authorization? | Denial Appeal Pro</title>
+  <meta name="description" content="Prior authorization is advance insurer approval required before certain services — the most common source of CARC 197 denials. Learn how to prevent and appeal prior auth denials.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is CARC 197 and how does it relate to prior authorization?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CARC 197 indicates a claim was denied because precertification, authorization, or pre-treatment approval was not obtained. It is the most common CARC code assigned to prior authorization failures and signals that the payer has no record of approved authorization for the service."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can prior authorization be obtained retroactively?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Some payers allow retroactive authorization for emergent or urgent services where prior auth was not possible before treatment. Policies vary by payer and plan, and retroactive auth is never guaranteed — document the clinical urgency that prevented advance approval."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does prior authorization approval take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standard prior auth requests must be decided within 14 days for most commercial plans under ACA rules. Urgent requests must be decided within 72 hours. Medicare Advantage and Medicaid managed care plans follow similar but plan-specific timelines."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What services typically require prior authorization?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common prior auth requirements apply to advanced imaging like MRI and CT scans, inpatient admissions, specialty drugs, durable medical equipment, bariatric surgery, and many outpatient procedures. Each payer publishes its own prior auth list."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Payers and Plans</p>
+    <p class="hero-eyebrow">Payers and Plans</p>
+    <h1>What Is Prior Authorization?</h1>
+    <p class="hero-sub">Missing prior authorization triggers CARC 197 — the denial code responsible for roughly 35% of all authorization-related claim rejections across commercial, Medicare Advantage, and Medicaid managed care plans.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">Advance approval from an insurer required before certain services are rendered — the most common source of CARC 197 denials.</p>
+    </div>
+
+    <h2>What Prior Authorization Means</h2>
+    <p>Prior authorization, also called precertification or pre-approval, is a utilization management process requiring a health care provider to obtain advance approval from the patient's insurance plan before delivering specific services, procedures, medications, or equipment. The payer reviews clinical information to determine whether the requested service meets its medical necessity and coverage criteria. If approved, the payer issues an authorization number valid for a defined period and number of units. If denied, the provider must either appeal the authorization decision or inform the patient that the service may not be covered. Prior authorization requirements vary by payer, plan type, and service category.</p>
+
+    <h2>Why Prior Authorization Matters</h2>
+    <p>Prior authorization is the single most preventable cause of claim denials in modern health care. When a service is rendered without required prior auth, the resulting claim denial assigns CARC 197 and typically results in zero payment regardless of medical necessity. Revenue cycle teams spend significant staff time obtaining authorizations, tracking expiration dates, and resolving auth-related denials after the fact. CMS and state regulators have increasingly scrutinized prior auth practices, requiring faster decision timeframes and greater transparency. For patients, a prior auth denial can delay critical treatment by days or weeks while the appeal process runs its course.</p>
+
+    <h2>How Prior Authorization Affects Your Claim</h2>
+    <p>During claims adjudication, the payer's system checks whether a valid authorization number is linked to the claim for services on its prior auth list. If no authorization is on file, the claim receives CARC 197 and is denied regardless of whether the service was medically appropriate. Even when authorization was obtained, mismatches between the authorized procedure code, date range, or provider NPI and the submitted claim can trigger denial. Authorization numbers must be included on the claim form in the designated field, and the service date must fall within the authorization's effective period. A single digit error in the authorization number is enough to cause a denial that requires manual correction and resubmission.</p>
+
+    <div class="callout">
+      <p>Always include the authorization number on the claim and verify it matches the approved procedure, provider, and date range. A valid auth attached to the wrong service code will still produce a CARC 197 denial.</p>
+    </div>
+
+    <h2>What to Do About a Prior Authorization Denial</h2>
+    <p>Check whether authorization was actually obtained and whether the authorization number was correctly submitted on the claim. If auth was approved but not linked, submit a corrected claim with the authorization number. If auth was never obtained, request retroactive authorization citing emergent circumstances or payer processing delays. If auth was denied before service, appeal the authorization decision with clinical documentation demonstrating medical necessity under the payer's coverage policy. File within the plan's appeal deadline and reference the specific payer policy criteria the service meets. Upload your CARC 197 denial to Denial Appeal Pro for instant analysis and appeal letter generation mapped to your payer's authorization requirements.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What is CARC 197 and how does it relate to prior authorization?</h3>
+    <p>CARC 197 indicates a claim was denied because precertification, authorization, or pre-treatment approval was not obtained. It is the most common CARC code assigned to prior authorization failures and signals that the payer has no record of approved authorization for the service.</p>
+
+    <h3>Can prior authorization be obtained retroactively?</h3>
+    <p>Some payers allow retroactive authorization for emergent or urgent services where prior auth was not possible before treatment. Policies vary by payer and plan, and retroactive auth is never guaranteed — document the clinical urgency that prevented advance approval.</p>
+
+    <h3>How long does prior authorization approval take?</h3>
+    <p>Standard prior auth requests must be decided within 14 days for most commercial plans under ACA rules. Urgent requests must be decided within 72 hours. Medicare Advantage and Medicaid managed care plans follow similar but plan-specific timelines.</p>
+
+    <h3>What services typically require prior authorization?</h3>
+    <p>Common prior auth requirements apply to advanced imaging like MRI and CT scans, inpatient admissions, specialty drugs, durable medical equipment, bariatric surgery, and many outpatient procedures. Each payer publishes its own prior auth list.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your Prior Authorization Denial</h2>
+      <p>Upload your CARC 197 denial and Denial Appeal Pro generates a submission-ready appeal with clinical necessity arguments in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

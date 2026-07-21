@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is TRICARE? | Denial Appeal Pro</title>
+  <meta name="description" content="TRICARE is the health insurance program for U.S. military members, retirees, and families — administered by the Department of Defense with specific appeal rights.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Who is eligible for TRICARE?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Active duty service members, National Guard and Reserve members, military retirees, and their eligible family members qualify for TRICARE. Coverage options vary based on the sponsor's duty status and geographic location."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the different TRICARE plan options?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TRICARE offers multiple plans including TRICARE Prime for managed care, TRICARE Select for preferred provider coverage, TRICARE For Life for Medicare-eligible retirees, and TRICARE East and West regions administered by Humana and Health Net respectively."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I appeal a TRICARE claim denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "File a reconsideration request with your TRICARE contractor within 90 days of the initial determination. If the reconsideration is unfavorable, you may request a formal appeal hearing before the Defense Health Agency within 60 days of the reconsideration decision."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does TRICARE require referrals for specialist care?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TRICARE Prime requires referrals from a primary care manager for specialist visits. TRICARE Select allows direct access to specialists without referrals but may require prior authorization for certain services and procedures."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Payers and Plans</p>
+    <p class="hero-eyebrow">Payers and Plans</p>
+    <h1>What Is TRICARE?</h1>
+    <p class="hero-sub">TRICARE provides health coverage to 9.6 million active duty members, retirees, and military families through a Department of Defense program with its own claims rules and appeal procedures.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The health insurance program for U.S. military members, retirees, and their families — administered by the Department of Defense with specific appeal rights.</p>
+    </div>
+
+    <h2>What TRICARE Means</h2>
+    <p>TRICARE is the health care program serving Uniformed Service members, retirees, and their families worldwide. Administered by the Defense Health Agency under the Department of Defense, TRICARE provides comprehensive medical coverage through a network of military treatment facilities and civilian providers. The program offers multiple plan options including TRICARE Prime for managed care enrollment, TRICARE Select for point-of-service flexibility, and TRICARE For Life as secondary coverage for Medicare-eligible military retirees. Claims for civilian care are processed by regional contractors — Humana Military for TRICARE East and Health Net Federal Services for TRICARE West.</p>
+
+    <h2>Why TRICARE Matters</h2>
+    <p>TRICARE operates under federal military regulations rather than state insurance law or standard commercial payer rules. Its coverage policies, referral requirements, and prior authorization procedures differ from both Medicare and commercial insurance, creating unique denial patterns that providers unfamiliar with military health care often mishandle. TRICARE beneficiaries may receive care at military facilities at no cost or through civilian networks with cost-sharing, and the rules governing each pathway vary. Understanding TRICARE's specific claim submission requirements, timely filing limits, and appeal deadlines is essential for providers serving military communities and for beneficiaries facing denied claims.</p>
+
+    <h2>How TRICARE Affects Your Claim</h2>
+    <p>TRICARE adjudicates claims against its own Clinical Policy Manual and Medical Benefits Matrix rather than commercial medical policies or CMS coverage determinations. Common TRICARE denial reasons include services not meeting medical necessity criteria under TRICARE policy, missing referrals for TRICARE Prime enrollees, and claims submitted outside the one-year timely filing limit. Network status matters significantly — TRICARE Select pays higher rates for network providers and may apply greater cost-sharing for out-of-network care. Providers must use specific TRICARE payer IDs and submit claims to the correct regional contractor based on the beneficiary's address, as misrouted claims are frequently denied or delayed.</p>
+
+    <div class="callout">
+      <p>TRICARE claims must be submitted to the correct regional contractor — East or West — based on the beneficiary's home address. A claim sent to the wrong region will be rejected, not merely delayed.</p>
+    </div>
+
+    <h2>What to Do About a TRICARE Denial</h2>
+    <p>Review the denial notice for the specific TRICARE policy citation and determine whether the issue is medical necessity, missing authorization, or a billing error. Obtain the TRICARE Clinical Policy Manual section relevant to the denied service and gather clinical documentation supporting coverage. File a reconsideration request with your regional TRICARE contractor within 90 days of the initial determination. If reconsideration fails, request a formal appeal hearing before the Defense Health Agency within 60 days. Upload your TRICARE denial to Denial Appeal Pro for analysis mapped to TRICARE coverage policies and appeal letter generation.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Who is eligible for TRICARE?</h3>
+    <p>Active duty service members, National Guard and Reserve members, military retirees, and their eligible family members qualify for TRICARE. Coverage options vary based on the sponsor's duty status and geographic location.</p>
+
+    <h3>What are the different TRICARE plan options?</h3>
+    <p>TRICARE offers multiple plans including TRICARE Prime for managed care, TRICARE Select for preferred provider coverage, TRICARE For Life for Medicare-eligible retirees, and TRICARE East and West regions administered by Humana and Health Net respectively.</p>
+
+    <h3>How do I appeal a TRICARE claim denial?</h3>
+    <p>File a reconsideration request with your TRICARE contractor within 90 days of the initial determination. If the reconsideration is unfavorable, you may request a formal appeal hearing before the Defense Health Agency within 60 days of the reconsideration decision.</p>
+
+    <h3>Does TRICARE require referrals for specialist care?</h3>
+    <p>TRICARE Prime requires referrals from a primary care manager for specialist visits. TRICARE Select allows direct access to specialists without referrals but may require prior authorization for certain services and procedures.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your TRICARE Denial</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies your TRICARE plan and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

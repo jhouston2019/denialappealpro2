@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Revenue Cycle Management? | Denial Appeal Pro</title>
+  <meta name="description" content="Revenue cycle management is the end-to-end process of managing claims from patient registration through final payment. Learn how denial management fits into RCM and why it matters.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are the main stages of revenue cycle management?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "RCM typically includes patient registration, insurance verification, charge capture, claims submission, payment posting, denial management, and patient collections. Each stage feeds the next, and breakdowns at any point reduce overall collections."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does denial management fit into RCM?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Denial management sits between payment posting and final account resolution. When claims are denied, the RCM team must identify the reason, appeal or correct the claim, and prevent the same denial from recurring on future submissions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who is responsible for revenue cycle management?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "In most practices, RCM is shared across front desk staff, billing specialists, coders, and practice administrators. Larger organizations may have a dedicated revenue cycle director overseeing the entire process."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a healthy denial rate in RCM?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Industry benchmarks target a first-pass denial rate below 5 percent. Practices above 10 percent typically have systemic issues in coding, authorization, or claims scrubbing that require process improvement."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Revenue Cycle</p>
+    <p class="hero-eyebrow">Revenue Cycle</p>
+    <h1>What Is Revenue Cycle Management?</h1>
+    <p class="hero-sub">From the moment a patient schedules an appointment to the day the final dollar is collected, revenue cycle management governs every financial touchpoint in your practice — and denial management is where most of that money is won or lost.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The end-to-end process of managing claims from patient registration through final payment — denial management is a critical phase of the revenue cycle.</p>
+    </div>
+
+    <h2>What Revenue Cycle Management Means</h2>
+    <p>Revenue cycle management, commonly abbreviated RCM, is the operational framework that turns clinical services into collected revenue. It begins before the patient arrives — with insurance verification and eligibility checks — and continues through charge capture, coding, claims submission, payment posting, denial resolution, and patient billing. Every step in the cycle depends on accurate data flowing forward. A missing authorization at registration can produce a denial weeks later. A coding error at charge capture can trigger an underpayment that sits in accounts receivable for months. RCM is not a single department task — it is the connective tissue between clinical operations and financial outcomes.</p>
+
+    <h2>Why Revenue Cycle Management Matters</h2>
+    <p>Strong RCM is the difference between a profitable practice and one that delivers excellent care but struggles to stay open. The average medical practice loses 5 percent of net revenue to preventable billing errors and unworked denials. For a practice billing $5 million annually, that represents $250,000 in recoverable revenue sitting on the table. RCM metrics like days in AR, clean claim rate, and first-pass resolution rate give administrators a real-time pulse on financial health. Without structured RCM, practices react to denials instead of preventing them — and reaction is always more expensive than prevention.</p>
+
+    <h2>How RCM Affects Your Practice</h2>
+    <p>RCM touches every role in the organization. Front desk staff set the cycle in motion by collecting accurate demographic and insurance data. Providers influence it through documentation quality and charge capture completeness. Billers and coders translate clinical work into compliant claims. Denial specialists recover revenue that would otherwise be written off. When any link in this chain breaks, the financial impact compounds. A practice with 45 days in AR and a 12 percent denial rate is operating at a fundamentally different margin than one holding 28 days in AR with denials under 5 percent — even if both deliver identical patient care.</p>
+
+    <div class="callout">
+      <p>Denial management is not a standalone function — it is the recovery engine at the center of RCM. Every dollar recovered through appeal is a dollar that front-end prevention failed to protect.</p>
+    </div>
+
+    <h2>What to Do About RCM Gaps</h2>
+    <p>Start by mapping your current revenue cycle and identifying where claims fail most often. Run a denial trend report for the last 90 days and categorize denials by root cause — authorization, coding, eligibility, timely filing. Address the highest-volume denial categories first with process fixes at the front end, then build an appeal workflow for denials that still occur. Track clean claim rate, first-pass resolution rate, and days in AR monthly. When denials arrive despite your best prevention efforts, use Denial Appeal Pro to decode the denial reason and generate a submission-ready appeal letter in under 60 seconds.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What are the main stages of revenue cycle management?</h3>
+    <p>RCM typically includes patient registration, insurance verification, charge capture, claims submission, payment posting, denial management, and patient collections. Each stage feeds the next, and breakdowns at any point reduce overall collections.</p>
+
+    <h3>How does denial management fit into RCM?</h3>
+    <p>Denial management sits between payment posting and final account resolution. When claims are denied, the RCM team must identify the reason, appeal or correct the claim, and prevent the same denial from recurring on future submissions.</p>
+
+    <h3>Who is responsible for revenue cycle management?</h3>
+    <p>In most practices, RCM is shared across front desk staff, billing specialists, coders, and practice administrators. Larger organizations may have a dedicated revenue cycle director overseeing the entire process.</p>
+
+    <h3>What is a healthy denial rate in RCM?</h3>
+    <p>Industry benchmarks target a first-pass denial rate below 5 percent. Practices above 10 percent typically have systemic issues in coding, authorization, or claims scrubbing that require process improvement.</p>
+
+    <div class="cta-block">
+      <h2>Strengthen Your Denial Recovery</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies the denial reason and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>
