@@ -21,10 +21,70 @@ const CORE_FEATURES: readonly string[] = [
   "Appeal history",
 ];
 
-const SINGLE_FEATURES: readonly string[] = [
-  "1 appeal",
-  ...CORE_FEATURES,
-  "No subscription required",
+const SUBSCRIPTION_FEATURES: readonly string[] = [
+  "Priority generation",
+  "Saved provider profiles",
+  "Bulk appeal processing",
+];
+
+const SUBSCRIPTION_PLANS: readonly {
+  plan: Extract<PlanKey, "essential" | "professional" | "enterprise">;
+  title: string;
+  appealsLabel: string;
+  cta: string;
+  popular?: boolean;
+}[] = [
+  {
+    plan: "essential",
+    title: "Essential",
+    appealsLabel: "10 appeals per month",
+    cta: "Start Essential Plan",
+  },
+  {
+    plan: "professional",
+    title: "Professional",
+    appealsLabel: "25 appeals per month",
+    cta: "Start Professional Plan",
+    popular: true,
+  },
+  {
+    plan: "enterprise",
+    title: "Enterprise",
+    appealsLabel: "50 appeals per month",
+    cta: "Start Enterprise Plan",
+  },
+];
+
+const BULK_PACKS: readonly {
+  plan: Extract<PlanKey, "bulk_10" | "bulk_25" | "bulk_50" | "bulk_100">;
+  appeals: number;
+  perAppeal: string;
+  cta: string;
+}[] = [
+  {
+    plan: "bulk_10",
+    appeals: 10,
+    perAppeal: "$8.90/appeal",
+    cta: "Buy 10 Appeals",
+  },
+  {
+    plan: "bulk_25",
+    appeals: 25,
+    perAppeal: "$7.96/appeal",
+    cta: "Buy 25 Appeals",
+  },
+  {
+    plan: "bulk_50",
+    appeals: 50,
+    perAppeal: "$6.98/appeal",
+    cta: "Buy 50 Appeals",
+  },
+  {
+    plan: "bulk_100",
+    appeals: 100,
+    perAppeal: "$6.99/appeal",
+    cta: "Buy 100 Appeals",
+  },
 ];
 
 function Check() {
@@ -46,54 +106,29 @@ function Check() {
   );
 }
 
-function CheckLight() {
-  return (
-    <svg
-      className="h-5 w-5 flex-shrink-0 text-blue-400"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      aria-hidden
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M5 13l4 4L19 7"
-      />
-    </svg>
-  );
-}
-
 function PlanPriceLine({
   plan,
   prices,
   pricesLoading,
-  dark = false,
 }: {
   plan: PlanKey;
   prices: Partial<Record<PlanKey, PlanPriceDisplay>>;
   pricesLoading: boolean;
-  dark?: boolean;
 }) {
   const entry = prices[plan];
-  const amountClass = dark
-    ? "text-5xl font-bold text-white"
-    : "text-5xl font-bold text-slate-900";
-  const suffixClass = dark ? "text-slate-300" : "text-slate-600";
 
   if (pricesLoading && !entry) {
     return (
-      <div className="mb-4 flex items-baseline gap-2">
-        <span className={amountClass}>…</span>
+      <div className="mb-2 flex items-baseline gap-2">
+        <span className="text-4xl font-bold text-slate-900">…</span>
       </div>
     );
   }
 
   if (!entry) {
     return (
-      <div className="mb-4 flex items-baseline gap-2">
-        <span className={`text-sm ${suffixClass}`}>Price unavailable</span>
+      <div className="mb-2 flex items-baseline gap-2">
+        <span className="text-sm text-slate-600">Price unavailable</span>
       </div>
     );
   }
@@ -103,12 +138,27 @@ function PlanPriceLine({
     : entry.suffix.replace(/^\//, "");
 
   return (
-    <div className="mb-4 flex items-baseline gap-2">
-      <span className={amountClass}>{entry.amountFormatted}</span>
-      <span className={suffixClass}>
+    <div className="mb-2 flex items-baseline gap-2">
+      <span className="text-4xl font-bold text-slate-900">
+        {entry.amountFormatted}
+      </span>
+      <span className="text-slate-600">
         {entry.suffix.startsWith("(") ? suffixText : `/${suffixText}`}
       </span>
     </div>
+  );
+}
+
+function FeatureList({ items }: { items: readonly string[] }) {
+  return (
+    <ul className="space-y-3">
+      {items.map((t) => (
+        <li key={t} className="flex items-start gap-2 text-sm text-slate-700">
+          <Check />
+          <span>{t}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -189,172 +239,138 @@ export default function PricingPageClient({ userEmail }: Props) {
           ) : null}
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-lg border border-slate-800 bg-[#F8FAFC] p-8">
-            <div className="mb-6">
-              <h2 className="mb-2 text-2xl font-bold text-slate-900">Single</h2>
-              <PlanPriceLine
-                plan="single"
-                prices={prices}
-                pricesLoading={pricesLoading}
-              />
-            </div>
-
-            <ul className="mb-8 space-y-3">
-              {SINGLE_FEATURES.map((t) => (
-                <li
-                  key={t}
-                  className="flex items-start gap-2 text-sm text-slate-700"
+        <section className="mb-16">
+          <h2 className="mb-8 text-center text-2xl font-bold text-white sm:text-3xl">
+            Subscribe and Save
+          </h2>
+          <div className="grid gap-8 lg:grid-cols-3">
+            {SUBSCRIPTION_PLANS.map(
+              ({ plan, title, appealsLabel, cta, popular }) => (
+                <div
+                  key={plan}
+                  className={`relative rounded-lg bg-[#F8FAFC] p-8 ${
+                    popular
+                      ? "border-2 border-[#2563EB]"
+                      : "border border-slate-800"
+                  }`}
                 >
-                  <Check />
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
+                  {popular ? (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#2563EB] px-4 py-1 text-xs font-semibold text-white">
+                      ★ Most Popular
+                    </div>
+                  ) : null}
+                  <div className="mb-6">
+                    <h3 className="mb-2 text-2xl font-bold text-slate-900">
+                      {title}
+                    </h3>
+                    <PlanPriceLine
+                      plan={plan}
+                      prices={prices}
+                      pricesLoading={pricesLoading}
+                    />
+                  </div>
 
-            <button
-              type="button"
-              onClick={() => handleCheckout("single")}
-              disabled={loading === "single"}
-              className="w-full rounded-lg bg-[#2563EB] px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#1E40AF] disabled:opacity-50"
-            >
-              {loading === "single" ? "Loading..." : "Start Single Appeal"}
-            </button>
+                  <div className="mb-8">
+                    <FeatureList
+                      items={[appealsLabel, ...CORE_FEATURES, ...SUBSCRIPTION_FEATURES]}
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleCheckout(plan)}
+                    disabled={loading === plan}
+                    className="w-full rounded-lg bg-[#2563EB] px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#1E40AF] disabled:opacity-50"
+                  >
+                    {loading === plan ? "Loading..." : cta}
+                  </button>
+                </div>
+              )
+            )}
           </div>
+        </section>
 
-          <div className="rounded-lg border border-slate-800 bg-[#F8FAFC] p-8">
-            <div className="mb-6">
-              <h2 className="mb-2 text-2xl font-bold text-slate-900">
-                Essential
-              </h2>
-              <PlanPriceLine
-                plan="essential"
-                prices={prices}
-                pricesLoading={pricesLoading}
-              />
+        <section className="mb-10">
+          <h2 className="mb-8 text-center text-2xl font-bold text-white sm:text-3xl">
+            Pay As You Go
+          </h2>
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="rounded-lg border border-slate-800 bg-[#F8FAFC] p-8">
+              <div className="mb-6">
+                <h3 className="mb-2 text-2xl font-bold text-slate-900">Single</h3>
+                <PlanPriceLine
+                  plan="single"
+                  prices={prices}
+                  pricesLoading={pricesLoading}
+                />
+                <p className="text-sm text-slate-600">
+                  Try it once, no commitment
+                </p>
+              </div>
+
+              <div className="mb-8">
+                <FeatureList items={["1 appeal", ...CORE_FEATURES]} />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleCheckout("single")}
+                disabled={loading === "single"}
+                className="w-full rounded-lg bg-[#2563EB] px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#1E40AF] disabled:opacity-50"
+              >
+                {loading === "single" ? "Loading..." : "Start Single Appeal"}
+              </button>
             </div>
 
-            <ul className="mb-8 space-y-3">
-              {[
-                "10 appeals per month",
-                "Unused appeals roll over (up to 1 month)",
-                ...CORE_FEATURES,
-                "Priority processing",
-              ].map((t) => (
-                <li
-                  key={t}
-                  className="flex items-start gap-2 text-sm text-slate-700"
-                >
-                  <Check />
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="rounded-lg border border-slate-800 bg-[#F8FAFC] p-8">
+              <div className="mb-6">
+                <h3 className="mb-2 text-2xl font-bold text-slate-900">
+                  Bulk Packs
+                </h3>
+                <p className="text-sm text-slate-600">
+                  Prepaid appeal credits — use anytime
+                </p>
+              </div>
 
-            <button
-              type="button"
-              onClick={() => handleCheckout("essential")}
-              disabled={loading === "essential"}
-              className="w-full rounded-lg bg-[#2563EB] px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#1E40AF] disabled:opacity-50"
-            >
-              {loading === "essential"
-                ? "Loading..."
-                : "Start Essential Plan"}
-            </button>
-          </div>
+              <div className="mb-6 space-y-4">
+                {BULK_PACKS.map(({ plan, appeals, perAppeal, cta }) => (
+                  <div
+                    key={plan}
+                    className="rounded-lg border border-slate-200 bg-white p-4"
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="font-semibold text-slate-900">
+                          {appeals} appeals
+                        </p>
+                        <div className="mt-1">
+                          <PlanPriceLine
+                            plan={plan}
+                            prices={prices}
+                            pricesLoading={pricesLoading}
+                          />
+                          <p className="text-xs text-slate-500">{perAppeal}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCheckout(plan)}
+                        disabled={loading === plan}
+                        className="shrink-0 rounded-lg border border-[#2563EB] bg-white px-4 py-2 text-sm font-semibold text-[#2563EB] transition hover:bg-blue-50 disabled:opacity-50"
+                      >
+                        {loading === plan ? "Loading..." : cta}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-          <div className="relative rounded-lg border-2 border-[#2563EB] bg-[#F8FAFC] p-8">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#2563EB] px-4 py-1 text-xs font-semibold text-white">
-              Most Popular
+              <FeatureList items={CORE_FEATURES} />
             </div>
-            <div className="mb-6">
-              <h2 className="mb-2 text-2xl font-bold text-slate-900">
-                Professional
-              </h2>
-              <PlanPriceLine
-                plan="professional"
-                prices={prices}
-                pricesLoading={pricesLoading}
-              />
-            </div>
-
-            <ul className="mb-8 space-y-3">
-              {[
-                "25 appeals per month",
-                "Unused appeals roll over (up to 1 month)",
-                ...CORE_FEATURES,
-                "Priority processing",
-                "Bulk PDF upload (up to 100 files)",
-                "CSV / Excel batch processing",
-              ].map((t) => (
-                <li
-                  key={t}
-                  className="flex items-start gap-2 text-sm text-slate-700"
-                >
-                  <Check />
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
-
-            <button
-              type="button"
-              onClick={() => handleCheckout("professional")}
-              disabled={loading === "professional"}
-              className="w-full rounded-lg bg-[#2563EB] px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-[#1E40AF] disabled:opacity-50"
-            >
-              {loading === "professional"
-                ? "Loading..."
-                : "Start Professional Plan"}
-            </button>
           </div>
+        </section>
 
-          <div className="relative rounded-lg border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-8">
-            <div className="mb-6">
-              <h2 className="mb-2 text-2xl font-bold text-white">Enterprise</h2>
-              <PlanPriceLine
-                plan="enterprise"
-                prices={prices}
-                pricesLoading={pricesLoading}
-                dark
-              />
-            </div>
-
-            <ul className="mb-8 space-y-3">
-              {[
-                "75 appeals per month",
-                "Unused appeals roll over (up to 1 month)",
-                ...CORE_FEATURES,
-                "Priority processing",
-                "Bulk PDF upload (up to 100 files)",
-                "CSV / Excel batch processing",
-                "Dedicated account support",
-                "Custom payer templates",
-              ].map((t) => (
-                <li
-                  key={t}
-                  className="flex items-start gap-2 text-sm text-slate-200"
-                >
-                  <CheckLight />
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
-
-            <button
-              type="button"
-              onClick={() => handleCheckout("enterprise")}
-              disabled={loading === "enterprise"}
-              className="w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:from-purple-700 hover:to-blue-700 disabled:opacity-50"
-            >
-              {loading === "enterprise"
-                ? "Loading..."
-                : "Start Enterprise Plan"}
-            </button>
-          </div>
-        </div>
-
-        <p className="mt-10 text-center text-sm text-slate-400">
+        <p className="text-center text-sm text-slate-400">
           No contracts. Cancel anytime. Appeals generated in under 60 seconds.
         </p>
       </main>

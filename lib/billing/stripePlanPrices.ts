@@ -4,8 +4,29 @@ import { PLAN_CONFIG, type BillablePlanType } from "@/lib/billing/planLimits";
 /** Plans sold via /api/create-checkout-session */
 export type CheckoutPlanType = Extract<
   BillablePlanType,
-  "single" | "essential" | "professional" | "enterprise"
+  | "single"
+  | "essential"
+  | "professional"
+  | "enterprise"
+  | "bulk_10"
+  | "bulk_25"
+  | "bulk_50"
+  | "bulk_100"
 >;
+
+const ONE_TIME_CHECKOUT_PLANS: readonly CheckoutPlanType[] = [
+  "single",
+  "bulk_10",
+  "bulk_25",
+  "bulk_50",
+  "bulk_100",
+];
+
+export function isOneTimeCheckoutPlan(
+  planType: CheckoutPlanType
+): boolean {
+  return ONE_TIME_CHECKOUT_PLANS.includes(planType);
+}
 
 /** Shared fallbacks for live/test — set once instead of four separate price IDs. */
 export const STRIPE_PRICE_TEST_ONETIME_ENV = "STRIPE_PRICE_TEST_ONETIME";
@@ -42,6 +63,10 @@ export const CHECKOUT_PLAN_PRICE_ENV_KEYS: Record<
     "STRIPE_PRODUCT_ENTERPRISE_PLAN",
     "STRIPE_PRICE_PRO_1499",
   ],
+  bulk_10: ["STRIPE_PRICE_BULK_10"],
+  bulk_25: ["STRIPE_PRICE_BULK_25"],
+  bulk_50: ["STRIPE_PRICE_BULK_50"],
+  bulk_100: ["STRIPE_PRICE_BULK_100"],
 };
 
 const PLAN_ENV_NEEDLES: Record<CheckoutPlanType, readonly string[]> = {
@@ -49,6 +74,10 @@ const PLAN_ENV_NEEDLES: Record<CheckoutPlanType, readonly string[]> = {
   essential: ["ESSENTIAL", "FIRM"],
   professional: ["PROFESSIONAL"],
   enterprise: ["ENTERPRISE", "PRO_1499", "PRO1499"],
+  bulk_10: ["BULK_10"],
+  bulk_25: ["BULK_25"],
+  bulk_50: ["BULK_50"],
+  bulk_100: ["BULK_100"],
 };
 
 export type PlanPriceResolveError =
@@ -145,7 +174,7 @@ export function resolveStripePriceId(
     return null;
   }
 
-  if (planType === "single") {
+  if (isOneTimeCheckoutPlan(planType)) {
     const testOnce = process.env[STRIPE_PRICE_TEST_ONETIME_ENV]?.trim();
     if (testOnce) {
       return { priceId: testOnce, envKey: STRIPE_PRICE_TEST_ONETIME_ENV };
@@ -166,7 +195,7 @@ export function resolveStripePriceId(
 
 export function missingPriceEnvHint(planType: CheckoutPlanType): string {
   const keys = CHECKOUT_PLAN_PRICE_ENV_KEYS[planType].join(" or ");
-  if (planType === "single") {
+  if (isOneTimeCheckoutPlan(planType)) {
     return `Set ${keys} (one-time price) or ${STRIPE_PRICE_TEST_ONETIME_ENV}=price_… in Netlify, then redeploy.`;
   }
   return (
@@ -179,7 +208,7 @@ export function missingPriceEnvHint(planType: CheckoutPlanType): string {
 export function checkoutModeForPlan(
   planType: CheckoutPlanType
 ): Stripe.Checkout.SessionCreateParams["mode"] {
-  return planType === "single" ? "payment" : "subscription";
+  return isOneTimeCheckoutPlan(planType) ? "payment" : "subscription";
 }
 
 export function validatePriceForCheckout(
@@ -188,7 +217,8 @@ export function validatePriceForCheckout(
 ): string | null {
   const mode = checkoutModeForPlan(planType);
   if (mode === "payment" && price.type !== "one_time") {
-    return `Price ${price.id} is recurring; Single checkout needs a one-time price in Stripe.`;
+    const label = PLAN_CONFIG[planType].displayName;
+    return `Price ${price.id} is recurring; ${label} checkout needs a one-time price in Stripe.`;
   }
   return null;
 }
@@ -198,7 +228,7 @@ export function subscriptionUsesOneTimePriceFallback(
   planType: CheckoutPlanType,
   price: Stripe.Price
 ): boolean {
-  return planType !== "single" && !price.recurring;
+  return !isOneTimeCheckoutPlan(planType) && !price.recurring;
 }
 
 export function formatUsdFromCents(cents: number): string {
@@ -292,7 +322,7 @@ export function buildCheckoutSessionParams(
 
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [lineItem];
 
-  if (planType === "single") {
+  if (isOneTimeCheckoutPlan(planType)) {
     return {
       mode: "payment",
       customer_creation: "always",

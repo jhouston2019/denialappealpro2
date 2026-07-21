@@ -7,7 +7,11 @@ export type BillablePlanType =
   | "essential"
   | "professional"
   | "enterprise"
-  | "premier";
+  | "premier"
+  | "bulk_10"
+  | "bulk_25"
+  | "bulk_50"
+  | "bulk_100";
 
 export type PlanConfig = {
   displayName: string;
@@ -38,8 +42,28 @@ export const PLAN_CONFIG: Record<BillablePlanType, PlanConfig> = {
   },
   enterprise: {
     displayName: "Enterprise",
-    reviewsPerPeriod: 75,
+    reviewsPerPeriod: 50,
     billingCadence: "monthly",
+  },
+  bulk_10: {
+    displayName: "Bulk 10",
+    reviewsPerPeriod: 10,
+    billingCadence: "one_time",
+  },
+  bulk_25: {
+    displayName: "Bulk 25",
+    reviewsPerPeriod: 25,
+    billingCadence: "one_time",
+  },
+  bulk_50: {
+    displayName: "Bulk 50",
+    reviewsPerPeriod: 50,
+    billingCadence: "one_time",
+  },
+  bulk_100: {
+    displayName: "Bulk 100",
+    reviewsPerPeriod: 100,
+    billingCadence: "one_time",
   },
 };
 
