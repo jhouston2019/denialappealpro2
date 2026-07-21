@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is an ICD-10 Code? | Denial Appeal Pro</title>
+  <meta name="description" content="An ICD-10 code is the diagnosis code that justifies medical necessity on a claim. Learn how ICD-10 codes work, why they cause denials, and how to fix coding mismatches.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How many characters are in an ICD-10 code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ICD-10-CM diagnosis codes contain three to seven characters. The first three characters identify the category, and additional characters specify laterality, severity, and other clinical details."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between ICD-10-CM and ICD-10-PCS?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ICD-10-CM codes describe diagnoses on all claim types. ICD-10-PCS codes describe inpatient hospital procedures and appear only on institutional claims."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I bill multiple ICD-10 codes on one claim?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Claims typically include a primary diagnosis and up to several secondary diagnoses. The primary code must support medical necessity for the billed procedure."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do payers deny claims for diagnosis coding errors?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Payers deny claims when the diagnosis code does not justify the procedure, is not specific enough, or is excluded from coverage under the patient's plan. CARC code 50 is the most common adjustment for medical necessity denials."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Billing and Coding</p>
+    <p class="hero-eyebrow">Billing and Coding</p>
+    <h1>What Is an ICD-10 Code?</h1>
+    <p class="hero-sub">The diagnosis code on every claim answers one critical question for payers: why did this patient need the procedure you are billing?</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">International Classification of Diseases code — the diagnosis code that justifies the medical necessity of the procedure billed.</p>
+    </div>
+
+    <h2>What an ICD-10 Code Means</h2>
+    <p>ICD-10 stands for the International Classification of Diseases, 10th Revision. These alphanumeric codes describe patient diagnoses, symptoms, and conditions with far greater specificity than the previous ICD-9 system. Code M17.11 identifies primary osteoarthritis of the right knee, while code J06.9 covers acute upper respiratory infection. Every professional and institutional claim requires at least one ICD-10 diagnosis code linked to each procedure or service line. Payers use these codes to determine whether the billed service is medically necessary and covered under the patient's benefit plan.</p>
+
+    <h2>Why ICD-10 Codes Matter</h2>
+    <p>Diagnosis coding is the primary gatekeeper for medical necessity determinations. A procedure without a supporting diagnosis code will deny automatically, and a vague or incorrect code can trigger the same outcome. The transition to ICD-10 expanded the code set from roughly 14,000 to over 70,000 diagnosis codes, giving payers more granular criteria for coverage decisions. Medical necessity denials tied to diagnosis coding represent approximately 17% of all commercial claim rejections, making ICD-10 accuracy essential for revenue integrity.</p>
+
+    <h2>How ICD-10 Codes Affect Your Claim</h2>
+    <p>Payers run automated edits that cross-reference your ICD-10 codes against the CPT or HCPCS codes on the claim. Local Coverage Determinations and National Coverage Determinations specify which diagnosis codes support payment for specific procedures. If your primary diagnosis does not appear on the payer's approved list, the claim denies regardless of clinical appropriateness. Specificity matters — billing M54.5 for low back pain when the documentation supports M54.41 for lumbago with sciatica, right side, creates both a compliance gap and a denial risk.</p>
+
+    <div class="callout">
+      <p>List the most specific ICD-10 code supported by your documentation as the primary diagnosis. Generic or unspecified codes are among the fastest paths to a medical necessity denial.</p>
+    </div>
+
+    <h2>What to Do About ICD-10 Code Issues</h2>
+    <p>When a claim denies for medical necessity, review the clinical documentation against the diagnosis code submitted. If a more specific code is supported, submit a corrected claim. If the original code was accurate, prepare an appeal with clinical notes, test results, and treatment history that demonstrate why the service was necessary. Maintain a diagnosis-to-procedure crosswalk for your most common services to prevent mismatches before submission. Denial Appeal Pro can analyze your EOB and generate an appeal letter that addresses the specific diagnosis coding gap identified by the payer.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>How many characters are in an ICD-10 code?</h3>
+    <p>ICD-10-CM diagnosis codes contain three to seven characters. The first three characters identify the category, and additional characters specify laterality, severity, and other clinical details.</p>
+
+    <h3>What is the difference between ICD-10-CM and ICD-10-PCS?</h3>
+    <p>ICD-10-CM codes describe diagnoses on all claim types. ICD-10-PCS codes describe inpatient hospital procedures and appear only on institutional claims.</p>
+
+    <h3>Can I bill multiple ICD-10 codes on one claim?</h3>
+    <p>Yes. Claims typically include a primary diagnosis and up to several secondary diagnoses. The primary code must support medical necessity for the billed procedure.</p>
+
+    <h3>Why do payers deny claims for diagnosis coding errors?</h3>
+    <p>Payers deny claims when the diagnosis code does not justify the procedure, is not specific enough, or is excluded from coverage under the patient's plan. CARC code 50 is the most common adjustment for medical necessity denials.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Medical Necessity Denials</h2>
+      <p>Upload your denial letter and Denial Appeal Pro builds a clinical appeal mapped to your diagnosis and procedure codes in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

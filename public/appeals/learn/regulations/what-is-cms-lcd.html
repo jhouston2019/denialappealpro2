@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a CMS LCD? | Denial Appeal Pro</title>
+  <meta name="description" content="A Local Coverage Determination is a Medicare Administrative Contractor decision about whether a service is covered in a specific geographic area. Learn how LCDs cause denials.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I find the LCD for my Medicare jurisdiction?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Search the Medicare Coverage Database on CMS.gov using your procedure code, diagnosis code, or service description. Filter results by your Medicare Administrative Contractor jurisdiction, which is determined by the state where the patient received the service."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between an LCD and an NCD?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An LCD applies only within a specific MAC jurisdiction and may vary by region. An NCD is a nationwide Medicare policy that applies uniformly to all beneficiaries regardless of where they live."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can a service be covered under one LCD but denied under another?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Because LCDs are jurisdiction-specific, the same procedure may be covered in one region and non-covered in another. Providers billing across multiple states must verify LCD requirements for each MAC territory separately."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I appeal an LCD-based Medicare denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Submit a redetermination appeal demonstrating that the patient meets all LCD coverage criteria documented in the policy. Include clinical notes, test results, and any required prior diagnostic steps listed in the LCD's coverage indications section."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Regulations and Law</p>
+    <p class="hero-eyebrow">Regulations and Law</p>
+    <h1>What Is a CMS LCD?</h1>
+    <p class="hero-sub">Medicare coverage is not uniform nationwide — Local Coverage Determinations set the rules for whether your service is payable in your patient's MAC jurisdiction, and more than 500 active LCDs govern outpatient claims today.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A Medicare Administrative Contractor decision about whether a service is covered under Medicare in a specific geographic area.</p>
+    </div>
+
+    <h2>What a CMS LCD Means</h2>
+    <p>A Local Coverage Determination, or LCD, is a coverage policy issued by a Medicare Administrative Contractor defining whether a specific service, procedure, or item is reasonable and necessary for Medicare beneficiaries within that contractor's geographic jurisdiction. Each MAC serves a defined region and may publish LCDs that differ from policies in neighboring jurisdictions. LCDs specify covered diagnosis codes, frequency limits, documentation requirements, and conditions under which a service is considered medically necessary.</p>
+
+    <h2>Why LCDs Matter</h2>
+    <p>LCD compliance is a primary source of Medicare medical necessity denials for outpatient services, DME suppliers, and laboratory providers. A claim that meets national billing standards can still be denied if it fails the LCD criteria for the patient's MAC region. Providers who serve patients across state lines or MAC boundaries must track multiple LCD versions for the same procedure code. Missing a single required diagnostic prerequisite listed in an LCD is one of the most common preventable causes of Medicare denials worth $500 to $5,000 per claim.</p>
+
+    <h2>How a CMS LCD Affects Your Claim</h2>
+    <p>When Medicare processes a claim, the MAC's claims editing system checks the billed codes against applicable LCDs for that jurisdiction. If the diagnosis code, frequency, or documentation requirements in the LCD are not met, the claim is denied — often with CARC code 50 for lack of medical necessity. The remittance may reference the specific LCD number and policy title. Because LCDs can be more restrictive than national coverage, a service covered under one MAC's LCD may be non-covered under another MAC serving a different state.</p>
+
+    <div class="callout">
+      <p>LCD requirements vary by MAC jurisdiction. Always verify coverage against the LCD for the state where the patient received the service — not the state where your practice is located.</p>
+    </div>
+
+    <h2>What to Do About an LCD Denial</h2>
+    <p>Locate the applicable LCD on the Medicare Coverage Database and review the coverage indications and limitations sections. Compare your claim against every requirement — diagnosis codes, prior testing, frequency caps, and documentation standards. If the patient meets all LCD criteria, file a Medicare redetermination appeal with clinical documentation mapped directly to each coverage indication in the policy. If a required prerequisite was not documented, determine whether retrospective documentation or additional testing supports coverage. Upload your denial to Denial Appeal Pro to generate an appeal letter citing the specific LCD criteria your documentation satisfies.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>How do I find the LCD for my Medicare jurisdiction?</h3>
+    <p>Search the Medicare Coverage Database on CMS.gov using your procedure code, diagnosis code, or service description. Filter results by your Medicare Administrative Contractor jurisdiction, which is determined by the state where the patient received the service.</p>
+
+    <h3>What is the difference between an LCD and an NCD?</h3>
+    <p>An LCD applies only within a specific MAC jurisdiction and may vary by region. An NCD is a nationwide Medicare policy that applies uniformly to all beneficiaries regardless of where they live.</p>
+
+    <h3>Can a service be covered under one LCD but denied under another?</h3>
+    <p>Yes. Because LCDs are jurisdiction-specific, the same procedure may be covered in one region and non-covered in another. Providers billing across multiple states must verify LCD requirements for each MAC territory separately.</p>
+
+    <h3>How do I appeal an LCD-based Medicare denial?</h3>
+    <p>Submit a redetermination appeal demonstrating that the patient meets all LCD coverage criteria documented in the policy. Include clinical notes, test results, and any required prior diagnostic steps listed in the LCD's coverage indications section.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your LCD-Based Denial</h2>
+      <p>Upload your Medicare denial and Denial Appeal Pro maps your documentation to LCD coverage criteria and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

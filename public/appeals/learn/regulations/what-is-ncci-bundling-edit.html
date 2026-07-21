@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is an NCCI Bundling Edit? | Denial Appeal Pro</title>
+  <meta name="description" content="An NCCI bundling edit prohibits separate billing of two procedure codes when one is a component of the other. Learn how bundling edits cause denials and how to respond.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What CARC code appears on NCCI bundling denials?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "NCCI bundling denials most commonly appear with CARC code 97, indicating the benefit for this service is included in the payment for another service. The remittance may also reference an NCCI edit identifier in the remark section."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What modifiers bypass an NCCI bundling edit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common override modifiers include 59, XE, XP, XS, and XU when the edit allows modifier use. Each modifier has a specific clinical meaning, and using the wrong modifier can trigger audit risk even if payment is initially received."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can both codes be paid on the same claim?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When an NCCI bundling edit applies and no valid modifier override is present, only the column 1 code receives payment. The column 2 code is denied as bundled. Both codes may be paid only when documentation supports a clinically distinct service and an allowed modifier is appended."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I rebill or appeal an NCCI bundling denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "If you missed a valid modifier, correct the claim and resubmit. If the services were genuinely distinct and a modifier was already present, appeal with operative notes and documentation proving the procedures were independent. Rebilling without new documentation rarely succeeds."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Regulations and Law</p>
+    <p class="hero-eyebrow">Regulations and Law</p>
+    <h1>What Is an NCCI Bundling Edit?</h1>
+    <p class="hero-sub">When two procedure codes land on the same claim, an NCCI bundling edit decides which one gets paid — and CARC code 97 on your remittance usually means the secondary code was swallowed by the primary.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A specific NCCI rule that prohibits separate billing of two procedure codes when one is considered a component of the other.</p>
+    </div>
+
+    <h2>What an NCCI Bundling Edit Means</h2>
+    <p>An NCCI bundling edit is a specific procedure-to-procedure rule within CMS's National Correct Coding Initiative that blocks separate payment for two CPT or HCPCS codes billed on the same date of service. The edit designates one code as the comprehensive column 1 procedure and the other as the component column 2 code. When the edit fires, the payer treats the column 2 service as already included in the payment for column 1 and denies or zeroes out the secondary line.</p>
+
+    <h2>Why NCCI Bundling Edits Matter</h2>
+    <p>Bundling edits are among the top three denial categories for outpatient physician claims, driving millions of dollars in write-offs annually across Medicare and commercial payers. They exist to prevent duplicate payment for work that is inherently part of a larger procedure — such as billing a separate incision code with a major surgical procedure. Revenue cycle teams that understand bundling logic recover payment that would otherwise be abandoned, while teams that treat every CARC 97 as non-appealable leave recoverable dollars on the table.</p>
+
+    <h2>How an NCCI Bundling Edit Affects Your Claim</h2>
+    <p>When a bundling edit applies, the remittance shows a CO-97 adjustment on the column 2 line, reducing payment to zero. You cannot bill the patient for the denied amount because the payer considers it included in the primary procedure payment. If the edit allows modifier override and the services were clinically distinct, appending modifier 59 or an appropriate X-modifier before submission can prevent the denial. Without a permitted modifier, the only path to payment is an appeal demonstrating the services were not components of each other — a high documentation bar that succeeds in roughly 20 percent of appealed bundling cases with strong operative notes.</p>
+
+    <div class="callout">
+      <p>A CO-97 bundling denial means you cannot balance-bill the patient for the denied amount. Your recovery path is a corrected claim with a valid modifier or an appeal with documentation proving the services were distinct.</p>
+    </div>
+
+    <h2>What to Do About an NCCI Bundling Edit Denial</h2>
+    <p>Look up the specific code pair in the current NCCI edit table and check whether modifier override is allowed. Review the operative report to confirm whether the services were performed at separate anatomic sites or during distinct sessions. If a modifier was omitted but clinically supported, submit a corrected claim. If a modifier was present and denied, file a first-level appeal with the operative note, highlighting the distinct clinical work performed. Upload your EOB to Denial Appeal Pro to identify the bundling edit and generate an appeal letter with the documentation strategy most likely to overturn your specific denial.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What CARC code appears on NCCI bundling denials?</h3>
+    <p>NCCI bundling denials most commonly appear with CARC code 97, indicating the benefit for this service is included in the payment for another service. The remittance may also reference an NCCI edit identifier in the remark section.</p>
+
+    <h3>What modifiers bypass an NCCI bundling edit?</h3>
+    <p>Common override modifiers include 59, XE, XP, XS, and XU when the edit allows modifier use. Each modifier has a specific clinical meaning, and using the wrong modifier can trigger audit risk even if payment is initially received.</p>
+
+    <h3>Can both codes be paid on the same claim?</h3>
+    <p>When an NCCI bundling edit applies and no valid modifier override is present, only the column 1 code receives payment. The column 2 code is denied as bundled. Both codes may be paid only when documentation supports a clinically distinct service and an allowed modifier is appended.</p>
+
+    <h3>Should I rebill or appeal an NCCI bundling denial?</h3>
+    <p>If you missed a valid modifier, correct the claim and resubmit. If the services were genuinely distinct and a modifier was already present, appeal with operative notes and documentation proving the procedures were independent. Rebilling without new documentation rarely succeeds.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your Bundling Denial</h2>
+      <p>Upload your denial letter and Denial Appeal Pro decodes the bundling edit and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

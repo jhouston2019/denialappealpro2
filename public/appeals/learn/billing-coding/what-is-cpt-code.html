@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a CPT Code? | Denial Appeal Pro</title>
+  <meta name="description" content="A CPT code is a five-digit Current Procedural Terminology code that identifies the medical service or procedure billed on a claim. Learn how CPT codes work and why coding errors cause denials.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Who maintains CPT codes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The American Medical Association maintains and publishes the CPT code set. The AMA releases annual updates that add, revise, or delete codes to reflect new procedures and technology."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between CPT and HCPCS codes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CPT codes describe physician and outpatient procedures. HCPCS Level II codes cover supplies, drugs, and services not included in CPT, such as durable medical equipment and ambulance transport."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can the same CPT code have different payment amounts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Each payer applies its own fee schedule to a CPT code, so the allowed amount varies by contract, geography, and plan type even when the billed code is identical."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if I use the wrong CPT code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An incorrect CPT code can trigger a denial for medical necessity mismatch, bundling, or unlisted procedure review. You may need to submit a corrected claim or appeal with supporting documentation."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Billing and Coding</p>
+    <p class="hero-eyebrow">Billing and Coding</p>
+    <h1>What Is a CPT Code?</h1>
+    <p class="hero-sub">Every procedure on a professional claim rides on a five-digit CPT code — the universal language payers use to decide what service you performed and how much they will pay for it.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">Current Procedural Terminology code — a five-digit number identifying the medical service or procedure billed on a claim.</p>
+    </div>
+
+    <h2>What a CPT Code Means</h2>
+    <p>CPT stands for Current Procedural Terminology. These five-digit codes are published by the American Medical Association and describe every billable medical service a physician or qualified healthcare professional performs. Code 99213 represents an established patient office visit at a moderate level of complexity, while code 27447 identifies a total knee replacement. Payers use CPT codes to match your claim to their fee schedule, apply bundling rules, and verify that the procedure aligns with the diagnosis codes on the same claim. Without an accurate CPT code, the payer cannot determine what you did or whether it should be covered.</p>
+
+    <h2>Why CPT Codes Matter</h2>
+    <p>CPT coding is the foundation of outpatient and professional claim reimbursement. A single digit error can shift a high-complexity visit to a low-complexity code, reducing payment by $50 or more per encounter. Industry research shows that coding-related denials account for roughly 11% of all claim rejections, making CPT accuracy one of the highest-impact areas in revenue cycle management. Coders and clinicians must stay current with annual CPT updates, which add hundreds of new codes each year for emerging procedures and technology.</p>
+
+    <h2>How CPT Codes Affect Your Claim</h2>
+    <p>When you submit a claim, the payer cross-references your CPT code against the ICD-10 diagnosis codes, any modifiers, and National Correct Coding Initiative edits. If the CPT code does not support medical necessity for the listed diagnoses, the claim denies. If two CPT codes on the same claim are considered bundled, the secondary code may be rejected entirely. The CPT code also determines your allowed amount through the payer's contracted fee schedule — billing code 99214 when documentation supports only 99213 creates compliance risk and potential audit exposure.</p>
+
+    <div class="callout">
+      <p>Always pair CPT codes with accurate ICD-10 diagnosis codes and appropriate modifiers. The procedure code alone never tells the full story — payers evaluate the entire claim as a unit.</p>
+    </div>
+
+    <h2>What to Do About CPT Code Issues</h2>
+    <p>If a claim denies due to a CPT coding problem, review the operative note or encounter documentation against the code description in the CPT manual. Determine whether a corrected claim with a different code is appropriate or whether an appeal with clinical documentation is the better path. Train billing staff to run claims through scrubbing software that flags invalid code combinations before submission. When a denial references an incorrect or unsupported CPT code, upload your EOB to Denial Appeal Pro for a targeted appeal strategy mapped to the specific coding issue.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Who maintains CPT codes?</h3>
+    <p>The American Medical Association maintains and publishes the CPT code set. The AMA releases annual updates that add, revise, or delete codes to reflect new procedures and technology.</p>
+
+    <h3>What is the difference between CPT and HCPCS codes?</h3>
+    <p>CPT codes describe physician and outpatient procedures. HCPCS Level II codes cover supplies, drugs, and services not included in CPT, such as durable medical equipment and ambulance transport.</p>
+
+    <h3>Can the same CPT code have different payment amounts?</h3>
+    <p>Yes. Each payer applies its own fee schedule to a CPT code, so the allowed amount varies by contract, geography, and plan type even when the billed code is identical.</p>
+
+    <h3>What happens if I use the wrong CPT code?</h3>
+    <p>An incorrect CPT code can trigger a denial for medical necessity mismatch, bundling, or unlisted procedure review. You may need to submit a corrected claim or appeal with supporting documentation.</p>
+
+    <div class="cta-block">
+      <h2>Fight Coding-Related Denials</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies the coding issue and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

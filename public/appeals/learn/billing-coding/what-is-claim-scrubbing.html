@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Claim Scrubbing? | Denial Appeal Pro</title>
+  <meta name="description" content="Claim scrubbing is the automated pre-submission review that catches coding errors, missing data, and NCCI conflicts before a claim reaches the payer. Learn how it prevents denials.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "When does claim scrubbing happen in the billing workflow?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Claim scrubbing runs after charge entry and coding but before the claim is transmitted to the clearinghouse or payer. Some systems also scrub at the clearinghouse level as a second pass."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What errors does claim scrubbing catch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Scrubbing catches invalid CPT and ICD-10 codes, missing modifiers, NCCI edit conflicts, duplicate claims, invalid NPI numbers, and payer-specific billing rules that would trigger automatic denials."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is claim scrubbing the same as a clearinghouse edit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "They overlap but serve different stages. Internal scrubbing happens in your practice management system before transmission. Clearinghouse edits validate format and basic eligibility at the point of routing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can claim scrubbing prevent all denials?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Scrubbing prevents errors detectable by automated rules. Denials for medical necessity, authorization failures, and benefit exclusions require clinical review and cannot be caught by scrubbing alone."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Billing and Coding</p>
+    <p class="hero-eyebrow">Billing and Coding</p>
+    <h1>What Is Claim Scrubbing?</h1>
+    <p class="hero-sub">Before a claim ever leaves your office, automated scrubbing runs it against hundreds of rules — catching the errors that would otherwise come back as denials days later.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The automated review of a claim before submission to identify errors that would cause a denial — including missing codes, invalid modifiers, and NCCI conflicts.</p>
+    </div>
+
+    <h2>What Claim Scrubbing Means</h2>
+    <p>Claim scrubbing is an automated quality control process that evaluates claims against coding rules, payer-specific edits, and data completeness checks before submission. The scrubber validates that CPT and ICD-10 codes are active and properly formatted, that required modifiers are present for bundled code pairs, and that National Correct Coding Initiative edits are addressed. It also checks demographic fields, provider identifiers, and payer-specific requirements such as authorization numbers and referral data. Claims that fail scrubbing are held for correction rather than transmitted to the payer.</p>
+
+    <h2>Why Claim Scrubbing Matters</h2>
+    <p>Every claim that bypasses scrubbing and gets denied costs an average of $25 in staff time to rework, plus the delay in payment that impacts cash flow. Organizations with robust pre-submission scrubbing reduce preventable denials by up to 40% compared to those relying on payer edits alone. Scrubbing shifts quality control upstream — fixing a missing modifier before submission takes seconds, while appealing the same bundling denial after adjudication can take weeks and may still fail without proper documentation.</p>
+
+    <h2>How Claim Scrubbing Affects Your Claim</h2>
+    <p>A well-configured scrubber acts as a gatekeeper between your billing team and the payer. It flags NCCI column 1 and column 2 code pairs that require modifier 59 or an X-modifier before the claim is released. It catches expired or invalid diagnosis codes that would trigger immediate rejection. Payer-specific rule sets add another layer — Medicare edits differ from commercial payer requirements, and scrubbing software can apply the correct rule set based on the destination payer. Claims that pass all scrubbing rules have a significantly higher first-pass acceptance rate at adjudication.</p>
+
+    <div class="callout">
+      <p>Review your scrubber's override log monthly. Frequent overrides of the same edit rule often indicate a training gap or a payer policy change that your rule set has not yet captured.</p>
+    </div>
+
+    <h2>What to Do About Scrubbing Gaps</h2>
+    <p>If denials persist despite scrubbing, audit which edit categories are slipping through. Compare denied claims against your scrubber's rule library to identify gaps. Update payer-specific rules when contracts change and subscribe to quarterly NCCI edit releases. Train billing staff to resolve scrubber flags rather than overriding them without review. For denials that scrubbing could not prevent — such as medical necessity or authorization failures — upload your EOB to Denial Appeal Pro for a targeted appeal strategy.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>When does claim scrubbing happen in the billing workflow?</h3>
+    <p>Claim scrubbing runs after charge entry and coding but before the claim is transmitted to the clearinghouse or payer. Some systems also scrub at the clearinghouse level as a second pass.</p>
+
+    <h3>What errors does claim scrubbing catch?</h3>
+    <p>Scrubbing catches invalid CPT and ICD-10 codes, missing modifiers, NCCI edit conflicts, duplicate claims, invalid NPI numbers, and payer-specific billing rules that would trigger automatic denials.</p>
+
+    <h3>Is claim scrubbing the same as a clearinghouse edit?</h3>
+    <p>They overlap but serve different stages. Internal scrubbing happens in your practice management system before transmission. Clearinghouse edits validate format and basic eligibility at the point of routing.</p>
+
+    <h3>Can claim scrubbing prevent all denials?</h3>
+    <p>No. Scrubbing prevents errors detectable by automated rules. Denials for medical necessity, authorization failures, and benefit exclusions require clinical review and cannot be caught by scrubbing alone.</p>
+
+    <div class="cta-block">
+      <h2>Recover Denials Scrubbing Missed</h2>
+      <p>Upload your denial letter and Denial Appeal Pro generates a submission-ready appeal for the denials that made it past your scrubber in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

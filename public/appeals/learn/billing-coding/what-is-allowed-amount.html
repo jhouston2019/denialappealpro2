@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is an Allowed Amount? | Denial Appeal Pro</title>
+  <meta name="description" content="The allowed amount is the maximum an insurer pays for a covered service. Learn how allowed amounts differ from billed charges and what contractual write-offs mean.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Where do I find the allowed amount on my EOB?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The allowed amount appears on your 835 remittance advice or EOB, typically labeled as allowed, approved, or eligible amount. It sits between the billed charge and the payer payment columns."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a contractual write-off?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A contractual write-off is the difference between your billed charge and the allowed amount for in-network services. You agree to accept the allowed amount as payment in full and cannot bill the patient for this difference."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can the allowed amount be zero?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. When a claim is fully denied, the allowed amount may be zero, meaning the payer recognizes no payable benefit for that service. The entire billed amount may become a write-off or patient responsibility depending on the denial reason."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the allowed amount the same as what the payer pays?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not always. The payer subtracts patient deductibles, coinsurance, and copays from the allowed amount. The remaining balance is the payer's actual payment to the provider."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Billing and Coding</p>
+    <p class="hero-eyebrow">Billing and Coding</p>
+    <h1>What Is an Allowed Amount?</h1>
+    <p class="hero-sub">The allowed amount on your remittance advice is the payer's final word on what a service is worth — everything above it is a contractual write-off you cannot collect.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The maximum amount an insurer will pay for a covered service — the difference between the billed charge and the allowed amount is a contractual write-off.</p>
+    </div>
+
+    <h2>What an Allowed Amount Means</h2>
+    <p>The allowed amount is the maximum reimbursement a payer will provide for a specific covered service under the patient's benefit plan and your provider contract. If you bill $400 for a procedure and the payer's allowed amount is $150, the payer calculates payment from $150 — not from your billed charge. The $250 difference is a contractual adjustment, also called a write-off, that you agree to absorb as an in-network provider. The allowed amount appears on every 835 remittance advice and EOB as the benchmark from which deductibles, coinsurance, and copays are calculated before the payer's final payment is determined.</p>
+
+    <h2>Why Allowed Amounts Matter</h2>
+    <p>Understanding allowed amounts is fundamental to revenue cycle accuracy and patient billing compliance. Billing patients for the difference between your chargemaster rate and the allowed amount — a practice called balance billing — is prohibited for in-network services and can trigger regulatory penalties. Allowed amounts also drive your true collection rate: a practice billing $1 million in charges but receiving allowed amounts totaling $350,000 has a 35% gross collection rate. Tracking allowed amounts rather than charges gives leadership an accurate picture of revenue performance.</p>
+
+    <h2>How Allowed Amounts Affect Your Claim</h2>
+    <p>When a claim adjudicates successfully, the payer assigns an allowed amount from the contracted fee schedule. Patient cost-sharing is applied against this amount — not against your billed charge. If a $150 allowed amount carries a 20% coinsurance, the patient owes $30 and the payer pays $120. When a claim denies entirely, the allowed amount may drop to zero, converting the full billed charge into either a write-off or patient responsibility depending on the denial category. Misreading a zero allowed amount as a partial payment is a common cause of incorrect patient statements and compliance violations.</p>
+
+    <div class="callout">
+      <p>Never bill a patient for the difference between your billed charge and the allowed amount on an in-network claim. That gap is a contractual write-off, not patient responsibility.</p>
+    </div>
+
+    <h2>What to Do About Allowed Amount Discrepancies</h2>
+    <p>When the allowed amount on your remittance does not match your contracted fee schedule, investigate before posting payment. Verify the correct contract tier, provider enrollment status, and service date eligibility. Request a payer reconsideration when the allowed amount is clearly wrong. When the allowed amount is zero due to a denial, determine whether the denial is appealable or a legitimate write-off. Upload your EOB to Denial Appeal Pro to decode the denial reason and generate an appeal letter when the zero allowed amount represents a recoverable claim.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Where do I find the allowed amount on my EOB?</h3>
+    <p>The allowed amount appears on your 835 remittance advice or EOB, typically labeled as allowed, approved, or eligible amount. It sits between the billed charge and the payer payment columns.</p>
+
+    <h3>What is a contractual write-off?</h3>
+    <p>A contractual write-off is the difference between your billed charge and the allowed amount for in-network services. You agree to accept the allowed amount as payment in full and cannot bill the patient for this difference.</p>
+
+    <h3>Can the allowed amount be zero?</h3>
+    <p>Yes. When a claim is fully denied, the allowed amount may be zero, meaning the payer recognizes no payable benefit for that service. The entire billed amount may become a write-off or patient responsibility depending on the denial reason.</p>
+
+    <h3>Is the allowed amount the same as what the payer pays?</h3>
+    <p>Not always. The payer subtracts patient deductibles, coinsurance, and copays from the allowed amount. The remaining balance is the payer's actual payment to the provider.</p>
+
+    <div class="cta-block">
+      <h2>Recover Zero-Allowed Denials</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies why your allowed amount is zero and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

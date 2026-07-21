@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Coordination of Benefits? | Denial Appeal Pro</title>
+  <meta name="description" content="Coordination of benefits determines which insurer pays first when a patient has multiple plans. Learn how COB errors cause denials and how to fix them.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How is primary insurance determined under COB rules?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Primary coverage is determined by COB rules based on the type of coverage — birthday rule for dependent children with two parent plans, employment status for active versus retiree coverage, and Medicare secondary payer rules when Medicare is involved. The primary plan pays first."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What CARC code indicates a coordination of benefits denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "COB-related denials commonly appear with CARC code 22 for coordination of benefits issue, CARC code 109 for claim not covered by this payer, and CARC code 252 for missing or invalid other insurance information on the claim."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I bill the primary or secondary insurance first?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Always bill the primary insurer first. After the primary payer processes the claim and issues an EOB, submit the remaining balance to the secondary insurer with the primary EOB attached. Billing secondary first is one of the most common COB errors."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can COB denials be fixed without an appeal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Many COB denials are corrected by rebilling to the correct primary payer or updating other insurance information on the claim. If the payer applied the wrong COB order despite correct billing, an appeal with both insurers' EOBs and COB determination documentation is required."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Regulations and Law</p>
+    <p class="hero-eyebrow">Regulations and Law</p>
+    <h1>What Is Coordination of Benefits?</h1>
+    <p class="hero-sub">When a patient carries two insurance cards, coordination of benefits decides which plan pays first — and billing the wrong one is responsible for an estimated 8 percent of all commercial claim denials.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The process of determining which insurer pays first when a patient has multiple insurance plans — denials often result from COB errors.</p>
+    </div>
+
+    <h2>What Coordination of Benefits Means</h2>
+    <p>Coordination of benefits, or COB, is the process insurers use to determine the order of payment when a patient is covered by more than one health plan. The primary plan pays first up to its benefit limits, and the secondary plan may cover remaining eligible costs. COB rules prevent duplicate payment across plans and ensure total reimbursement does not exceed the total charges. Standard COB rules include the birthday rule for dependent children, Medicare secondary payer provisions, and rules for active versus retiree coverage when a patient has employer and spouse plans.</p>
+
+    <h2>Why Coordination of Benefits Matters</h2>
+    <p>COB errors are among the most common administrative denial causes in medical billing, accounting for approximately 8 percent of commercial claim denials. When a provider bills the secondary insurer first, omits other insurance information on the claim, or fails to attach the primary EOB to the secondary submission, the claim is denied or pended. These denials are highly recoverable because they typically reflect billing sequence errors rather than coverage exclusions — but they stall cash flow until the correct COB order is established and claims are resubmitted in the proper sequence.</p>
+
+    <h2>How Coordination of Benefits Affects Your Claim</h2>
+    <p>When a claim is submitted, the payer checks whether the patient has other active coverage on file. If other insurance exists and the billed plan is not the primary payer, the claim is denied with CARC code 22 or code 109 indicating a COB issue. The remittance directs the provider to bill the other insurer first. After primary processing, the secondary claim requires the primary EOB showing what was paid, allowed, and adjusted. Missing or incorrect other insurance data on the claim form triggers the same denial even when the billing sequence is otherwise correct.</p>
+
+    <div class="callout">
+      <p>Always verify COB order at registration and capture all active insurance on the claim. Bill primary first, then submit to secondary with the primary EOB attached — reversing this sequence is the leading cause of COB denials.</p>
+    </div>
+
+    <h2>What to Do About a COB Denial</h2>
+    <p>Review the denial reason and identify which insurer should be primary under applicable COB rules. Contact the patient or both insurers to confirm coverage order if unclear. Submit the claim to the correct primary payer first. Once the primary EOB is received, bill the secondary insurer with the primary payment information attached. If you billed the correct primary payer and still received a COB denial, appeal with documentation from both insurers confirming the COB determination. Upload your denial to Denial Appeal Pro to generate an appeal letter or corrected billing instructions for your specific COB denial.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>How is primary insurance determined under COB rules?</h3>
+    <p>Primary coverage is determined by COB rules based on the type of coverage — birthday rule for dependent children with two parent plans, employment status for active versus retiree coverage, and Medicare secondary payer rules when Medicare is involved. The primary plan pays first.</p>
+
+    <h3>What CARC code indicates a coordination of benefits denial?</h3>
+    <p>COB-related denials commonly appear with CARC code 22 for coordination of benefits issue, CARC code 109 for claim not covered by this payer, and CARC code 252 for missing or invalid other insurance information on the claim.</p>
+
+    <h3>Should I bill the primary or secondary insurance first?</h3>
+    <p>Always bill the primary insurer first. After the primary payer processes the claim and issues an EOB, submit the remaining balance to the secondary insurer with the primary EOB attached. Billing secondary first is one of the most common COB errors.</p>
+
+    <h3>Can COB denials be fixed without an appeal?</h3>
+    <p>Many COB denials are corrected by rebilling to the correct primary payer or updating other insurance information on the claim. If the payer applied the wrong COB order despite correct billing, an appeal with both insurers' EOBs and COB determination documentation is required.</p>
+
+    <div class="cta-block">
+      <h2>Resolve Your COB Denial</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies the COB issue and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Claim Denial Rate? | Denial Appeal Pro</title>
+  <meta name="description" content="Claim denial rate is the percentage of submitted claims denied by payers. The industry average is 5 to 10 percent. Learn how to measure and reduce your denial rate.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do you calculate claim denial rate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Divide the number of denied claims by the total number of claims submitted in the same period, then multiply by 100. Most organizations calculate this monthly using remittance data from 835 files."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a good denial rate for a medical practice?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Top-performing organizations maintain denial rates below 3 percent. The industry average ranges from 5 to 10 percent. Any practice consistently above 10 percent has significant revenue cycle problems to address."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between denial rate and rejection rate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Rejection rate measures claims that fail initial format or edit checks before adjudication. Denial rate measures claims that were processed but payment was refused. Both metrics matter but measure different failure points."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the most common causes of high denial rates?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The top causes are authorization failures, coding errors, eligibility issues, timely filing misses, and medical necessity denials. Tracking denial rate by root cause category is the first step toward reduction."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Billing and Coding</p>
+    <p class="hero-eyebrow">Billing and Coding</p>
+    <h1>What Is a Claim Denial Rate?</h1>
+    <p class="hero-sub">Your claim denial rate is the single number that tells leadership how much revenue is slipping through the cracks — and whether your billing operation is performing or failing.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">The percentage of claims submitted that are denied by payers — the industry average is 5 to 10 percent with top performers below 3 percent.</p>
+    </div>
+
+    <h2>What a Claim Denial Rate Means</h2>
+    <p>Claim denial rate is a key performance indicator that measures the percentage of submitted claims a payer refuses to pay. It is calculated by dividing the number of denied claims by the total claims submitted during a given period and multiplying by 100. If a practice submits 1,000 claims in a month and 80 are denied, the denial rate is 8 percent. This metric differs from rejection rate, which tracks claims that fail initial validation before reaching adjudication. Denial rate specifically measures claims the payer processed and then refused to pay in full or in part.</p>
+
+    <h2>Why Claim Denial Rate Matters</h2>
+    <p>Denial rate is the most direct measure of revenue cycle health. Every denied claim represents staff time spent on rework, delayed cash flow, and potential permanent revenue loss if the denial is not appealed within the payer's deadline. The industry average denial rate sits between 5 and 10 percent, while top-performing organizations maintain rates below 3 percent. A mid-size practice submitting 5,000 claims per month at an 8 percent denial rate with an average claim value of $200 is losing $80,000 monthly to denials — much of it recoverable with timely appeals.</p>
+
+    <h2>How Claim Denial Rate Affects Your Revenue</h2>
+    <p>A rising denial rate signals systemic problems in one or more areas of the revenue cycle — front-end eligibility verification, coding accuracy, authorization management, or claims submission quality. Denial rate also varies by payer, specialty, and service line, so aggregate numbers can mask concentrated problems. A practice may have a 4 percent overall denial rate but 15 percent denials from a single payer due to contract-specific authorization requirements. Tracking denial rate by payer, CARC code, and provider reveals where intervention will have the greatest financial impact.</p>
+
+    <div class="callout">
+      <p>Break your denial rate down by root cause category every month. A flat overall rate hiding a spike in authorization denials still demands immediate action on the authorization workflow.</p>
+    </div>
+
+    <h2>What to Do About a High Denial Rate</h2>
+    <p>Start by categorizing every denial by CARC code and identifying the top three root causes. Implement front-end fixes for preventable denials — eligibility checks, authorization verification, and claim scrubbing — before investing in appeal workflows. Set a target denial rate below 5 percent and track progress monthly. For denials that cannot be prevented, establish an appeal process with defined turnaround times and success rate tracking. Denial Appeal Pro helps practices recover revenue from existing denials by generating submission-ready appeal letters in under 60 seconds, directly reducing the financial impact of your denial rate.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>How do you calculate claim denial rate?</h3>
+    <p>Divide the number of denied claims by the total number of claims submitted in the same period, then multiply by 100. Most organizations calculate this monthly using remittance data from 835 files.</p>
+
+    <h3>What is a good denial rate for a medical practice?</h3>
+    <p>Top-performing organizations maintain denial rates below 3 percent. The industry average ranges from 5 to 10 percent. Any practice consistently above 10 percent has significant revenue cycle problems to address.</p>
+
+    <h3>What is the difference between denial rate and rejection rate?</h3>
+    <p>Rejection rate measures claims that fail initial format or edit checks before adjudication. Denial rate measures claims that were processed but payment was refused. Both metrics matter but measure different failure points.</p>
+
+    <h3>What are the most common causes of high denial rates?</h3>
+    <p>The top causes are authorization failures, coding errors, eligibility issues, timely filing misses, and medical necessity denials. Tracking denial rate by root cause category is the first step toward reduction.</p>
+
+    <div class="cta-block">
+      <h2>Lower Your Denial Rate With Faster Appeals</h2>
+      <p>Upload your denial letter and Denial Appeal Pro generates a submission-ready appeal in under 60 seconds — recovering revenue that would otherwise inflate your denial rate.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

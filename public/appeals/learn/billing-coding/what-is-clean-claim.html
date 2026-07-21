@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Clean Claim? | Denial Appeal Pro</title>
+  <meta name="description" content="A clean claim contains all required information and can be processed without additional provider input. Learn what makes a claim clean and how to reduce rejections.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What information is required for a clean claim?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A clean claim requires patient demographics, valid insurance information, provider NPI, date of service, diagnosis codes, procedure codes, and any required authorization or referral numbers. Missing any mandatory field makes the claim unclean."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How quickly must payers process a clean claim?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Under the Affordable Care Act, payers must process clean electronic claims within 30 calendar days. Paper claims may have a 30-day window from receipt."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between a rejected and a denied claim?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A rejected claim fails initial format or edit checks and never enters adjudication. A denied claim is processed but payment is refused for clinical or coverage reasons. Clean claim status applies to claims that pass initial validation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can a clean claim still be denied?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Clean claim status means the payer has enough information to adjudicate the claim. The payer can still deny it for medical necessity, lack of authorization, or benefit exclusions."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Billing and Coding</p>
+    <p class="hero-eyebrow">Billing and Coding</p>
+    <h1>What Is a Clean Claim?</h1>
+    <p class="hero-sub">A clean claim clears every validation check on first submission — no missing fields, no format errors, and no follow-up requests before the payer can adjudicate and pay.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A claim submitted with all required information that can be processed and paid without additional information from the provider.</p>
+    </div>
+
+    <h2>What a Clean Claim Means</h2>
+    <p>A clean claim is a healthcare claim that contains every data element the payer needs to process payment without requesting additional information from the provider. This includes accurate patient identifiers, valid member ID, correct provider NPI and taxonomy, complete diagnosis and procedure codes, dates of service, and any required prior authorization numbers. The claim must also pass electronic format validation under HIPAA X12 standards. When a claim is clean, the payer's clock for payment begins immediately — typically 30 days for electronic submissions under federal prompt payment rules.</p>
+
+    <h2>Why Clean Claims Matter</h2>
+    <p>Every unclean claim adds days or weeks to your revenue cycle while staff chase missing data, resubmit corrected files, and reprocess denials. Industry benchmarks show that first-pass clean claim rates above 95% correlate with significantly faster collections and lower administrative costs. Organizations operating below 90% clean claim rate often employ twice the billing staff per dollar collected compared to high-performing peers. Achieving clean claim status on first submission is the single most efficient lever in revenue cycle management because it eliminates rework before adjudication even begins.</p>
+
+    <h2>How Clean Claims Affect Your Revenue Cycle</h2>
+    <p>An unclean claim may be rejected at the clearinghouse before it ever reaches the payer, or suspended in the payer's system pending additional documentation. Each rejection resets the payment timeline and consumes staff time for investigation and resubmission. Common causes of unclean claims include invalid NPI numbers, mismatched subscriber information, missing referring provider data, and incorrect place of service codes. Even a claim that passes format checks may be deemed unclean if the payer requires attachments or authorization numbers that were not included on the initial submission.</p>
+
+    <div class="callout">
+      <p>Track your first-pass clean claim rate monthly. A drop of even 2 percentage points often signals a registration, coding, or system configuration problem that will cascade into delayed payments.</p>
+    </div>
+
+    <h2>What to Do to Improve Clean Claim Rates</h2>
+    <p>Implement front-end eligibility verification at scheduling and check-in to catch insurance issues before the encounter. Use claim scrubbing software to validate codes, modifiers, and NCCI edits before transmission. Audit your top 10 rejection reasons monthly and address root causes systematically. Train registration staff on accurate demographic capture and payer-specific requirements. When clean claims still result in denials, upload the EOB to Denial Appeal Pro to distinguish between submission errors and true coverage denials that require a formal appeal.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What information is required for a clean claim?</h3>
+    <p>A clean claim requires patient demographics, valid insurance information, provider NPI, date of service, diagnosis codes, procedure codes, and any required authorization or referral numbers. Missing any mandatory field makes the claim unclean.</p>
+
+    <h3>How quickly must payers process a clean claim?</h3>
+    <p>Under the Affordable Care Act, payers must process clean electronic claims within 30 calendar days. Paper claims may have a 30-day window from receipt.</p>
+
+    <h3>What is the difference between a rejected and a denied claim?</h3>
+    <p>A rejected claim fails initial format or edit checks and never enters adjudication. A denied claim is processed but payment is refused for clinical or coverage reasons. Clean claim status applies to claims that pass initial validation.</p>
+
+    <h3>Can a clean claim still be denied?</h3>
+    <p>Yes. Clean claim status means the payer has enough information to adjudicate the claim. The payer can still deny it for medical necessity, lack of authorization, or benefit exclusions.</p>
+
+    <div class="cta-block">
+      <h2>Turn Denials Into Payments</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies whether the issue was a submission error or an appealable denial in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

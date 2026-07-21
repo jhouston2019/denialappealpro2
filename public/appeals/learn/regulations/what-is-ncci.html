@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is NCCI? | Denial Appeal Pro</title>
+  <meta name="description" content="NCCI is CMS's National Correct Coding Initiative — a system of edits that prevents improper payment of procedure code combinations. Learn how NCCI affects claim denials.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does NCCI apply to commercial insurance claims?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "NCCI edits are mandatory for Medicare and Medicaid claims. Many commercial payers adopt NCCI edits or similar bundling logic in their own claim editing systems, so NCCI rules frequently cause denials on non-Medicare claims as well."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is an NCCI column 1 and column 2 edit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Column 1 is the primary procedure code that receives payment. Column 2 is the secondary code that is bundled into column 1 and denied when billed together unless a valid modifier override applies."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How often does CMS update NCCI edits?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CMS publishes NCCI edit updates quarterly, typically effective January 1, April 1, July 1, and October 1 each year. Billing teams should review quarterly releases to avoid new bundling denials on previously billable code pairs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can NCCI bundling denials be appealed?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. When services were genuinely distinct and performed at separate anatomic sites or on separate occasions, you can appeal with documentation supporting modifier use or clinical separation. Successful appeals require operative notes and clear evidence the bundled service was independent."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Regulations and Law</p>
+    <p class="hero-eyebrow">Regulations and Law</p>
+    <h1>What Is NCCI?</h1>
+    <p class="hero-sub">The National Correct Coding Initiative is CMS's automated gatekeeper for procedure code pairs — flagging more than 800,000 edit combinations each quarter to block payment on codes that should not be billed together.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">CMS's system of edits that prevent improper payment of procedure code combinations that should not be billed together.</p>
+    </div>
+
+    <h2>What NCCI Means</h2>
+    <p>NCCI stands for the National Correct Coding Initiative, a CMS program that maintains automated edits identifying procedure code pairs that should not be billed and paid separately on the same date of service for the same patient. The system includes procedure-to-procedure edits, medically unlikely edits, and add-on code rules. Each edit designates a column 1 code that receives payment and a column 2 code that is typically denied when billed together without a valid modifier override.</p>
+
+    <h2>Why NCCI Matters</h2>
+    <p>NCCI is one of the most common sources of Medicare claim denials and a major driver of revenue leakage for outpatient and physician practices. Coding teams that do not run NCCI checks before submission face predictable denials on the remittance advice, often with CARC code 97 indicating bundled service. Because CMS updates NCCI quarterly with thousands of new or revised edits, even experienced billers encounter new bundling conflicts after each effective date.</p>
+
+    <h2>How NCCI Affects Your Claim</h2>
+    <p>When a claim passes through Medicare's processing system, NCCI edits run automatically against every line item. If a column 2 code is billed with its paired column 1 code without an allowed modifier, the secondary line is denied or reduced to zero payment. Commercial payers frequently mirror these edits in their own claim scrubbing software, meaning the same code pair that fails NCCI on Medicare may also fail on a commercial remittance. A single missed edit can cost $150 to $3,000 per line depending on the procedure.</p>
+
+    <div class="callout">
+      <p>NCCI edits update quarterly on January 1, April 1, July 1, and October 1. Run your charge review against the current quarter's edit file before submission to avoid preventable bundling denials.</p>
+    </div>
+
+    <h2>What to Do About an NCCI Denial</h2>
+    <p>Identify the specific NCCI edit pair on your remittance and determine whether a modifier override is permitted for that edit. If the services were genuinely distinct — separate anatomic site, separate session, or distinct clinical purpose — append the appropriate modifier and resubmit or appeal with operative notes documenting the separation. If no modifier is allowed, the column 2 service may not be separately billable and should be written off unless clinical documentation supports a rare exception. Upload your EOB to Denial Appeal Pro to decode the denial and generate an appeal letter with the documentation strategy your specific NCCI edit requires.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Does NCCI apply to commercial insurance claims?</h3>
+    <p>NCCI edits are mandatory for Medicare and Medicaid claims. Many commercial payers adopt NCCI edits or similar bundling logic in their own claim editing systems, so NCCI rules frequently cause denials on non-Medicare claims as well.</p>
+
+    <h3>What is an NCCI column 1 and column 2 edit?</h3>
+    <p>Column 1 is the primary procedure code that receives payment. Column 2 is the secondary code that is bundled into column 1 and denied when billed together unless a valid modifier override applies.</p>
+
+    <h3>How often does CMS update NCCI edits?</h3>
+    <p>CMS publishes NCCI edit updates quarterly, typically effective January 1, April 1, July 1, and October 1 each year. Billing teams should review quarterly releases to avoid new bundling denials on previously billable code pairs.</p>
+
+    <h3>Can NCCI bundling denials be appealed?</h3>
+    <p>Yes. When services were genuinely distinct and performed at separate anatomic sites or on separate occasions, you can appeal with documentation supporting modifier use or clinical separation. Successful appeals require operative notes and clear evidence the bundled service was independent.</p>
+
+    <div class="cta-block">
+      <h2>Fight Your NCCI Bundling Denial</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies the bundling reason and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

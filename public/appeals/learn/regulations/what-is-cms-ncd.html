@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a CMS NCD? | Denial Appeal Pro</title>
+  <meta name="description" content="A National Coverage Determination is a nationwide Medicare policy deciding whether a specific service is covered for all beneficiaries. Learn how NCDs affect claim denials.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Who publishes National Coverage Determinations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "NCDs are published by the Centers for Medicare and Medicaid Services at the national level. They supersede conflicting Local Coverage Determinations within the same jurisdiction and apply to all Medicare fee-for-service beneficiaries nationwide."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a non-covered NCD?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A non-covered NCD explicitly states that Medicare will not pay for a specific service or item for any beneficiary. These denials are generally not appealable on medical necessity grounds, though billing errors may still be corrected."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do NCDs require coverage with evidence development?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Some NCDs cover a service only when the patient is enrolled in a CMS-approved clinical study or registry under Coverage with Evidence Development. Claims for these services must include the appropriate study identifier to receive payment."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I appeal an NCD-based denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "If the NCD covers the service under specific conditions, submit a Medicare redetermination demonstrating the patient meets every criterion in the NCD policy. Cite the NCD number and map your clinical documentation to each coverage requirement listed in the decision memo."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Regulations and Law</p>
+    <p class="hero-eyebrow">Regulations and Law</p>
+    <h1>What Is a CMS NCD?</h1>
+    <p class="hero-sub">When CMS issues a National Coverage Determination, every Medicare Administrative Contractor in every state must follow it — making NCDs the single most authoritative coverage rule for roughly 65 million Medicare beneficiaries.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A nationwide Medicare policy that determines whether a specific service is covered under Medicare for all beneficiaries.</p>
+    </div>
+
+    <h2>What a CMS NCD Means</h2>
+    <p>A National Coverage Determination, or NCD, is a formal coverage policy issued by CMS that applies uniformly to all Medicare fee-for-service beneficiaries across every state and MAC jurisdiction. NCDs establish whether a specific item, service, or technology is covered, non-covered, or covered only under defined clinical conditions. When an NCD exists for a service, it takes precedence over any conflicting Local Coverage Determination in the same region.</p>
+
+    <h2>Why NCDs Matter</h2>
+    <p>NCDs define the national floor for Medicare coverage and eliminate regional variation for the services they address. For providers offering newer technologies, specialty drugs, or advanced diagnostics, the applicable NCD determines whether Medicare will pay at all. An NCD non-coverage decision is effectively a nationwide payment prohibition — no MAC can override it. Conversely, an NCD that covers a service under specific clinical criteria gives providers a clear, uniform standard for documentation and billing across all 50 states.</p>
+
+    <h2>How a CMS NCD Affects Your Claim</h2>
+    <p>Medicare claims editing systems check every billed service against applicable NCDs before payment is released. If the service is non-covered under an NCD, the claim is denied regardless of clinical documentation or medical necessity arguments at the MAC level. If the NCD covers the service under specific conditions — such as a required diagnosis, prior conservative treatment, or enrollment in a qualifying clinical registry — failure to meet any single criterion results in denial. CMS currently maintains over 300 active NCDs governing services ranging from bariatric surgery to PET scans to CAR-T cell therapy.</p>
+
+    <div class="callout">
+      <p>An NCD non-coverage decision applies nationwide and cannot be overridden by a favorable LCD or MAC medical director review. Verify NCD status before performing non-covered services on Medicare patients.</p>
+    </div>
+
+    <h2>What to Do About an NCD Denial</h2>
+    <p>Search the Medicare Coverage Database for the NCD governing your billed service and read the full decision memo including coverage indications, limitations, and non-coverage statements. If the NCD covers the service under conditions your patient meets, file a Medicare redetermination appeal mapping clinical documentation to each NCD requirement. If the service is non-covered under the NCD, payment recovery through standard appeal is unlikely — evaluate whether a billing error, wrong code, or Coverage with Evidence Development enrollment applies. Upload your denial to Denial Appeal Pro to identify the governing NCD and generate an appeal letter aligned with the policy criteria.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Who publishes National Coverage Determinations?</h3>
+    <p>NCDs are published by the Centers for Medicare and Medicaid Services at the national level. They supersede conflicting Local Coverage Determinations within the same jurisdiction and apply to all Medicare fee-for-service beneficiaries nationwide.</p>
+
+    <h3>What is a non-covered NCD?</h3>
+    <p>A non-covered NCD explicitly states that Medicare will not pay for a specific service or item for any beneficiary. These denials are generally not appealable on medical necessity grounds, though billing errors may still be corrected.</p>
+
+    <h3>Do NCDs require coverage with evidence development?</h3>
+    <p>Some NCDs cover a service only when the patient is enrolled in a CMS-approved clinical study or registry under Coverage with Evidence Development. Claims for these services must include the appropriate study identifier to receive payment.</p>
+
+    <h3>How do I appeal an NCD-based denial?</h3>
+    <p>If the NCD covers the service under specific conditions, submit a Medicare redetermination demonstrating the patient meets every criterion in the NCD policy. Cite the NCD number and map your clinical documentation to each coverage requirement listed in the decision memo.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your NCD-Based Denial</h2>
+      <p>Upload your Medicare denial and Denial Appeal Pro identifies the governing NCD and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

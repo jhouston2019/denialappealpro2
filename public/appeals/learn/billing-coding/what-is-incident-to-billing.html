@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is Incident-To Billing? | Denial Appeal Pro</title>
+  <meta name="description" content="Incident-to billing is a Medicare rule allowing clinical staff services to be billed under the supervising physician's NPI. Learn the requirements and denial risks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does incident-to billing apply to commercial payers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Incident-to billing is a Medicare-specific rule. Commercial payers have their own credentialing and billing requirements for services provided by non-physician practitioners and clinical staff."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the supervision requirements for incident-to billing?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The supervising physician must be physically present in the office suite and immediately available to furnish assistance and direction. The physician does not need to be in the same room but must be on-site."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can a new patient visit be billed incident-to?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Incident-to services require an established patient with an existing plan of care set by the supervising physician. The initial visit establishing the plan must be performed by the physician."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if incident-to requirements are not met?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medicare may deny the claim, recoup prior payments, or refer the case for audit. Claims billed incident-to without proper supervision or an established plan of care are considered compliance violations."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Billing and Coding</p>
+    <p class="hero-eyebrow">Billing and Coding</p>
+    <h1>What Is Incident-To Billing?</h1>
+    <p class="hero-sub">Incident-to billing lets a practice bill clinical staff services under the physician's NPI at the full physician rate — but only when every Medicare condition is met.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A Medicare billing rule allowing services provided by clinical staff to be billed under the supervising physician's NPI under specific conditions.</p>
+    </div>
+
+    <h2>What Incident-To Billing Means</h2>
+    <p>Incident-to billing is a Medicare provision that allows services performed by clinical staff — nurses, medical assistants, and other auxiliary personnel — to be billed under the supervising physician's National Provider Identifier at 100% of the physician fee schedule rate. The rule applies to services that are an integral part of the physician's professional service, furnished in the office setting, and performed under the direct supervision of the physician. The physician must have initially established the plan of care, and the patient must be an established patient returning for ongoing treatment. Incident-to billing does not apply to new patient visits, hospital services, or services performed outside the office.</p>
+
+    <h2>Why Incident-To Billing Matters</h2>
+    <p>Incident-to billing enables practices to receive full physician-level reimbursement for routine follow-up services delivered by clinical staff, improving practice efficiency and revenue. Without incident-to billing, these same services would either be non-billable or reimbursed at a lower rate. However, Medicare audits incident-to claims aggressively — the Office of Inspector General has identified incident-to billing as a high-risk area, with an estimated 12% of audited incident-to claims failing to meet supervision or documentation requirements. A single audit finding can trigger recoupment across hundreds of prior claims.</p>
+
+    <h2>How Incident-To Billing Affects Your Claim</h2>
+    <p>When billing incident-to, the claim is submitted under the supervising physician's NPI with no modifier indicating the service was performed by staff. Medicare expects the physician to be physically present in the office suite and immediately available during the service. The plan of care must have been established by the physician during a prior encounter with the same patient. If any condition is not met — the physician was off-site, the patient was new, or the service was outside the established plan — the claim is technically improper and may deny or become subject to recoupment. Commercial payers generally do not recognize incident-to billing and require services to be billed under the rendering provider's own credentials.</p>
+
+    <div class="callout">
+      <p>Document physician supervision and the established plan of care in every incident-to encounter. Audit findings almost always stem from missing supervision documentation, not from the billing rule itself.</p>
+    </div>
+
+    <h2>What to Do About Incident-To Denials</h2>
+    <p>If Medicare denies or recoups an incident-to claim, review the encounter documentation for evidence of physician supervision and an established plan of care. Gather sign-in logs, scheduling records, and the physician's notes from the visit that established the treatment plan. If requirements were met, submit a redetermination request with supporting documentation. If the practice has systemic gaps in supervision documentation, implement a compliance program before rebilling. For denials tied to other billing issues on the same claim, upload your EOB to Denial Appeal Pro for a comprehensive appeal strategy.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Does incident-to billing apply to commercial payers?</h3>
+    <p>Incident-to billing is a Medicare-specific rule. Commercial payers have their own credentialing and billing requirements for services provided by non-physician practitioners and clinical staff.</p>
+
+    <h3>What are the supervision requirements for incident-to billing?</h3>
+    <p>The supervising physician must be physically present in the office suite and immediately available to furnish assistance and direction. The physician does not need to be in the same room but must be on-site.</p>
+
+    <h3>Can a new patient visit be billed incident-to?</h3>
+    <p>No. Incident-to services require an established patient with an existing plan of care set by the supervising physician. The initial visit establishing the plan must be performed by the physician.</p>
+
+    <h3>What happens if incident-to requirements are not met?</h3>
+    <p>Medicare may deny the claim, recoup prior payments, or refer the case for audit. Claims billed incident-to without proper supervision or an established plan of care are considered compliance violations.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Medicare Billing Denials</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies the billing issue and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>

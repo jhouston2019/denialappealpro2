@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Prior Authorization Requirement? | Denial Appeal Pro</title>
+  <meta name="description" content="A prior authorization requirement means certain services must be approved before they are rendered or the claim may be denied. Learn how to respond to auth denials.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0f172a;
+      --accent: #22c55e;
+      --gray-50: #f9fafb;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-900: #111827;
+    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--gray-900);
+           background: white; line-height: 1.6; }
+    .nav { background: var(--primary); padding: 1rem 2rem;
+           display: flex; justify-content: space-between;
+           align-items: center; }
+    .nav-logo { font-family: 'DM Serif Display', serif; color: white;
+                font-size: 1.4rem; text-decoration: none; }
+    .nav-cta { background: var(--accent); color: white;
+               padding: 0.6rem 1.4rem; border-radius: 8px;
+               font-weight: 600; font-size: 0.9rem;
+               text-decoration: none; }
+    .hero { background: var(--primary); padding: 4rem 2rem;
+            text-align: center; }
+    .hero-breadcrumb { font-size: 0.78rem;
+                       color: rgba(255,255,255,0.4);
+                       margin-bottom: 0.75rem; text-align: center; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.4);
+                         text-decoration: none; }
+    .hero-eyebrow { color: var(--accent); font-size: 0.8rem;
+                    font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .hero h1 { font-family: 'DM Serif Display', serif;
+               font-size: clamp(2rem, 5vw, 3rem); color: white;
+               line-height: 1.2; margin-bottom: 1.25rem;
+               max-width: 800px; margin-left: auto;
+               margin-right: auto; }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.7);
+                max-width: 600px; margin: 0 auto 2rem;
+                line-height: 1.7; }
+    .btn-primary { display: inline-block; background: var(--accent);
+                   color: white; padding: 0.95rem 2.25rem;
+                   border-radius: 10px; font-weight: 700;
+                   font-size: 1.05rem; text-decoration: none;
+                   box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .content { max-width: 820px; margin: 0 auto;
+               padding: 3.5rem 2rem; }
+    .content h2 { font-family: 'DM Serif Display', serif;
+                  font-size: 1.75rem; color: var(--primary);
+                  margin: 2.5rem 0 1rem; }
+    .content h2:first-child { margin-top: 0; }
+    .content h3 { font-size: 1.1rem; font-weight: 600; color: var(--primary);
+                  margin: 1.75rem 0 0.5rem; }
+    .content p { font-size: 1.05rem; color: var(--gray-600);
+                 line-height: 1.8; margin-bottom: 1.25rem; }
+    .callout { background: var(--gray-50);
+               border-left: 4px solid var(--accent);
+               padding: 1.5rem 1.75rem;
+               border-radius: 0 8px 8px 0; margin: 2rem 0; }
+    .callout p { margin: 0; color: var(--primary); font-weight: 500; }
+    .definition-box { background: var(--primary); color: white;
+                      padding: 1.75rem 2rem; border-radius: 12px;
+                      margin-bottom: 2rem; }
+    .definition-box .def-label { font-size: 0.75rem; font-weight: 700;
+                                  text-transform: uppercase;
+                                  letter-spacing: 0.1em;
+                                  color: var(--accent);
+                                  margin-bottom: 0.5rem; }
+    .definition-box .def-text { font-family: 'DM Serif Display', serif;
+                                 font-size: 1.4rem; color: white;
+                                 line-height: 1.4; }
+    .cta-block { background: var(--primary); color: white;
+                 padding: 3rem 2rem; text-align: center;
+                 margin-top: 4rem; border-radius: 12px; }
+    .cta-block h2 { font-family: 'DM Serif Display', serif;
+                    font-size: 1.75rem; color: white;
+                    margin-bottom: 1rem; }
+    .cta-block p { color: rgba(255,255,255,0.7);
+                   margin-bottom: 1.75rem; font-size: 1.05rem; }
+    footer { background: var(--gray-50);
+             border-top: 1px solid var(--gray-200);
+             padding: 2rem; text-align: center;
+             color: var(--gray-600); font-size: 0.875rem;
+             margin-top: 4rem; }
+    footer a { color: var(--gray-600); text-decoration: none;
+               margin: 0 1rem; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Which services typically require prior authorization?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common prior authorization requirements apply to advanced imaging such as MRI and CT scans, inpatient admissions, specialty drugs, durable medical equipment, and many surgical procedures. Each payer publishes its own authorization list in provider manuals."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I appeal a denial for missing prior authorization?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, in several situations. If authorization was obtained but not linked to the claim, retroactive authorization may be granted for emergencies, or the payer failed to respond within required timeframes, an appeal with supporting documentation can overturn the denial."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long is a prior authorization valid?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Authorization validity periods vary by payer and service type, typically ranging from 30 to 180 days from the approval date. Always verify the authorized date range and number of approved units before rendering the service."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What CARC code indicates a prior authorization denial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Prior authorization denials commonly appear with CARC code 197 for precertification or authorization absent, and CARC code 15 for authorization number missing or invalid. Check the accompanying RARC remark code for specific payer instructions."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">Denial Appeal Pro</a>
+    <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-breadcrumb"><a href="../index.html">Glossary</a> › Regulations and Law</p>
+    <p class="hero-eyebrow">Regulations and Law</p>
+    <h1>What Is a Prior Authorization Requirement?</h1>
+    <p class="hero-sub">Prior authorization is the payer's gate before high-cost care — and authorization-related denials account for roughly 12 percent of all commercial claim denials, making them one of the most recoverable denial categories when documentation exists.</p>
+  </section>
+
+  <div class="content">
+    <div class="definition-box">
+      <p class="def-label">Definition</p>
+      <p class="def-text">A payer requirement that certain services must be approved before they are rendered or the claim may be denied.</p>
+    </div>
+
+    <h2>What a Prior Authorization Requirement Means</h2>
+    <p>A prior authorization requirement is a payer policy mandating that specific services, procedures, medications, or levels of care receive formal approval before the provider renders them or submits a claim. The provider or facility submits a precertification request with clinical documentation, and the payer reviews it against medical necessity and plan benefit criteria. If authorization is not obtained or the authorization number is not included on the claim, the payer typically denies payment citing CARC code 197 or code 15.</p>
+
+    <h2>Why Prior Authorization Requirements Matter</h2>
+    <p>Prior authorization is one of the most common and most preventable sources of claim denials in outpatient and facility billing. Payers use authorization requirements to control utilization and costs on high-dollar services including imaging, surgery, specialty pharmacy, and inpatient admissions. For revenue cycle teams, authorization denials represent a mix of true process failures and recoverable denials where authorization was actually obtained but not properly linked to the claim. Industry data shows authorization-related denials account for approximately 12 percent of all commercial denials.</p>
+
+    <h2>How Prior Authorization Affects Your Claim</h2>
+    <p>When a claim arrives without a valid authorization number for a service that requires one, the payer's claims system automatically denies or pend the line item. The remittance shows a denial reason referencing missing or invalid precertification. Even when authorization was granted, failure to enter the correct authorization number, date range, or approved units on the claim triggers the same denial. Retroactive authorization may be available for true emergencies or when the payer failed to respond to a timely authorization request within mandated timeframes — typically 72 hours for urgent requests and 15 days for standard requests under many state regulations.</p>
+
+    <div class="callout">
+      <p>Always verify that the authorization number, approved date range, and unit count on your claim exactly match the payer's authorization record. Mismatched auth data is the leading cause of denials on services that were actually approved.</p>
+    </div>
+
+    <h2>What to Do About a Prior Authorization Denial</h2>
+    <p>Check whether authorization was obtained and whether the authorization number was correctly entered on the claim. If authorization exists but was not linked, submit a corrected claim with the valid authorization number. If authorization was denied or never requested, evaluate whether retroactive authorization applies for emergency services or payer non-response. File a first-level appeal with the authorization approval letter, clinical documentation supporting medical necessity, and evidence of timely submission if the payer missed response deadlines. Upload your denial to Denial Appeal Pro to generate an appeal letter mapped to your specific authorization denial reason.</p>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>Which services typically require prior authorization?</h3>
+    <p>Common prior authorization requirements apply to advanced imaging such as MRI and CT scans, inpatient admissions, specialty drugs, durable medical equipment, and many surgical procedures. Each payer publishes its own authorization list in provider manuals.</p>
+
+    <h3>Can I appeal a denial for missing prior authorization?</h3>
+    <p>Yes, in several situations. If authorization was obtained but not linked to the claim, retroactive authorization may be granted for emergencies, or the payer failed to respond within required timeframes, an appeal with supporting documentation can overturn the denial.</p>
+
+    <h3>How long is a prior authorization valid?</h3>
+    <p>Authorization validity periods vary by payer and service type, typically ranging from 30 to 180 days from the approval date. Always verify the authorized date range and number of approved units before rendering the service.</p>
+
+    <h3>What CARC code indicates a prior authorization denial?</h3>
+    <p>Prior authorization denials commonly appear with CARC code 197 for precertification or authorization absent, and CARC code 15 for authorization number missing or invalid. Check the accompanying RARC remark code for specific payer instructions.</p>
+
+    <div class="cta-block">
+      <h2>Appeal Your Authorization Denial</h2>
+      <p>Upload your denial letter and Denial Appeal Pro identifies the authorization issue and generates a submission-ready appeal in under 60 seconds.</p>
+      <a href="/analysis-preview" class="btn-primary">Appeal This Denial Free →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Denial Appeal Pro ·
+      <a href="/">Home</a>
+      <a href="/appeals/learn/">Glossary</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/analysis-preview">Appeal This Denial Free</a>
+    </p>
+    <p style="margin-top:0.5rem;">Denial Appeal Pro is not a law 
+    firm and does not provide legal advice. Appeal letters are 
+    AI-generated and should be reviewed before submission.</p>
+  </footer>
+</body>
+</html>
