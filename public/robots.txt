@@ -1,54 +1,15 @@
-# Estimate Review Pro - Production Robots.txt
-# Updated: 2025-12-17
-
 User-agent: *
-
-# ALLOW: SEO Landing Pages
 Allow: /
-Allow: /estimate-review.html
-Allow: /xactimate-estimate-review.html
-Allow: /insurance-estimate-review.html
-Allow: /contractor-estimate-review.html
-Allow: /adjuster-estimate-review.html
-Allow: /water-damage-estimate-review.html
-Allow: /fire-damage-estimate-review.html
-Allow: /wind-hail-estimate-review.html
-Allow: /estimate-review-vs-chatgpt.html
-Allow: /estimate-review-not-claim-help.html
-
-# DISALLOW: Operational & Functional Pages
-Disallow: /upload-estimate.html
-Disallow: /upload*
-
-# DISALLOW: Netlify Functions & API
-Disallow: /.netlify/
-Disallow: /.netlify/functions/
-Disallow: /api/
-Disallow: /api*
-
-# DISALLOW: Admin & Internal Tools
 Disallow: /admin/
-Disallow: /admin*
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /deliverables
+Disallow: /account
+Disallow: /success
+Disallow: /cancel
+Disallow: /recover
+Disallow: /create-account
+Disallow: /auth/
+Disallow: /app
 
-# DISALLOW: Payment & Transaction Pages
-Disallow: /payment*
-Disallow: /checkout*
-Disallow: /success*
-Disallow: /thank-you*
-Disallow: /confirmation*
-
-# DISALLOW: Testing & Development
-Disallow: /test*
-Disallow: /qa*
-Disallow: /staging*
-Disallow: /dev*
-
-# DISALLOW: User Data & Reports
-Disallow: /reports/
-Disallow: /results/
-Disallow: /downloads/
-
-# Sitemap Location
-Sitemap: https://estimatereviewpro.com/sitemap.xml
-
-
+Sitemap: https://denialappealpro.com/sitemap.xml
