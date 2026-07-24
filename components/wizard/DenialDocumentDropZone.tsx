@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState, useCallback, useEffect } from "react";
-import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
 import type { ExtractDenialResponse } from "@/lib/wizard/mapExtractedToIntake";
 
 function fileMatchesAccept(file: File, acceptAttr?: string) {
@@ -90,7 +89,7 @@ export default function DenialDocumentDropZone({
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch(netlifyFunctionUrl("extract-denial"), {
+      const response = await fetch("/api/extract-denial", {
         method: "POST",
         body: formData,
       });
