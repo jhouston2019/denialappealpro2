@@ -106,14 +106,9 @@ type RawExtract = Record<string, unknown> & {
 };
 
 async function extractTextFromPDF(pdfBuffer: Buffer): Promise<string> {
-  const { PDFParse } = await import("pdf-parse");
-  const parser = new PDFParse({ data: new Uint8Array(pdfBuffer) });
-  try {
-    const data = await parser.getText();
-    return String(data?.text || "").trim();
-  } finally {
-    await parser.destroy();
-  }
+  const pdfParse = (await import("pdf-parse")).default;
+  const data = await pdfParse(pdfBuffer);
+  return String(data.text || "").trim();
 }
 
 function dedupe(arr: unknown[]): string[] {
