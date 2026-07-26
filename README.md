@@ -122,6 +122,27 @@ npm run test:safety
 
 More detail: [docs/PAYMENT_FLOW_TESTING.md](docs/PAYMENT_FLOW_TESTING.md).
 
+### Phase 1.6 grounding tests (LLM)
+
+Grounding, adversarial, and presence suites call **gpt-4o** and **fail closed** if the key is missing (they must not silently pass against the deterministic template).
+
+```bash
+# 1. Copy the example and set your key (file is gitignored)
+cp .env.test.example .env.test
+# Edit .env.test → OPENAI_API_KEY=sk-...
+
+# 2. Preflight + unit + Part H grounding + presence (each LLM assertion ×3)
+npm run test:phase1
+
+# 3. Adversarial suite (LLM ×3)
+npm run test:phase1:adversarial
+
+# 4. Regenerate golden letters (a)/(b)
+npm run test:phase1:golden-letters
+```
+
+`npm run test:phase1` runs `scripts/phase1-preflight.mjs` first; if `OPENAI_API_KEY` is absent it exits non-zero with a clear message. Tests log `generatorPath: 'llm'` on each attempt.
+
 **See [QUICKSTART.md](QUICKSTART.md) for detailed setup instructions.**
 
 ### Database seeding and migrations

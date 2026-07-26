@@ -1,0 +1,105 @@
+import { getValue, missingRequired } from "../ledger/builder";
+import { FACT_LABELS } from "../ledger/keys";
+import type { FactKey, FactLedger, FactValue } from "../ledger/types";
+import {
+  formatCurrency,
+  formatLetterDate,
+} from "../format/render";
+import { getAuthoritiesForLedger } from "../authorities/gate";
+import { assembleLetter, hasClinicalFacts } from "../letter/assembler";
+import { routeDenial } from "../router/index";
+import type { GenerationResult } from "./types";
+
+function fmt(v: FactValue | undefined): string {
+  if (v == null) return "";
+  if (Array.isArray(v)) return v.map(String).join(", ");
+  return String(v);
+}
+
+function req(key: FactKey): string {
+  return `[[REQUIRED: ${key} — ${FACT_LABELS[key]}]]`;
+}
+
+function valOrRequired(ledger: FactLedger, key: FactKey): string {
+  const v = getValue(ledger, key);
+  if (valueEmpty(v as FactValue)) return req(key);
+  return fmt(v);
+}
+
+function valueEmpty(v: FactValue): boolean {
+  if (v == null) return true;
+  if (typeof v === "string") return !v.trim();
+  if (Array.isArray(v)) return !v.length;
+  return false;
+}
+
+/**
+ * Deterministic grounded draft — never used for grounding proof tests.
+ * Sets generatorPath: 'deterministic'.
+ */
+export function deterministicGroundedDraft(ledger: FactLedger): GenerationResult {
+  const missing = missingRequired(ledger);
+  const route = routeDenial(ledger);
+  const claim = valOrRequired(ledger, "claim.number");
+  const dosRaw = getValue(ledger, "claim.dateOfService");
+  const dos = !valueEmpty(dosRaw as FactValue)
+    ? formatLetterDate(String(dosRaw))
+    : req("claim.dateOfService");
+  const cpt = valOrRequired(ledger, "claim.cptCodes");
+  const billed =
+    formatCurrency(fmt(getValue(ledger, "claim.billedAmount"))) ||
+    req("claim.billedAmount");
+  const denied =
+    formatCurrency(fmt(getValue(ledger, "claim.deniedAmount"))) ||
+    req("claim.deniedAmount");
+  const descriptor =
+    route.primaryCarc?.descriptor ??
+    "Payment adjusted per the cited reason code.";
+
+  const relief = `We request reversal of the denial and payment for claim ${claim} at the contracted rate.`;
+
+  const claimSummary = `Claim ${claim} was submitted for services rendered on ${dos}. CPT ${cpt}. The billed amount is ${billed}; the denied amount is ${denied}.`;
+
+  const denialBasis = `The payer denied this claim citing: ${descriptor}.`;
+
+  const strategyArg = route.strategy.leadArgument;
+
+  const clinicalParas: string[] = [];
+  if (hasClinicalFacts(ledger)) {
+    const diagnosis = getValue(ledger, "clinical.primaryDiagnosis");
+    const indication = getValue(ledger, "clinical.indication");
+    const prior = getValue(ledger, "clinical.priorTreatments");
+    const conservative = getValue(ledger, "clinical.conservativeCareTried");
+    const functional = getValue(ledger, "clinical.functionalImpact");
+
+    if (!valueEmpty(diagnosis as FactValue)) {
+      clinicalParas.push(`Primary diagnosis: ${fmt(diagnosis)}.`);
+    }
+    if (!valueEmpty(indication as FactValue)) {
+      clinicalParas.push(`Clinical indication: ${fmt(indication)}.`);
+    }
+    if (!valueEmpty(prior as FactValue)) {
+      clinicalParas.push(`Prior treatments: ${fmt(prior)}.`);
+    }
+    if (!valueEmpty(conservative as FactValue)) {
+      clinicalParas.push(`Conservative care tried: ${fmt(conservative)}.`);
+    }
+    if (!valueEmpty(functional as FactValue)) {
+      clinicalParas.push(`Functional impact: ${fmt(functional)}.`);
+    }
+  }
+
+  const narrativeParts = [relief, claimSummary, denialBasis, strategyArg];
+  if (clinicalParas.length) {
+    narrativeParts.push(clinicalParas.join(" "));
+  }
+  if (missing.length) {
+    narrativeParts.push(missing.map((k) => req(k)).join(" "));
+  }
+
+  const narrative = narrativeParts.join("\n\n");
+  const authorities = getAuthoritiesForLedger(ledger);
+  const text = assembleLetter(ledger, narrative, authorities);
+
+  return { text, generatorPath: "deterministic", ledger };
+}

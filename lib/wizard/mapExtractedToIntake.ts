@@ -1,16 +1,14 @@
-import {
-  emptyIntake,
-  normalizeIcdCodesFromExtract,
-  type DenialIntake,
-} from "@/lib/wizard/denialIntakeEngine";
+import { emptyIntake, type DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 import {
   emptyConfidence,
   type DapConfidenceMap,
   type FieldConfidence,
 } from "@/lib/dap-wizard-snapshot";
+import type { FactLedger } from "@/lib/appeal/ledger/types";
 
 export type ExtractDenialResponse = {
   success?: boolean;
+  ledger?: FactLedger;
   patientName?: string;
   patientNameConfidence?: FieldConfidence;
   providerName?: string;
@@ -33,10 +31,16 @@ export type ExtractDenialResponse = {
   billedAmountConfidence?: FieldConfidence;
   paidAmount?: string;
   paidAmountConfidence?: FieldConfidence;
+  deniedAmount?: string;
+  deniedAmountConfidence?: FieldConfidence;
   cptCodes?: string[];
   cptCodesConfidence?: FieldConfidence;
   icd10Codes?: string[];
   icd10CodesConfidence?: FieldConfidence;
+  memberId?: string;
+  memberIdConfidence?: FieldConfidence;
+  modifiers?: string[];
+  modifiersConfidence?: FieldConfidence;
   error?: string;
   message?: string;
 };
@@ -66,17 +70,28 @@ function conf(v: unknown, fallback: FieldConfidence = "low"): FieldConfidence {
 export function mapExtractedToIntake(payload: ExtractDenialResponse): {
   intake: DenialIntake;
   confidence: DapConfidenceMap;
+  ledger: FactLedger | null;
 } {
   const base = emptyIntake();
   const confidence = emptyConfidence();
 
-  const icdFromLegacy = normalizeIcdCodesFromExtract(
-    payload as unknown as Record<string, unknown>
-  );
+  // ICD-10 is clinical/user-only — do not populate from document extraction.
+
+  const denied =
+    str(payload.deniedAmount) ||
+    (() => {
+      const b = parseFloat(str(payload.billedAmount).replace(/[$,\s]/g, ""));
+      const p = parseFloat(str(payload.paidAmount).replace(/[$,\s]/g, ""));
+      if (Number.isFinite(b) && Number.isFinite(p)) {
+        return Math.max(0, b - p).toFixed(2);
+      }
+      return "";
+    })();
 
   const intake: DenialIntake = {
     ...base,
     patientName: str(payload.patientName),
+    memberId: str(payload.memberId),
     providerName: str(payload.providerName),
     providerNpi: str(payload.providerNpi),
     payer: str(payload.payerName),
@@ -86,15 +101,15 @@ export function mapExtractedToIntake(payload: ExtractDenialResponse): {
     carcCodes: arr(payload.carcCodes),
     rarcCodes: arr(payload.rarcCodes),
     cptCodes: arr(payload.cptCodes),
-    icdCodes:
-      arr(payload.icd10Codes).length > 0
-        ? arr(payload.icd10Codes)
-        : icdFromLegacy,
+    modifiers: arr(payload.modifiers).join(", "),
+    icdCodes: [],
     billedAmount: str(payload.billedAmount),
     paidAmount: str(payload.paidAmount),
+    deniedAmount: denied,
   };
 
   confidence.patientName = conf(payload.patientNameConfidence);
+  confidence.memberId = conf(payload.memberIdConfidence);
   confidence.providerName = conf(payload.providerNameConfidence);
   confidence.providerNpi = conf(payload.providerNpiConfidence);
   confidence.payerName = conf(payload.payerNameConfidence);
@@ -105,8 +120,13 @@ export function mapExtractedToIntake(payload: ExtractDenialResponse): {
   confidence.rarcCodes = conf(payload.rarcCodesConfidence);
   confidence.billedAmount = conf(payload.billedAmountConfidence);
   confidence.paidAmount = conf(payload.paidAmountConfidence);
+  confidence.deniedAmount = conf(payload.deniedAmountConfidence);
   confidence.cptCodes = conf(payload.cptCodesConfidence);
-  confidence.icd10Codes = conf(payload.icd10CodesConfidence);
+  confidence.icd10Codes = "low";
 
-  return { intake, confidence };
+  return {
+    intake,
+    confidence,
+    ledger: payload.ledger && typeof payload.ledger === "object" ? payload.ledger : null,
+  };
 }

@@ -23,6 +23,10 @@ import {
   type DapConfidenceMap,
   type DapWizardSnapshot,
 } from "@/lib/dap-wizard-snapshot";
+import { DEFAULT_ENCLOSURES } from "@/lib/appeal/ledger/keys";
+import { ensureLedger } from "@/lib/appeal/ledger/intakeToLedger";
+import type { EnclosureItem, FactLedger } from "@/lib/appeal/ledger/types";
+import { routeDenial } from "@/lib/appeal/router/index";
 import { emptyIntake, type DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 import {
   mapExtractedToIntake,
@@ -36,6 +40,14 @@ import { Step2ExtractionPanel } from "./step2-extraction-panel";
 import { Step3ConfirmPanel } from "./step3-confirm-panel";
 import { Step4GeneratePanel } from "./step4-generate-panel";
 import "./dap-wizard.css";
+
+function defaultEnclosures(): EnclosureItem[] {
+  return DEFAULT_ENCLOSURES.map((e) => ({
+    id: e.id,
+    label: e.label,
+    checked: false,
+  }));
+}
 
 const WIZARD_PANEL =
   "rounded-[10px] border-[0.5px] border-[#e4e4e4] bg-white px-[18px] py-4 text-[#2a3a4a] md:px-[18px] md:py-4";
@@ -53,13 +65,15 @@ function buildSnapshot(
   currentStep: number,
   intake: DenialIntake,
   confidence: DapConfidenceMap,
-  uploadedFileName: string | null
+  uploadedFileName: string | null,
+  ledger: FactLedger | null
 ): DapWizardSnapshot {
   return {
     v: 1,
     currentStep,
     intake,
     confidence,
+    ledger,
     uploadedFileName,
   };
 }
@@ -77,6 +91,10 @@ export default function UploadWizardClient({
   const [intake, setIntake] = useState<DenialIntake>(() => emptyIntake());
   const [confidence, setConfidence] = useState<DapConfidenceMap>(() =>
     emptyConfidence()
+  );
+  const [ledger, setLedger] = useState<FactLedger | null>(null);
+  const [enclosures, setEnclosures] = useState<EnclosureItem[]>(() =>
+    defaultEnclosures()
   );
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [pasteText, setPasteText] = useState("");
@@ -100,9 +118,14 @@ export default function UploadWizardClient({
 
   const persistState = useCallback(
     (step: number, fileName: string | null = uploadedFile?.name ?? null) => {
-      writeDapWizardState(buildSnapshot(step, intake, confidence, fileName));
+      const nextLedger = ledger
+        ? { ...ledger, enclosures }
+        : ledger;
+      writeDapWizardState(
+        buildSnapshot(step, intake, confidence, fileName, nextLedger)
+      );
     },
-    [confidence, intake, uploadedFile]
+    [confidence, enclosures, intake, ledger, uploadedFile]
   );
 
   useEffect(() => {
@@ -123,12 +146,18 @@ export default function UploadWizardClient({
     if (!snap) return;
     setIntake(snap.intake);
     setConfidence(snap.confidence);
+    if (snap.ledger) {
+      setLedger(snap.ledger);
+      if (snap.ledger.enclosures?.length) {
+        setEnclosures(snap.ledger.enclosures);
+      }
+    }
     setCurrentStep(Math.min(4, Math.max(1, snap.currentStep)));
   }, []);
 
   useEffect(() => {
     persistState(currentStep);
-  }, [currentStep, intake, confidence, persistState]);
+  }, [currentStep, intake, confidence, ledger, enclosures, persistState]);
 
   useEffect(() => {
     let cancelled = false;
@@ -201,9 +230,18 @@ export default function UploadWizardClient({
 
   const applyExtraction = useCallback(
     (payload: ExtractDenialResponse) => {
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[Step 2] extract-denial raw response:", payload);
+      }
       const mapped = mapExtractedToIntake(payload);
       setIntake(mapped.intake);
       setConfidence(mapped.confidence);
+      if (mapped.ledger) {
+        setLedger(mapped.ledger);
+        if (mapped.ledger.enclosures?.length) {
+          setEnclosures(mapped.ledger.enclosures);
+        }
+      }
       setCurrentStep(2);
       announce("Extraction complete. Review the fields below.");
     },
@@ -244,7 +282,13 @@ export default function UploadWizardClient({
     setPreviewUnlockBusy(true);
     try {
       writeDapWizardResume(
-        buildSnapshot(currentStep, intake, confidence, uploadedFile?.name ?? null)
+        buildSnapshot(
+          currentStep,
+          intake,
+          confidence,
+          uploadedFile?.name ?? null,
+          ledger ? { ...ledger, enclosures } : ledger
+        )
       );
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
@@ -266,12 +310,44 @@ export default function UploadWizardClient({
     } finally {
       setPreviewUnlockBusy(false);
     }
-  }, [announce, confidence, currentStep, intake, uploadedFile]);
+  }, [announce, confidence, currentStep, enclosures, intake, ledger, uploadedFile]);
 
   const handleStep3Continue = useCallback(() => {
+    const nextLedger = ensureLedger(ledger, intake, enclosures);
+    const route = routeDenial(nextLedger);
+    if (route.strategy.id === "authorization" && !intake.authBranch) {
+      announce("Select authorization status before continuing.");
+      return;
+    }
+    if (route.strategy.id === "bundling" && !intake.bundlingBranch) {
+      announce("Select separate billing basis before continuing.");
+      return;
+    }
+    if (route.strategy.id === "timely-filing" && !intake.timelyFilingBranch) {
+      announce("Select timely filing basis before continuing.");
+      return;
+    }
+    if (
+      route.strategy.id === "medical-necessity" &&
+      !intake.primaryDiagnosis?.trim()
+    ) {
+      announce("Primary diagnosis is required for medical necessity appeals.");
+      return;
+    }
+    if (intake.planType == null) {
+      announce("Select plan type before continuing.");
+      return;
+    }
+    setLedger(nextLedger);
     if (isPreviewMode || !isAuthenticated || !isPaid) {
       writeDapWizardResume(
-        buildSnapshot(3, intake, confidence, uploadedFile?.name ?? null)
+        buildSnapshot(
+          3,
+          intake,
+          confidence,
+          uploadedFile?.name ?? null,
+          nextLedger
+        )
       );
       router.push("/pricing");
       return;
@@ -279,10 +355,12 @@ export default function UploadWizardClient({
     setCurrentStep(4);
   }, [
     confidence,
+    enclosures,
     intake,
     isAuthenticated,
     isPaid,
     isPreviewMode,
+    ledger,
     router,
     uploadedFile,
   ]);
@@ -290,7 +368,12 @@ export default function UploadWizardClient({
   const handleGenerate = useCallback(async () => {
     setGenerateLoading(true);
     try {
+      const factLedger = ensureLedger(ledger, intake, enclosures);
+      setLedger(factLedger);
+
       const body = {
+        ledger: factLedger,
+        // Legacy fields retained for backward-compatible logging only.
         patientName: intake.patientName,
         providerName: intake.providerName,
         providerNpi: intake.providerNpi,
@@ -302,12 +385,16 @@ export default function UploadWizardClient({
         rarcCodes: intake.rarcCodes,
         billedAmount: intake.billedAmount,
         paidAmount: intake.paidAmount,
+        deniedAmount: intake.deniedAmount,
         icd10Codes: intake.icdCodes,
         cptCodes: intake.cptCodes,
         additionalContext: intake.additionalContext,
         providerAddress: intake.providerAddress,
         providerPhone: intake.providerPhone,
         providerFax: intake.providerFax,
+        memberId: intake.memberId,
+        signerName: intake.signerName,
+        signerTitle: intake.signerTitle,
       };
 
       const res = await wizardFetch(netlifyFunctionUrl("generate-appeal"), {
@@ -318,6 +405,7 @@ export default function UploadWizardClient({
         success?: boolean;
         reviewId?: string;
         letterText?: string;
+        validationErrors?: Array<{ rule: string; message: string }>;
         error?: string;
       };
 
@@ -332,7 +420,13 @@ export default function UploadWizardClient({
           data.reviewId
         );
       }
-      announce("Appeal letter generated.");
+      if (data.validationErrors?.length) {
+        announce(
+          "Letter generated with unresolved gaps — export is blocked until facts are completed."
+        );
+      } else {
+        announce("Appeal letter generated.");
+      }
       router.push(`/deliverables?reviewId=${data.reviewId}`);
     } catch (err) {
       announce(
@@ -341,7 +435,7 @@ export default function UploadWizardClient({
     } finally {
       setGenerateLoading(false);
     }
-  }, [announce, intake, router]);
+  }, [announce, enclosures, intake, ledger, router]);
 
   const handleLogout = useCallback(async () => {
     const supabase = createSupabaseBrowserClient();
@@ -552,9 +646,12 @@ export default function UploadWizardClient({
         {currentStep === 3 ? (
           <Step3ConfirmPanel
             intake={intake}
+            ledger={ledger}
+            enclosures={enclosures}
             onIntakeChange={(patch) =>
               setIntake((prev) => ({ ...prev, ...patch }))
             }
+            onEnclosuresChange={setEnclosures}
             onBack={() => setCurrentStep(2)}
             onContinue={handleStep3Continue}
             isPreviewMode={isPreviewMode}

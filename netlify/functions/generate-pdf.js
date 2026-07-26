@@ -4,6 +4,10 @@ const {
   optionsResponse,
   verifyWizardAuth,
 } = require("./_wizardAuth.js");
+const {
+  evaluateExportGate,
+  exportBlockedPayload,
+} = require("../../lib/appeal/netlify-entry.ts");
 
 /**
  * Standard PDF 14 fonts use WinAnsi; pdf-lib throws if a code point is not encodable.
@@ -111,7 +115,8 @@ exports.handler = async (event) => {
     certifiedMailHeader: Boolean(body && body.certifiedMailHeader),
   });
 
-  const { text: rawText, fileName: rawName, certifiedMailHeader } = body || {};
+  const { text: rawText, fileName: rawName, certifiedMailHeader, ledger } =
+    body || {};
 
   if (rawText != null && typeof rawText !== "string") {
     return jsonError(
@@ -122,6 +127,19 @@ exports.handler = async (event) => {
     );
   }
 
+  const text = rawText == null ? "" : rawText;
+
+  // Export gate — all seven grounding rules (shared with DOCX).
+  const gateErrors = evaluateExportGate(text, ledger);
+  if (gateErrors.length) {
+    const payload = exportBlockedPayload(gateErrors);
+    return {
+      statusCode: 422,
+      headers: { ...corsHeaders },
+      body: JSON.stringify(payload),
+    };
+  }
+
   const fileName = sanitizeFileName(
     typeof rawName === "string" ? rawName : undefined
   );
@@ -129,7 +147,6 @@ exports.handler = async (event) => {
   const headerBlock = certifiedMailHeader
     ? "SENT VIA CERTIFIED MAIL - RETURN RECEIPT REQUESTED\n\n"
     : "";
-  const text = rawText == null ? "" : rawText;
   const fullText = headerBlock + text;
 
   const fullTextSafe = sanitizeTextForWinAnsi(String(fullText));

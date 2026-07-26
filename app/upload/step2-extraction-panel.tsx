@@ -8,6 +8,7 @@ import type { FieldConfidence } from "@/lib/dap-wizard-snapshot";
 const WIZARD_PANEL =
   "rounded-[10px] border-[0.5px] border-[#e4e4e4] bg-white px-[18px] py-4 text-[#2a3a4a] md:px-[18px] md:py-4";
 
+/** Green/orange borders driven by Fact.confidence via DapConfidenceMap (high ≥ 0.5). */
 function fieldStyle(confidence: FieldConfidence): React.CSSProperties {
   return {
     width: "100%",
@@ -52,6 +53,14 @@ export function Step2ExtractionPanel({
             value={intake.patientName}
             onChange={(e) => onIntakeChange({ patientName: e.target.value })}
             style={fieldStyle(confidence.patientName)}
+          />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold">Member ID</span>
+          <input
+            value={intake.memberId}
+            onChange={(e) => onIntakeChange({ memberId: e.target.value })}
+            style={fieldStyle(confidence.memberId)}
           />
         </label>
         <label className="block">
@@ -111,16 +120,9 @@ export function Step2ExtractionPanel({
           confidence={confidence.cptCodes}
           id="cpt-codes"
         />
-        <CodeMultiInput
-          label="ICD-10 codes"
-          values={intake.icdCodes}
-          onChange={(icdCodes) => onIntakeChange({ icdCodes })}
-          confidence={confidence.icd10Codes}
-          id="icd-codes"
-        />
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <label className="block">
           <span className="mb-1 block text-sm font-semibold">Billed amount</span>
           <input
@@ -135,6 +137,14 @@ export function Step2ExtractionPanel({
             value={intake.paidAmount}
             onChange={(e) => onIntakeChange({ paidAmount: e.target.value })}
             style={fieldStyle(confidence.paidAmount)}
+          />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold">Denied amount</span>
+          <input
+            value={intake.deniedAmount}
+            onChange={(e) => onIntakeChange({ deniedAmount: e.target.value })}
+            style={fieldStyle(confidence.deniedAmount)}
           />
         </label>
       </div>

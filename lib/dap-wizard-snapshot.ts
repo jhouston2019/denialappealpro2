@@ -1,3 +1,4 @@
+import type { FactLedger } from "@/lib/appeal/ledger/types";
 import type { DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 
 export const DAP_WIZARD_STATE_KEY = "dap_wizard_state" as const;
@@ -7,6 +8,7 @@ export type FieldConfidence = "high" | "low";
 
 export type DapConfidenceMap = {
   patientName: FieldConfidence;
+  memberId: FieldConfidence;
   providerName: FieldConfidence;
   providerNpi: FieldConfidence;
   payerName: FieldConfidence;
@@ -17,6 +19,7 @@ export type DapConfidenceMap = {
   rarcCodes: FieldConfidence;
   billedAmount: FieldConfidence;
   paidAmount: FieldConfidence;
+  deniedAmount: FieldConfidence;
   cptCodes: FieldConfidence;
   icd10Codes: FieldConfidence;
 };
@@ -26,12 +29,14 @@ export type DapWizardSnapshot = {
   currentStep: number;
   intake: DenialIntake;
   confidence: DapConfidenceMap;
+  ledger?: FactLedger | null;
   uploadedFileName?: string | null;
 };
 
 export function emptyConfidence(): DapConfidenceMap {
   return {
     patientName: "low",
+    memberId: "low",
     providerName: "low",
     providerNpi: "low",
     payerName: "low",
@@ -42,6 +47,7 @@ export function emptyConfidence(): DapConfidenceMap {
     rarcCodes: "low",
     billedAmount: "low",
     paidAmount: "low",
+    deniedAmount: "low",
     cptCodes: "low",
     icd10Codes: "low",
   };

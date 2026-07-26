@@ -208,11 +208,16 @@ export type DenialIntake = {
   dateOfService: string;
   payer: string;
   patientName: string;
+  memberId: string;
   providerName: string;
   providerNpi: string;
   providerAddress: string;
   providerPhone: string;
   providerFax: string;
+  signerName: string;
+  signerTitle: string;
+  signerCredentials: string;
+  signerPhone: string;
   planType: string;
   carcCodes: string[];
   rarcCodes: string[];
@@ -221,11 +226,40 @@ export type DenialIntake = {
   icdCodes: string[];
   billedAmount: string;
   paidAmount: string;
+  deniedAmount: string;
   treatmentProvided: string;
   medicalNecessity: string;
+  primaryDiagnosis: string;
+  priorTreatments: string;
+  conservativeCareTried: string;
+  functionalImpact: string;
+  urgency: string;
   specialCircumstances: string;
   denialReason: string;
   additionalContext: string;
+  authBranch: "A" | "B" | "C" | "D" | null;
+  bundlingBranch:
+    | "modifier-59"
+    | "no-ncci-edit"
+    | "modifier-indicator-0"
+    | null;
+  timelyFilingBranch:
+    | "proof-of-timely-submission"
+    | "coordination-of-benefits"
+    | "good-cause"
+    | "plan-error"
+    | null;
+  goodCauseDescription: string;
+  authorizationNumber: string;
+  planType:
+    | "erisa-self-funded"
+    | "fully-insured-group"
+    | "medicare-advantage"
+    | "medicaid-mco"
+    | "marketplace-individual"
+    | "medicare-traditional"
+    | "unknown"
+    | null;
 };
 
 export function emptyIntake(): DenialIntake {
@@ -234,11 +268,16 @@ export function emptyIntake(): DenialIntake {
     dateOfService: "",
     payer: "",
     patientName: "",
+    memberId: "",
     providerName: "",
     providerNpi: "",
     providerAddress: "",
     providerPhone: "",
     providerFax: "",
+    signerName: "",
+    signerTitle: "",
+    signerCredentials: "",
+    signerPhone: "",
     planType: "Commercial",
     carcCodes: [],
     rarcCodes: [],
@@ -247,11 +286,23 @@ export function emptyIntake(): DenialIntake {
     icdCodes: [],
     billedAmount: "",
     paidAmount: "",
+    deniedAmount: "",
     treatmentProvided: "",
     medicalNecessity: "",
+    primaryDiagnosis: "",
+    priorTreatments: "",
+    conservativeCareTried: "",
+    functionalImpact: "",
+    urgency: "",
     specialCircumstances: "",
     denialReason: "",
     additionalContext: "",
+    authBranch: null,
+    bundlingBranch: null,
+    timelyFilingBranch: null,
+    goodCauseDescription: "",
+    authorizationNumber: "",
+    planType: null,
   };
 }
 

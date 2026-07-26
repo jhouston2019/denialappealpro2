@@ -1,11 +1,17 @@
 /**
  * extract-denial — Free preview extraction from denial letter PDF or pasted text.
  * POST multipart/form-data (file) OR JSON { text: string }
- * Ported from netlify/functions/extract-denial.js
+ * Returns a FactLedger (+ thin legacy shape for existing consumers).
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import {
+  ledgerToLegacyShape,
+  withDenialReason,
+} from "@/lib/appeal/ledger/adapter";
+import { buildLedgerFromExtraction } from "@/lib/appeal/ledger/fromExtraction";
+import type { FactLedger } from "@/lib/appeal/ledger/types";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -16,36 +22,48 @@ Extract structured claim data from the input text.
 
 The input may be messy, incomplete, or poorly formatted.
 
-You MUST return a single JSON object with EXACTLY these keys (use null when unknown — never omit a key):
+You MUST return a single JSON object with EXACTLY these keys (use null when unknown — never omit a key).
+These are the ONLY allowed keys. Do NOT invent clinical facts, diagnoses, indications, urgency, or treatment history.
 
-- payer_name: insurance payer / plan name (same as "payer" on forms)
+ALLOWED KEYS (non-clinical only):
+- payer_name: insurance payer / plan name
 - claim_number
-- patient_name: full patient or member name as printed (look for labels: Patient, Member, Subscriber, Insured, Beneficiary, Pt Name). This is required as its own string field whenever any patient/member name appears in the document.
+- patient_name: full patient or member name as printed (Patient, Member, Subscriber, Insured, Beneficiary, Pt Name)
+- member_id: member / subscriber ID as printed
+- group_name
+- group_number
+- date_of_birth: YYYY-MM-DD when possible
 - date_of_service: service or DOS date; YYYY-MM-DD when possible
+- date_processed: claim processed / EOB date; YYYY-MM-DD when possible
 - cpt_codes: array of procedure codes
-- icd10_codes: array of diagnosis codes (ICD-10); same as icd_codes
 - modifiers: array
 - carc_codes: array of numeric CARC values only (e.g. "50")
 - rarc_codes: array (e.g. "N115")
 - billed_amount: numeric only
+- allowed_amount: numeric only
 - paid_amount: numeric only
+- denied_amount: numeric only (amount denied / patient responsibility for denied lines if stated)
+- timely_filing_days: number of days if stated
+- payer_appeal_address: appeal mailing address if present
+- appeal_address_block: full appeal address block if present
 - denial_reason_text: short exact denial wording from the document (1–2 sentences max)
 
-Do not rename keys. Do not nest patient name under another object. Put the member/patient string only in patient_name.
+Do NOT return icd10_codes, icd_codes, diagnosis, clinical narrative, urgency, or any clinical fields.
+Do not rename keys. Do not nest patient name under another object.
 
 -----------------------------------
 RULES:
 -----------------------------------
 
 1. DO NOT GUESS
-   - If a value is not clearly present, return null for that key
+   - If a value is not literally present in the document, return null for that key
+   - Never infer, never substitute a plausible default, never carry a value from a different field
 
 2. HANDLE MULTIPLE VALUES
-   - CPT, ICD-10, CARC, RARC, modifiers must be arrays (use [] when none)
+   - CPT, CARC, RARC, modifiers must be arrays (use [] when none)
 
 3. NORMALIZE DATA:
    - CPT codes: numeric strings (e.g. "99213")
-   - ICD-10: keep formatting (e.g. "M54.5")
    - CARC: numbers only (e.g. "50")
    - RARC: codes (e.g. "N115")
 
@@ -69,41 +87,29 @@ OUTPUT FORMAT (STRICT JSON):
   "payer_name": null,
   "claim_number": null,
   "patient_name": null,
+  "member_id": null,
+  "group_name": null,
+  "group_number": null,
+  "date_of_birth": null,
   "date_of_service": null,
+  "date_processed": null,
   "cpt_codes": [],
-  "icd10_codes": [],
   "modifiers": [],
   "carc_codes": [],
   "rarc_codes": [],
   "billed_amount": null,
+  "allowed_amount": null,
   "paid_amount": null,
+  "denied_amount": null,
+  "timely_filing_days": null,
+  "payer_appeal_address": null,
+  "appeal_address_block": null,
   "denial_reason_text": null
 }
 
 Use null for unknown scalars and [] for unknown arrays (not empty string for scalars).`;
 
-type RawExtract = Record<string, unknown> & {
-  payer_name?: unknown;
-  payer?: unknown;
-  claim_number?: unknown;
-  patient_name?: unknown;
-  patient?: unknown;
-  member_name?: unknown;
-  member?: unknown;
-  insured_name?: unknown;
-  subscriber_name?: unknown;
-  date_of_service?: unknown;
-  cpt_codes?: unknown;
-  icd10_codes?: unknown;
-  icd_codes?: unknown;
-  carc_codes?: unknown;
-  rarc_codes?: unknown;
-  billed_amount?: unknown;
-  paid_amount?: unknown;
-  denial_reason_text?: unknown;
-  provider_name?: unknown;
-  provider_npi?: unknown;
-};
+type RawExtract = Record<string, unknown>;
 
 async function extractTextFromPDF(pdfBuffer: Buffer): Promise<string> {
   const pdfParse = (await import("pdf-parse")).default;
@@ -125,17 +131,18 @@ function dedupe(arr: unknown[]): string[] {
   return out;
 }
 
-function normalizeAmount(val: unknown): string {
-  if (val == null || val === "") return "";
+function normalizeAmount(val: unknown): string | null {
+  if (val == null || val === "") return null;
   const s = String(val).replace(/[$,\s]/g, "");
-  if (!s) return "";
+  if (!s) return null;
   const n = parseFloat(s);
-  return Number.isFinite(n) ? n.toFixed(2) : "";
+  return Number.isFinite(n) ? n.toFixed(2) : null;
 }
 
-function normalizeDate(val: unknown): string {
-  if (val == null || val === "") return "";
+function normalizeDate(val: unknown): string | null {
+  if (val == null || val === "") return null;
   const s = String(val).trim();
+  if (!s) return null;
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
   const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
   if (m) {
@@ -145,7 +152,7 @@ function normalizeDate(val: unknown): string {
     const dd = String(parseInt(m[2], 10)).padStart(2, "0");
     return `${y}-${mm}-${dd}`;
   }
-  return s.slice(0, 10);
+  return s.slice(0, 10) || null;
 }
 
 function normalizeCarc(c: unknown): string {
@@ -175,151 +182,99 @@ function applyAliases(data: RawExtract): RawExtract {
       }
     }
   }
-  const icd10 = d.icd10_codes;
-  const icd = d.icd_codes;
-  if (
-    (!Array.isArray(icd10) || !icd10.length) &&
-    Array.isArray(icd) &&
-    icd.length
-  ) {
-    d.icd10_codes = icd;
+  if (!d.member_id && d.subscriber_id) d.member_id = d.subscriber_id;
+  if (!d.payer_appeal_address && d.appeal_address) {
+    d.payer_appeal_address = d.appeal_address;
   }
+  // ICD must never flow into the ledger from extraction — drop aliases.
+  delete d.icd10_codes;
+  delete d.icd_codes;
   return d;
 }
 
-function postProcess(data: RawExtract | null | undefined) {
+function nullIfEmpty(s: string | null | undefined): string | null {
+  if (s == null) return null;
+  const t = String(s).trim();
+  return t || null;
+}
+
+function postProcess(data: RawExtract | null | undefined): Record<string, unknown> {
   const raw = applyAliases(data || {});
+  const carc = dedupe(
+    (Array.isArray(raw.carc_codes) ? raw.carc_codes : [])
+      .map(normalizeCarc)
+      .filter(Boolean)
+  );
+  const rarc = dedupe(
+    (Array.isArray(raw.rarc_codes) ? raw.rarc_codes : [])
+      .map(normalizeRarc)
+      .filter(Boolean)
+  );
+  const cpt = dedupe(
+    Array.isArray(raw.cpt_codes) ? raw.cpt_codes.map(String) : []
+  );
+  const modifiers = dedupe(
+    Array.isArray(raw.modifiers) ? raw.modifiers.map(String) : []
+  );
+
   return {
-    payer_name: raw.payer_name ? String(raw.payer_name).trim() : "",
-    claim_number: raw.claim_number ? String(raw.claim_number).trim() : "",
-    patient_name: raw.patient_name ? String(raw.patient_name).trim() : "",
+    payer_name: nullIfEmpty(
+      raw.payer_name != null ? String(raw.payer_name) : null
+    ),
+    claim_number: nullIfEmpty(
+      raw.claim_number != null ? String(raw.claim_number) : null
+    ),
+    patient_name: nullIfEmpty(
+      raw.patient_name != null ? String(raw.patient_name) : null
+    ),
+    member_id: nullIfEmpty(
+      raw.member_id != null ? String(raw.member_id) : null
+    ),
+    group_name: nullIfEmpty(
+      raw.group_name != null ? String(raw.group_name) : null
+    ),
+    group_number: nullIfEmpty(
+      raw.group_number != null ? String(raw.group_number) : null
+    ),
+    date_of_birth: normalizeDate(raw.date_of_birth),
     date_of_service: normalizeDate(raw.date_of_service),
-    cpt_codes: dedupe(
-      Array.isArray(raw.cpt_codes) ? raw.cpt_codes.map(String) : []
-    ),
-    icd10_codes: dedupe(
-      Array.isArray(raw.icd10_codes) ? raw.icd10_codes.map(String) : []
-    ),
-    carc_codes: dedupe(
-      (Array.isArray(raw.carc_codes) ? raw.carc_codes : [])
-        .map(normalizeCarc)
-        .filter(Boolean)
-    ),
-    rarc_codes: dedupe(
-      (Array.isArray(raw.rarc_codes) ? raw.rarc_codes : [])
-        .map(normalizeRarc)
-        .filter(Boolean)
-    ),
+    date_processed: normalizeDate(raw.date_processed),
+    cpt_codes: cpt.length ? cpt : null,
+    modifiers: modifiers.length ? modifiers : null,
+    carc_codes: carc.length ? carc : null,
+    rarc_codes: rarc.length ? rarc : null,
     billed_amount: normalizeAmount(raw.billed_amount),
+    allowed_amount: normalizeAmount(raw.allowed_amount),
     paid_amount: normalizeAmount(raw.paid_amount),
-    denial_reason_text: raw.denial_reason_text
-      ? String(raw.denial_reason_text).trim()
-      : "",
-    provider_name: raw.provider_name ? String(raw.provider_name).trim() : "",
-    provider_npi: raw.provider_npi ? String(raw.provider_npi).trim() : "",
+    denied_amount: normalizeAmount(raw.denied_amount),
+    timely_filing_days:
+      raw.timely_filing_days != null && String(raw.timely_filing_days).trim()
+        ? String(raw.timely_filing_days).replace(/\D/g, "") || null
+        : null,
+    payer_appeal_address: nullIfEmpty(
+      raw.payer_appeal_address != null
+        ? String(raw.payer_appeal_address)
+        : null
+    ),
+    appeal_address_block: nullIfEmpty(
+      raw.appeal_address_block != null
+        ? String(raw.appeal_address_block)
+        : null
+    ),
+    denial_reason_text: nullIfEmpty(
+      raw.denial_reason_text != null ? String(raw.denial_reason_text) : null
+    ),
   };
 }
 
-function verbatimInRaw(val: unknown, raw: string): boolean {
-  if (!val || !raw) return false;
-  return raw.toLowerCase().includes(String(val).toLowerCase());
-}
-
-function fieldConfidence(
-  field: string,
-  val: unknown,
-  raw: string
-): "high" | "low" {
-  if (val == null || val === "" || (Array.isArray(val) && !val.length)) {
-    return "low";
-  }
-  if (Array.isArray(val)) {
-    const hits = val.filter((x) => verbatimInRaw(x, raw)).length;
-    const ratio = hits / val.length;
-    return ratio >= 0.5 ? "high" : "low";
-  }
-  if (verbatimInRaw(val, raw)) return "high";
-  if (field === "denial_reason_text" && String(val).length >= 20) return "high";
-  return "low";
-}
-
-function toApiResponse(
-  extracted: ReturnType<typeof postProcess>,
+function denialReasonConfidence(
+  text: string | null,
   rawText: string
-) {
-  const fc = {
-    patientName: fieldConfidence(
-      "patient_name",
-      extracted.patient_name,
-      rawText
-    ),
-    providerName: fieldConfidence(
-      "provider_name",
-      extracted.provider_name,
-      rawText
-    ),
-    providerNpi: fieldConfidence(
-      "provider_npi",
-      extracted.provider_npi,
-      rawText
-    ),
-    payerName: fieldConfidence("payer_name", extracted.payer_name, rawText),
-    claimNumber: fieldConfidence(
-      "claim_number",
-      extracted.claim_number,
-      rawText
-    ),
-    dateOfService: fieldConfidence(
-      "date_of_service",
-      extracted.date_of_service,
-      rawText
-    ),
-    denialReason: fieldConfidence(
-      "denial_reason_text",
-      extracted.denial_reason_text,
-      rawText
-    ),
-    carcCodes: fieldConfidence("carc_codes", extracted.carc_codes, rawText),
-    rarcCodes: fieldConfidence("rarc_codes", extracted.rarc_codes, rawText),
-    billedAmount: fieldConfidence(
-      "billed_amount",
-      extracted.billed_amount,
-      rawText
-    ),
-    paidAmount: fieldConfidence("paid_amount", extracted.paid_amount, rawText),
-    cptCodes: fieldConfidence("cpt_codes", extracted.cpt_codes, rawText),
-    icd10Codes: fieldConfidence("icd10_codes", extracted.icd10_codes, rawText),
-  };
-
-  return {
-    success: true,
-    patientName: extracted.patient_name || "",
-    patientNameConfidence: fc.patientName,
-    providerName: extracted.provider_name || "",
-    providerNameConfidence: fc.providerName,
-    providerNpi: extracted.provider_npi || "",
-    providerNpiConfidence: fc.providerNpi,
-    payerName: extracted.payer_name || "",
-    payerNameConfidence: fc.payerName,
-    claimNumber: extracted.claim_number || "",
-    claimNumberConfidence: fc.claimNumber,
-    dateOfService: extracted.date_of_service || "",
-    dateOfServiceConfidence: fc.dateOfService,
-    denialReason: extracted.denial_reason_text || "",
-    denialReasonConfidence: fc.denialReason,
-    carcCodes: extracted.carc_codes || [],
-    carcCodesConfidence: fc.carcCodes,
-    rarcCodes: extracted.rarc_codes || [],
-    rarcCodesConfidence: fc.rarcCodes,
-    billedAmount: extracted.billed_amount || "",
-    billedAmountConfidence: fc.billedAmount,
-    paidAmount: extracted.paid_amount || "",
-    paidAmountConfidence: fc.paidAmount,
-    cptCodes: extracted.cpt_codes || [],
-    cptCodesConfidence: fc.cptCodes,
-    icd10Codes: extracted.icd10_codes || [],
-    icd10CodesConfidence: fc.icd10Codes,
-  };
+): "high" | "low" {
+  if (!text) return "low";
+  if (rawText.toLowerCase().includes(text.toLowerCase())) return "high";
+  if (text.length >= 20) return "high";
+  return "low";
 }
 
 async function extractWithOpenAI(rawText: string): Promise<RawExtract> {
@@ -347,6 +302,7 @@ export async function POST(request: NextRequest) {
   try {
     const contentType = request.headers.get("content-type") || "";
     let rawText = "";
+    let documentId = "upload";
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await request.formData();
@@ -357,6 +313,7 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+      documentId = file.name || "upload";
       const arrayBuffer = await file.arrayBuffer();
       rawText = await extractTextFromPDF(Buffer.from(arrayBuffer));
     } else {
@@ -370,6 +327,7 @@ export async function POST(request: NextRequest) {
         );
       }
       rawText = String(body.text || "").trim();
+      documentId = "paste";
     }
 
     if (!rawText || rawText.length < 15) {
@@ -383,14 +341,34 @@ export async function POST(request: NextRequest) {
     }
 
     const llmRaw = await extractWithOpenAI(rawText);
+
+    if (process.env.NODE_ENV !== "production") {
+      console.log("[extract-denial] raw LLM response:", llmRaw);
+    }
+
     const extracted = postProcess(llmRaw);
-    const response = toApiResponse(extracted, rawText);
+    const { ledger, denialReasonText } = buildLedgerFromExtraction({
+      fields: extracted,
+      rawText,
+      documentId,
+    });
+
+    const legacy = withDenialReason(
+      ledgerToLegacyShape(ledger),
+      denialReasonText,
+      denialReasonConfidence(denialReasonText, rawText)
+    );
+
+    const response: Record<string, unknown> = {
+      ...legacy,
+      success: true,
+      ledger: ledger as FactLedger,
+    };
 
     return NextResponse.json(response);
   } catch (e) {
     console.error("[extract-denial]", e);
-    const message =
-      e instanceof Error ? e.message : "Extraction failed";
+    const message = e instanceof Error ? e.message : "Extraction failed";
     return NextResponse.json(
       { success: false, error: message },
       { status: 500 }

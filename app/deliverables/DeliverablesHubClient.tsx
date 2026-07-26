@@ -4,6 +4,11 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import "@/app/upload/dap-wizard.css";
+import type { FactLedger } from "@/lib/appeal/ledger/types";
+import {
+  canExportLetter,
+  type ValidationError,
+} from "@/lib/appeal/validate";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
 import { createSupabaseBrowserClient, wizardFetch } from "@/lib/supabaseClient";
 import { ReviewNavCtaLink } from "@/components/billing/ReviewNavCtaLink";
@@ -35,6 +40,26 @@ function parseIntakeFromReview(row: ReviewRow): StoredIntake | null {
   return null;
 }
 
+function parseLedgerFromReview(row: ReviewRow): FactLedger | null {
+  const summary = row.ai_summary_json;
+  if (!summary || typeof summary !== "object") return null;
+  const s = summary as { ledger?: FactLedger; intake?: { ledger?: FactLedger } };
+  if (s.ledger && typeof s.ledger === "object" && s.ledger.facts) {
+    return s.ledger;
+  }
+  if (s.intake?.ledger && typeof s.intake.ledger === "object") {
+    return s.intake.ledger;
+  }
+  return null;
+}
+
+function parseStoredValidation(row: ReviewRow): ValidationError[] {
+  const summary = row.ai_summary_json;
+  if (!summary || typeof summary !== "object") return [];
+  const s = summary as { validationErrors?: ValidationError[] };
+  return Array.isArray(s.validationErrors) ? s.validationErrors : [];
+}
+
 function intakeSummary(intake: StoredIntake | null, row: ReviewRow) {
   const patient =
     intake?.patientName || row.insured_name || "Patient";
@@ -64,6 +89,10 @@ export function DeliverablesHubClient({
   const [error, setError] = useState<string | null>(null);
   const [review, setReview] = useState<ReviewRow | null>(null);
   const [intake, setIntake] = useState<StoredIntake | null>(null);
+  const [ledger, setLedger] = useState<FactLedger | null>(null);
+  const [storedValidation, setStoredValidation] = useState<ValidationError[]>(
+    []
+  );
   const [copyMsg, setCopyMsg] = useState<string | null>(null);
   const [downloadBusy, setDownloadBusy] = useState<"pdf" | "docx" | null>(null);
 
@@ -82,6 +111,8 @@ export function DeliverablesHubClient({
 
     setReview(reviewRow as ReviewRow);
     setIntake(parseIntakeFromReview(reviewRow as ReviewRow));
+    setLedger(parseLedgerFromReview(reviewRow as ReviewRow));
+    setStoredValidation(parseStoredValidation(reviewRow as ReviewRow));
     if (typeof window !== "undefined") {
       window.sessionStorage.setItem(DELIVERABLES_REVIEW_ID_KEY, reviewRow.id);
     }
@@ -125,19 +156,55 @@ export function DeliverablesHubClient({
 
   const letterText = review?.letter_text?.trim() || "";
 
+  const exportGate = useMemo(() => {
+    if (!letterText) {
+      return { ok: false, errors: [] as ValidationError[] };
+    }
+    if (ledger) {
+      return canExportLetter(letterText, ledger);
+    }
+    if (storedValidation.length) {
+      return { ok: false, errors: storedValidation };
+    }
+    if (/\[\[REQUIRED:[^\]]+\]\]/.test(letterText)) {
+      return {
+        ok: false,
+        errors: [
+          {
+            rule: "no_unresolved_placeholders",
+            message: "Letter has unresolved required-fact placeholders",
+          },
+        ],
+      };
+    }
+    return { ok: true, errors: [] as ValidationError[] };
+  }, [ledger, letterText, storedValidation]);
+
   const handleCopy = useCallback(async () => {
     if (!letterText) return;
+    if (!exportGate.ok) {
+      setCopyMsg(
+        "Export blocked — resolve missing facts and regenerate before copying."
+      );
+      return;
+    }
     try {
       await navigator.clipboard.writeText(letterText);
       setCopyMsg("Copied to clipboard.");
     } catch {
       setCopyMsg("Could not copy to clipboard.");
     }
-  }, [letterText]);
+  }, [exportGate.ok, letterText]);
 
   const handleDownload = useCallback(
     async (kind: "pdf" | "docx") => {
       if (!letterText) return;
+      if (!exportGate.ok) {
+        setCopyMsg(
+          "Export blocked — resolve missing facts in the wizard and regenerate."
+        );
+        return;
+      }
       setDownloadBusy(kind);
       try {
         const fileName =
@@ -148,9 +215,26 @@ export function DeliverablesHubClient({
           kind === "pdf" ? "generate-pdf" : "generate-docx";
         const res = await wizardFetch(netlifyFunctionUrl(endpoint), {
           method: "POST",
-          body: JSON.stringify({ text: letterText, fileName }),
+          body: JSON.stringify({
+            text: letterText,
+            fileName,
+            ledger: ledger || undefined,
+          }),
         });
         if (!res.ok) {
+          const ct = res.headers.get("content-type") || "";
+          if (ct.includes("application/json")) {
+            const j = (await res.json().catch(() => null)) as {
+              error?: string;
+              details?: string;
+            } | null;
+            setCopyMsg(
+              j?.error ||
+                j?.details ||
+                `Download failed (HTTP ${res.status}).`
+            );
+            return;
+          }
           setCopyMsg(`Download failed (HTTP ${res.status}).`);
           return;
         }
@@ -168,7 +252,7 @@ export function DeliverablesHubClient({
         setDownloadBusy(null);
       }
     },
-    [letterText, review?.id]
+    [exportGate.ok, ledger, letterText, review?.id]
   );
 
   if (loading) {
@@ -230,7 +314,7 @@ export function DeliverablesHubClient({
         <button
           type="button"
           className="dap-btn-cta"
-          disabled={!letterText || downloadBusy !== null}
+          disabled={!letterText || !exportGate.ok || downloadBusy !== null}
           onClick={() => void handleDownload("pdf")}
         >
           {downloadBusy === "pdf" ? "Preparing PDF…" : "Download PDF"}
@@ -238,7 +322,7 @@ export function DeliverablesHubClient({
         <button
           type="button"
           className="dap-btn-ghost"
-          disabled={!letterText || downloadBusy !== null}
+          disabled={!letterText || !exportGate.ok || downloadBusy !== null}
           onClick={() => void handleDownload("docx")}
         >
           {downloadBusy === "docx" ? "Preparing Word…" : "Download Word"}
@@ -246,7 +330,7 @@ export function DeliverablesHubClient({
         <button
           type="button"
           className="dap-btn-ghost"
-          disabled={!letterText}
+          disabled={!letterText || !exportGate.ok}
           onClick={() => void handleCopy()}
         >
           Copy to clipboard
@@ -256,6 +340,23 @@ export function DeliverablesHubClient({
         </Link>
         <ReviewNavCtaLink billing={reviewNavBilling} variant="ghost-cta" />
       </div>
+
+      {!exportGate.ok && exportGate.errors.length ? (
+        <div
+          className="rounded-lg border border-[#f97316] bg-[#fff7ed] px-4 py-3 text-sm text-[#9a3412]"
+          role="alert"
+        >
+          <p className="font-semibold">Export blocked — unresolved gaps</p>
+          <ul className="mt-2 list-disc pl-5">
+            {exportGate.errors.slice(0, 8).map((e, i) => (
+              <li key={`${e.rule}-${i}`}>{e.message}</li>
+            ))}
+          </ul>
+          <p className="mt-2 text-xs">
+            Return to the wizard, complete the missing facts, and regenerate.
+          </p>
+        </div>
+      ) : null}
 
       {copyMsg ? (
         <p className="text-sm text-[#8aacc8]" role="status">

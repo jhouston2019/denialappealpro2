@@ -14,6 +14,20 @@ const {
   optionsResponse,
   verifyWizardAuth,
 } = require("./_wizardAuth.js");
+const {
+  evaluateExportGate,
+  exportBlockedPayload,
+} = require("../../lib/appeal/netlify-entry.ts");
+
+function assertExportAllowed(text, ledger) {
+  const errors = evaluateExportGate(String(text || ""), ledger);
+  if (!errors.length) return null;
+  return {
+    statusCode: 422,
+    headers: corsHeaders,
+    body: JSON.stringify(exportBlockedPayload(errors)),
+  };
+}
 
 // ─── Design tokens ───────────────────────────────────────────────
 const COLOR_NAVY    = "1B3A5C";
@@ -393,6 +407,10 @@ exports.handler = async (event) => {
   // body.sections = { claimMeta?, analysis?, comparison?, letter?, letterTitle? }
   if (body.sections) {
     const { claimMeta, analysis, comparison, letter, letterTitle } = body.sections;
+    if (letter) {
+      const blocked = assertExportAllowed(letter, body.ledger);
+      if (blocked) return blocked;
+    }
     const children = [];
 
     if (claimMeta || analysis) children.push(...buildCoverSection(claimMeta));
@@ -430,6 +448,10 @@ exports.handler = async (event) => {
 
   // ── Legacy plain-text path (backward compat) ──────────────────
   const text = String(body.text || "");
+  {
+    const blocked = assertExportAllowed(text, body.ledger);
+    if (blocked) return blocked;
+  }
   const lines = text.split("\n");
   const LETTER_HEADINGS = [
     "Basis for Supplement", "Basis for Dispute", "Basis for Appeal",

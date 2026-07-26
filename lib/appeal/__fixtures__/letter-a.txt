@@ -1,0 +1,32 @@
+Riverside Medical Group
+400 River Walk, Suite 200, Chattanooga, TN 37402
+Phone: 423-555-0144
+NPI: [[REQUIRED: provider.npi — Provider NPI]]
+
+July 26, 2026
+
+Cigna Health
+P.O. Box 182223, Chattanooga, TN 37422
+
+Re: Formal Appeal — Claim CIG-2026-887731
+    Patient: James Whitfield | Member ID: CIG987654321
+    Group: Riverside Medical Group ([[REQUIRED: patient.groupNumber — Group number]])
+    DOS: February 28, 2026
+    CPT: 27130 | Billed: $22,000.00
+    Denied: $22,000.00
+    Denial Codes: CARC CO-15 / RARC N517
+    Appeal Level: First-level
+
+To the Appeals Review Department:
+
+I am writing to appeal the denial of claim number CIG-2026-887731 for services provided to James Whitfield, member ID CIG987654321, on February 28, 2026. The claim was processed on March 12, 2026, and was denied in full, with a denied amount of $22,000.00. The denial was based on CARC code 15 and RARC code N517.
+
+The denial reason provided indicates that the claim was denied due to a lack of information. However, the claim was submitted with all necessary details, including the CPT code 27130, which accurately represents the service provided. The timely filing limit of 180 days was adhered to, ensuring that the claim was submitted within the required timeframe.
+
+Given the adherence to submission guidelines and the completeness of the information provided, I request a reconsideration of this claim. Please review the submitted documentation and process the claim for payment.
+
+Thank you for your attention to this matter. I look forward to your prompt response and resolution of this appeal.
+
+Sincerely,
+[[REQUIRED: signer.name — Signer name]]
+[[REQUIRED: signer.title — Signer title]]

@@ -1,0 +1,38 @@
+Riverside Medical Group
+400 River Walk, Suite 200, Chattanooga, TN 37402
+Phone: 423-555-0144   Fax: 423-555-0145
+NPI: 1568890123
+
+July 26, 2026
+
+Cigna Health
+P.O. Box 182223, Chattanooga, TN 37422
+
+Re: Formal Appeal — Claim CIG-2026-887731
+    Patient: James Whitfield | Member ID: CIG987654321
+    Group: Riverside Medical Group (#88231)
+    DOS: February 28, 2026
+    CPT: 27130 | Billed: $22,000.00
+    Denied: $22,000.00
+    Denial Codes: CARC CO-15 / RARC N517
+    Appeal Level: First-level
+
+To the Appeals Review Department:
+
+I am writing to appeal the denial of claim number CIG-2026-887731 for patient James Whitfield, member ID CIG987654321, under group number 88231 with Cigna Health. The claim was denied with CARC code 15 and RARC code N517, indicating that the service was not deemed a covered benefit.
+
+The service in question, performed on February 28, 2026, involved a procedure coded as 27130. The clinical indication for this procedure was end-stage degenerative joint disease of the right hip with refractory pain. Mr. Whitfield had previously undergone extensive conservative care, including six months of physical therapy, intra-articular corticosteroid injections, and NSAIDs, all of which failed to alleviate his condition. His functional capacity was severely impacted, as he was unable to ambulate more than 50 feet without an assistive device. Prior treatments also included activity modification, an assistive device trial, and supervised physical therapy.
+
+Given these clinical facts, the procedure was necessary to address Mr. Whitfield's significant functional impairment and pain. We request that you reconsider the denial of this claim, as the service provided was essential for the patient's health and mobility.
+
+Please review the claim with the provided clinical information and process it for payment. We look forward to your prompt response to this appeal.
+
+Sincerely,
+Jordan Hale
+Appeals Coordinator
+423-555-0144
+
+Enclosures:
+- Operative report
+- Office/progress notes
+- Copy of the EOB / remittance advice
