@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BUILD_NUMBER } from "@/lib/build-info";
 
 const CONTACT_EMAIL = "info@axis-strategic-labs.com";
 
@@ -10,7 +11,7 @@ export function SiteFooter() {
     >
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 sm:flex-row sm:gap-6">
         <span className="text-slate-600">
-          © {new Date().getFullYear()} Denial Appeal Pro
+          © {new Date().getFullYear()} Denial Appeal Pro · Build {BUILD_NUMBER}
         </span>
         <span className="hidden text-slate-700 sm:inline" aria-hidden>
           |

@@ -1,6 +1,7 @@
 {
   "name": "denialappealpro",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "buildNumber": 1,
   "private": true,
   "scripts": {
     "dev": "next dev",
