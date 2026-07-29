@@ -54,7 +54,7 @@ export function formatNpi(v: string): string {
 }
 
 export function formatCodesList(
-  codes: string[] | string | null | undefined,
+  codes: string[] | string | number | null | undefined,
   kind: "carc" | "rarc"
 ): string {
   const arr = Array.isArray(codes)
