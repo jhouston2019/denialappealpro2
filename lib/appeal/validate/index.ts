@@ -90,7 +90,7 @@ const INTERNAL_GROUNDING_RE =
 export const CLINICAL_ASSERTION_RE =
   /\b(osteoarthritis|emergent|urgent|conservative\s+(?:management|care)|functional\s+impairment|medically\s+necessary|failed\s+treatment|chronic\s+pain|degenerative|refractory|intraoperative)\b/gi;
 
-function isPresent(value: FactValue | undefined): boolean {
+function isPresent(value: FactValue | undefined): value is FactValue {
   if (value == null) return false;
   if (typeof value === "string") return value.trim().length > 0;
   if (typeof value === "number") return Number.isFinite(value);

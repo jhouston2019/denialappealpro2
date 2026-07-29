@@ -54,6 +54,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/cookie": "^0.6.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/pdf-parse": "^1.1.5",
     "@types/pdfkit": "^0.17.4",

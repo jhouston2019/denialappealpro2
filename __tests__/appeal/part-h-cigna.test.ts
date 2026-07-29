@@ -39,7 +39,7 @@ async function invokeExport(
   ledger: unknown
 ) {
   process.env.WIZARD_ALLOW_BYPASS = "true";
-  process.env.NODE_ENV = "development";
+  (process.env as Record<string, string | undefined>).NODE_ENV = "development";
   const mod =
     kind === "pdf"
       ? await import("../../netlify/functions/generate-pdf.js")
@@ -60,7 +60,7 @@ async function invokeExport(
 describe("Part H — Cigna fixture (CIG-2026-887731)", () => {
   before(() => {
     process.env.WIZARD_ALLOW_BYPASS = "true";
-    process.env.NODE_ENV = "development";
+    (process.env as Record<string, string | undefined>).NODE_ENV = "development";
   });
 
   it("1. setFact(clinical.primaryDiagnosis, …, document) throws via canonical builder (netlify-entry)", () => {
@@ -158,6 +158,7 @@ describe("Part H — Cigna fixture (CIG-2026-887731)", () => {
       "Appeal for claim CIG-2026-887731. Member [[REQUIRED: patient.memberId — Member ID]].";
     for (const kind of ["pdf", "docx"] as const) {
       const res = await invokeExport(kind, letter, ledger);
+      assert.ok(res, `${kind} handler response`);
       assert.equal(res.statusCode, 422, `${kind} status`);
       const body = JSON.parse(res.body);
       assert.ok(Array.isArray(body.errors), `${kind} errors array`);
@@ -185,6 +186,7 @@ describe("Part H — Cigna fixture (CIG-2026-887731)", () => {
 
     for (const kind of ["pdf", "docx"] as const) {
       const res = await invokeExport(kind, letter, ledger);
+      assert.ok(res, `${kind} handler response`);
       assert.equal(res.statusCode, 200, `${kind} ${res.body?.slice?.(0, 200)}`);
     }
   });

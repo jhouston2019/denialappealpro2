@@ -11,7 +11,7 @@ function isUserOnlyKey(key: FactKey): boolean {
   return CLINICAL_KEYS.includes(key) || key === "patient.planType";
 }
 
-function isPresent(value: FactValue | undefined): boolean {
+function isPresent(value: FactValue | undefined): value is FactValue {
   if (value == null) return false;
   if (typeof value === "string") return value.trim().length > 0;
   if (typeof value === "number") return Number.isFinite(value);

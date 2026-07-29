@@ -218,7 +218,6 @@ export type DenialIntake = {
   signerTitle: string;
   signerCredentials: string;
   signerPhone: string;
-  planType: string;
   carcCodes: string[];
   rarcCodes: string[];
   cptCodes: string[];
@@ -278,7 +277,6 @@ export function emptyIntake(): DenialIntake {
     signerTitle: "",
     signerCredentials: "",
     signerPhone: "",
-    planType: "Commercial",
     carcCodes: [],
     rarcCodes: [],
     cptCodes: [],

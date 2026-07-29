@@ -9,8 +9,8 @@ import { parseStructuredEstimate } from '../lib/xactimate-structural-parser';
 import { calculateExpectedQuantities, DimensionInput } from '../lib/dimension-engine';
 import { parseReportFromText } from '../lib/report-parser';
 import { calculatePerRoomDeviations } from '../lib/per-room-deviation-engine';
-import { validateEstimate, validateDimensions, validatePerimeter, validateDelta } from '../lib/validation-engine';
-import { validateFileUpload, sanitizeFilename, sanitizeCSV } from '../lib/security-guards';
+import { validateEstimate, validateDimensions, validatePerimeter, validateDelta, validateFileUpload } from '../lib/validation-engine';
+import { sanitizeFilename, sanitizeCSV } from '../lib/security-guards';
 import { extractHeightFromQuantity } from '../lib/height-extraction-engine';
 
 interface EnterpriseTestCase {

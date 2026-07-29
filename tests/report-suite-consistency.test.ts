@@ -9,31 +9,21 @@
 
 import { renderAllReports, validateReportConsistency, FormattedReport } from '../lib/report-renderer';
 import type { Report, ReportAnalysis } from '../lib/report-types';
+import type { Deviation } from '../lib/report-renderer';
 
 // Mock report data for testing
-const mockReport: Report = {
-  id: '10000000-0000-0000-0000-000000000001',
-  user_id: 'test-user',
-  estimate_name: 'Test Estimate',
-  file_path: '/test/estimate.pdf',
-  status: 'completed',
-  result_json: {} as any, // Will be populated below
-  created_at: '2026-02-25T00:00:00Z',
-  updated_at: '2026-02-25T00:00:00Z'
-};
-
 const mockAnalysis: ReportAnalysis = {
   classification: {
-    estimate_type: 'insurance_claim',
-    property_type: 'residential',
-    damage_category: 'water',
-    confidence_score: 95
+    classification: 'XACTIMATE',
+    confidence: 95,
   },
   property_details: {
     address: '123 Test St',
     claim_number: 'TEST-2024-001',
     date_of_loss: '2024-01-15',
-    total_estimate_value: 50000
+    adjuster: 'Test Adjuster',
+    total_estimate_value: 50000,
+    affected_areas: ['Kitchen', 'Living Room'],
   },
   detected_trades: [],
   missing_items: [],
@@ -46,24 +36,39 @@ const mockAnalysis: ReportAnalysis = {
   total_missing_value_estimate: {
     low: 5000,
     high: 8000,
-    confidence: 'medium'
   },
   critical_action_items: ['Test action 1', 'Test action 2'],
   metadata: {
     model_version: 'gpt-4-turbo-2024-04-09',
     processing_time_ms: 1000,
-    timestamp: '2026-02-25T00:00:00Z'
-  }
+    timestamp: '2026-02-25T00:00:00Z',
+    analysis_depth: 'standard',
+    confidence_score: 95,
+  },
+};
+
+const mockReport: Report = {
+  id: '10000000-0000-0000-0000-000000000001',
+  user_id: 'test-user',
+  team_id: null,
+  estimate_name: 'Test Estimate',
+  estimate_type: 'residential',
+  damage_type: 'water_damage',
+  result_json: mockAnalysis,
+  paid_single_use: false,
+  created_at: '2026-02-25T00:00:00Z',
+  expires_at: null,
 };
 
 // Mock deviations
-const mockDeviations = [
+const mockDeviations: Deviation[] = [
   {
+    deviationType: 'INSUFFICIENT_CUT_HEIGHT',
     trade: 'DRY',
     tradeName: 'Drywall',
     issue: 'Insufficient cut height',
-    source: 'BOTH' as const,
-    severity: 'CRITICAL' as const,
+    source: 'BOTH',
+    severity: 'CRITICAL',
     estimateValue: 360,
     expectedValue: 1440,
     unit: 'SF',
@@ -71,23 +76,23 @@ const mockDeviations = [
     impactMin: 15660,
     impactMax: 23220,
     complianceReference: 'IICRC S500',
-    reportDirective: 'Remove drywall full height in affected rooms'
+    reportDirective: 'Remove drywall full height in affected rooms',
   },
   {
+    deviationType: 'MISSING_INSULATION',
     trade: 'INS',
     tradeName: 'Insulation',
     issue: 'Missing insulation replacement',
-    source: 'REPORT' as const,
-    severity: 'HIGH' as const,
+    source: 'REPORT',
+    severity: 'HIGH',
     estimateValue: 0,
     expectedValue: 850,
     unit: 'SF',
     calculation: '850 SF × $4.00-$6.00/SF',
     impactMin: 3400,
     impactMax: 5100,
-    complianceReference: undefined,
-    reportDirective: 'Replace all insulation'
-  }
+    reportDirective: 'Replace all insulation',
+  },
 ];
 
 async function runConsistencyTest() {

@@ -16,41 +16,50 @@ const MOCK_ESTIMATE: StructuredEstimate = {
     {
       lineNumber: 1,
       tradeCode: 'DRY',
+      tradeName: 'Drywall',
       description: 'Remove drywall',
       actionType: 'REMOVE',
       quantity: 200,
       unit: 'SF',
-      unitPrice: 1.50,
       rcv: 300,
       acv: 300,
-      category: 'Interior'
+      depreciation: 0,
+      tax: 0,
+      overhead: false,
+      profit: false,
+      rawLine: 'Remove drywall',
+      parseConfidence: 0.95,
     },
     {
       lineNumber: 2,
       tradeCode: 'DRY',
+      tradeName: 'Drywall',
       description: 'Replace drywall 1/2"',
       actionType: 'REPLACE',
       quantity: 200,
       unit: 'SF',
-      unitPrice: 2.50,
       rcv: 500,
       acv: 500,
-      category: 'Interior'
+      depreciation: 0,
+      tax: 0,
+      overhead: false,
+      profit: false,
+      rawLine: 'Replace drywall 1/2"',
+      parseConfidence: 0.95,
     }
   ],
   totals: {
     rcv: 800,
     acv: 800,
     depreciation: 0,
-    overhead: 0,
-    profit: 0,
     tax: 0,
-    total: 800
   },
+  parseConfidence: 0.95,
   metadata: {
-    lineItemCount: 2,
-    tradeCount: 1,
-    parseConfidence: 0.95,
+    totalLines: 2,
+    parsedLines: 2,
+    rejectedLines: 0,
+    avgLineConfidence: 0.95,
     warnings: []
   }
 };
@@ -348,37 +357,44 @@ describe('Expert Intelligence Engine - Large Commercial', () => {
         {
           lineNumber: 3,
           tradeCode: 'INS',
+          tradeName: 'Insulation',
           description: 'Remove insulation',
           actionType: 'REMOVE',
           quantity: 100,
           unit: 'SF',
-          unitPrice: 1.00,
           rcv: 100,
           acv: 100,
-          category: 'Interior'
+          depreciation: 0,
+          tax: 0,
+          overhead: false,
+          profit: false,
+          rawLine: 'Remove insulation',
+          parseConfidence: 0.95,
         },
         {
           lineNumber: 4,
           tradeCode: 'FLR',
+          tradeName: 'Flooring',
           description: 'Remove flooring',
           actionType: 'REMOVE',
           quantity: 500,
           unit: 'SF',
-          unitPrice: 2.00,
           rcv: 1000,
           acv: 1000,
-          category: 'Interior'
+          depreciation: 0,
+          tax: 0,
+          overhead: false,
+          profit: false,
+          rawLine: 'Remove flooring',
+          parseConfidence: 0.95,
         }
       ],
       totals: {
         rcv: 1900,
         acv: 1900,
         depreciation: 0,
-        overhead: 0,
-        profit: 0,
         tax: 0,
-        total: 1900
-      }
+      },
     };
     
     const largeDimensions: ExpectedQuantities = {
