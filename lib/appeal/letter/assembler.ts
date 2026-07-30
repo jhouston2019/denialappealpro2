@@ -15,6 +15,7 @@ import {
   formatRarc,
 } from "../format/render";
 import { lookupCarc, routeDenial } from "../router/index";
+import { isCarc4M144Bundling } from "../router/bundling-detect";
 import { appendEnclosuresBlock } from "./enclosures";
 import { assembleSignatureBlock, stripTrailingSignature } from "./signature";
 
@@ -87,7 +88,7 @@ function formatIcd10Line(ledger: FactLedger): string {
   const fallback = arr(getValue(ledger, "clinical.icd10Codes"));
   const allCodes = codes.length ? codes : fallback;
   if (!allCodes.length) {
-    return `    ICD-10: ${req("claim.icd10Codes")}`;
+    return "";
   }
   const diagnosis = str(getValue(ledger, "clinical.primaryDiagnosis"));
   const codePart = allCodes.join(", ");
@@ -95,6 +96,62 @@ function formatIcd10Line(ledger: FactLedger): string {
     return `    ICD-10: ${codePart} — ${diagnosis}`;
   }
   return `    ICD-10: ${codePart}`;
+}
+
+/** Strip any content accidentally appended after the Enclosures block. */
+export function stripContentAfterEnclosures(text: string): string {
+  const t = String(text || "");
+  const match = t.match(/\n\s*Enclosures:\s*\n/i);
+  if (!match || match.index == null) return t.replace(/\s+$/, "");
+
+  const start = match.index;
+  const tail = t.slice(start);
+  const lines = tail.split("\n");
+  let endOffset = 0;
+  let inList = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^\s*Enclosures:\s*$/i.test(line)) {
+      inList = true;
+      endOffset += line.length + 1;
+      continue;
+    }
+    if (inList && /^\s*-\s/.test(line)) {
+      endOffset += line.length + 1;
+      continue;
+    }
+    if (inList && !line.trim()) {
+      endOffset += line.length + 1;
+      break;
+    }
+    if (inList) break;
+  }
+
+  return t.slice(0, start + endOffset).replace(/\s+$/, "");
+}
+
+/** System-rendered modifier-25 / NCCI bundling argument for CARC 4 + M144. */
+export function buildCarc4M144BundlingArgument(ledger: FactLedger): string {
+  const claim = orReq(str(getValue(ledger, "claim.number")), "claim.number");
+  const cptArr = arr(getValue(ledger, "claim.cptCodes"));
+  const emCode = cptArr.find((c) => /^99/.test(c)) || "99213";
+  const procCode = cptArr.find((c) => !/^99/.test(c)) || "93000";
+  const deniedRaw = str(getValue(ledger, "claim.deniedAmount"));
+  const denied = deniedRaw
+    ? formatCurrency(deniedRaw)
+    : req("claim.deniedAmount");
+  const payer = str(getValue(ledger, "claim.payerName")) || "the plan";
+
+  const paragraphs = [
+    `We demand reprocessing of claim ${claim} with modifier 25 appended to CPT ${emCode} and full payment of the denied amount of ${denied}. The evaluation and management service billed as CPT ${emCode} was a significant, separately identifiable E/M service performed on the same date of service as CPT ${procCode}. Under the CMS NCCI Policy Manual, Chapter 1, modifier 25 exempts significant and separately identifiable E/M services from National Correct Coding Initiative bundling edits when the E/M visit is above and beyond the work ordinarily associated with the procedure.`,
+    `The E/M visit addressed a distinct clinical issue requiring independent evaluation, medical decision-making, and documentation beyond the scope of the same-day procedure. The treating provider's record supports that the E/M service was medically necessary on its own merits and was not merely a routine or incidental component of the procedure. Separate billing with modifier 25 is appropriate when the physician's evaluation exceeds the pre- and post-procedure work included in the procedure code.`,
+    `NCCI column-two procedure-to-procedure edits are not absolute denials. They are overridable when modifier 25 applies and the clinical record demonstrates a separately identifiable E/M service. ${payer}'s own remittance guidance for this denial instructs that if modifier 25 applies and the E/M service was significant and separately identifiable, the claim should be resubmitted with modifier 25 appended to CPT ${emCode}. A blanket bundling denial without evaluating modifier 25 on its merits is not a valid coding determination.`,
+    `The plan must review the medical record, apply CMS NCCI modifier policy, and reprocess this claim with modifier 25 on CPT ${emCode}. Payment for the denied ${denied} must be remitted upon reprocessing. Denial without consideration of modifier 25 and the separately identifiable E/M service is inconsistent with standard NCCI edit policy and the plan's own resubmission instructions.`,
+    `We reserve all rights to escalate this matter if the plan continues to apply an automated bundling edit without meaningful review of the modifier 25 claim.`,
+  ];
+
+  return paragraphs.join("\n\n");
 }
 
 /** Whitespace-normalize for verbatim authority comparison. */
@@ -397,6 +454,7 @@ export function buildSignature(ledger: FactLedger): string {
 /** Strip model salutation / signature so only narrative sections 6–10 remain. */
 export function extractNarrativeBody(modelText: string): string {
   let t = stripTrailingSignature(String(modelText || "").trim());
+  t = t.replace(/\n\s*Enclosures:\s*\n[\s\S]*$/i, "").trim();
   t = t.replace(/^[\s\S]*?(?=To the Appeals Review Department[:]?)/i, "");
   t = t.replace(/^To the Appeals Review Department:?\s*\n+/i, "").trim();
   return t;
@@ -429,7 +487,11 @@ export function assembleLetterParts(
 ): AssembledLetterParts {
   const planType = resolvePlanType(ledger);
   const scaffold = buildScaffold(ledger);
-  const narrative = extractNarrativeBody(narrativeBody);
+  let narrative = extractNarrativeBody(narrativeBody);
+  if (isCarc4M144Bundling(ledger)) {
+    const bundlingBlock = buildCarc4M144BundlingArgument(ledger);
+    narrative = [narrative.trim(), bundlingBlock].filter(Boolean).join("\n\n");
+  }
   const authSection = buildAuthorities(ledger, authorities);
   const procedural = buildProcedural(ledger, planType);
   const escalation = buildEscalation(ledger, planType);
@@ -446,6 +508,7 @@ export function assembleLetterParts(
 
   let full = sections.join("\n\n");
   full = appendEnclosuresBlock(full, ledger.enclosures || []);
+  full = stripContentAfterEnclosures(full);
 
   return {
     scaffold,
@@ -490,6 +553,12 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
       "",
       "10. CLINICAL ARGUMENT — Omit unless clinical.* facts are present in the ledger."
     );
+    if (isCarc4M144Bundling(ledger)) {
+      lines.push(
+        "",
+        "CARC 4 + M144: Write at least 4 substantive paragraphs covering modifier 25, separate medical necessity, NCCI edit rebuttal, and resubmission demand with modifier 25 on CPT 99213. Never write \"Unknown denial reason.\""
+      );
+    }
     if (clinical) {
       lines[lines.length - 1] =
         "10. CLINICAL ARGUMENT — Include populated clinical.* facts only if relevant to the bundling argument.";

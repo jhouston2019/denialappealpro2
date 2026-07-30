@@ -7,6 +7,7 @@ import {
   citationStringsFromRecords,
   type AuthorityRecord,
 } from "./records";
+import { GLOBAL_PREAPPROVED_CITATIONS } from "./allowlist";
 
 export type { AuthorityRecord } from "./records";
 
@@ -134,7 +135,10 @@ export function serializeAuthoritiesForPrompt(
 }
 
 export function allowedCitationNeedles(records: AuthorityRecord[]): string[] {
-  return citationStringsFromRecords(records);
+  return [
+    ...GLOBAL_PREAPPROVED_CITATIONS,
+    ...citationStringsFromRecords(records),
+  ];
 }
 
 export function blockedRecordsForPlanType(

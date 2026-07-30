@@ -136,6 +136,24 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
       "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-B/part-147/section-147.136",
   },
   {
+    id: "cms-ncci-modifier-25",
+    citation: "CMS NCCI Policy Manual — bundling edits",
+    shortLabel: "CMS NCCI Policy Manual",
+    planTypes: [
+      "erisa-self-funded",
+      "fully-insured-group",
+      "medicare-advantage",
+      "marketplace-individual",
+    ],
+    strategies: ["bundling"],
+    argument: `Under the CMS National Correct Coding Initiative (NCCI) Policy Manual, Chapter 1, modifier 25 indicates that a significant, separately identifiable evaluation and management service was performed by the same physician on the same day as a procedure. NCCI procedure-to-procedure edits are not absolute when modifier 25 applies and the medical record documents a separately identifiable E/M service above and beyond the work ordinarily associated with the procedure. Denial without evaluation of modifier 25 on its merits is inconsistent with CMS NCCI edit policy.`,
+    quotable:
+      "significant, separately identifiable evaluation and management service",
+    blocked: ["medicaid-mco", "medicare-traditional"],
+    sourceUrl:
+      "https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits",
+  },
+  {
     id: "ma-422-subpart-m",
     citation: "42 C.F.R. Part 422, Subpart M",
     shortLabel: "MA Appeals (42 CFR 422)",

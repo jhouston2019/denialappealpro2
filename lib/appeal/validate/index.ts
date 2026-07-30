@@ -269,14 +269,20 @@ export function validateLetter(
     });
   }
 
-  // 8b. icd10_codes_required — diagnosis codes from extraction must reach the letter
-  const icdValue = getValue(ledger, "claim.icd10Codes");
+  // 8b. icd10_codes_required — required after Step 3 (document extraction or manual entry)
+  const icdClaim = getValue(ledger, "claim.icd10Codes");
+  const icdClinical = getValue(ledger, "clinical.icd10Codes");
+  const icdValue = isPresent(icdClaim)
+    ? icdClaim
+    : isPresent(icdClinical)
+      ? icdClinical
+      : null;
   if (!isPresent(icdValue)) {
     errors.push({
       rule: "icd10_codes_required",
       message: "ICD-10 diagnosis code(s) are required before letter export",
       factKey: "claim.icd10Codes",
-      wizardStep: 2,
+      wizardStep: 3,
     });
   } else {
     const needles = renderNeedles("claim.icd10Codes", icdValue);

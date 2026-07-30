@@ -11,6 +11,10 @@ import {
   withDenialReason,
 } from "@/lib/appeal/ledger/adapter";
 import { buildLedgerFromExtraction } from "@/lib/appeal/ledger/fromExtraction";
+import {
+  extractProviderNameFromRaw,
+  sanitizeProviderName,
+} from "@/lib/appeal/ledger/providerExtract";
 import type { FactLedger } from "@/lib/appeal/ledger/types";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +30,8 @@ You MUST return a single JSON object with EXACTLY these keys (use null when unkn
 These are the ONLY allowed keys. Do NOT invent clinical facts, diagnoses, indications, urgency, or treatment history.
 
 ALLOWED KEYS (non-clinical only):
-- payer_name: insurance payer / plan name
+- payer_name: insurance payer / plan name ONLY (e.g. "Cigna", "Blue Cross Blue Shield") — NOT the treating provider
+- provider_name: treating provider or medical practice name (e.g. "Riverside Medical Group") — NOT the insurance company
 - claim_number
 - patient_name: full patient or member name as printed (Patient, Member, Subscriber, Insured, Beneficiary, Pt Name)
 - member_id: member / subscriber ID as printed
@@ -86,6 +91,7 @@ OUTPUT FORMAT (STRICT JSON):
 
 {
   "payer_name": null,
+  "provider_name": null,
   "claim_number": null,
   "patient_name": null,
   "member_id": null,
@@ -169,6 +175,25 @@ function normalizeRarc(c: unknown): string {
 function applyAliases(data: RawExtract): RawExtract {
   const d: RawExtract = { ...data };
   if (!d.payer_name && d.payer) d.payer_name = d.payer;
+  if (!d.provider_name) {
+    for (const alt of [
+      "provider",
+      "rendering_provider",
+      "billing_provider",
+      "rendering_provider_name",
+      "billing_provider_name",
+    ] as const) {
+      if (d[alt]) {
+        d.provider_name = d[alt];
+        break;
+      }
+    }
+  }
+  // Never swap payer into provider — clear if they match or provider looks like payer.
+  d.provider_name = sanitizeProviderName(
+    d.provider_name != null ? String(d.provider_name) : null,
+    d.payer_name != null ? String(d.payer_name) : null
+  );
   if (!d.patient_name) {
     for (const alt of [
       "patient",
@@ -234,6 +259,9 @@ function postProcess(data: RawExtract | null | undefined): Record<string, unknow
   return {
     payer_name: nullIfEmpty(
       raw.payer_name != null ? String(raw.payer_name) : null
+    ),
+    provider_name: nullIfEmpty(
+      raw.provider_name != null ? String(raw.provider_name) : null
     ),
     claim_number: nullIfEmpty(
       raw.claim_number != null ? String(raw.claim_number) : null
@@ -362,6 +390,16 @@ export async function POST(request: NextRequest) {
     }
 
     const extracted = postProcess(llmRaw);
+    if (!extracted.provider_name) {
+      const fromRaw = extractProviderNameFromRaw(rawText);
+      if (fromRaw) {
+        extracted.provider_name = fromRaw;
+      }
+    }
+    extracted.provider_name = sanitizeProviderName(
+      extracted.provider_name != null ? String(extracted.provider_name) : null,
+      extracted.payer_name != null ? String(extracted.payer_name) : null
+    );
     const { ledger, denialReasonText } = buildLedgerFromExtraction({
       fields: extracted,
       rawText,

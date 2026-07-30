@@ -63,7 +63,7 @@ export function deterministicGroundedDraft(ledger: FactLedger): GenerationResult
     ? diagnosis
       ? `ICD-10: ${icdPart} — ${diagnosis}`
       : `ICD-10: ${icdPart}`
-    : req("claim.icd10Codes");
+    : "";
   const billed =
     formatCurrency(fmt(getValue(ledger, "claim.billedAmount"))) ||
     req("claim.billedAmount");
@@ -76,7 +76,13 @@ export function deterministicGroundedDraft(ledger: FactLedger): GenerationResult
 
   const relief = `We request reversal of the denial and payment for claim ${claim} at the contracted rate.`;
 
-  const claimSummary = `Claim ${claim} was submitted for services rendered on ${dos}. CPT ${cpt}. ${icdPhrase}. The billed amount is ${billed}; the denied amount is ${denied}.`;
+  const claimSummary = [
+    `Claim ${claim} was submitted for services rendered on ${dos}. CPT ${cpt}.`,
+    icdPhrase,
+    `The billed amount is ${billed}; the denied amount is ${denied}.`,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   const denialBasis = `The payer denied this claim citing: ${descriptor}.`;
 

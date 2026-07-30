@@ -22,6 +22,51 @@ export function normalizeCarcCode(raw: string): string {
 
 const ENTRIES: CarcEntry[] = [
   {
+    code: "1",
+    descriptor: "Deductible amount",
+    strategyId: "contractual",
+    primaryArgument:
+      "The patient responsibility reflects deductible application; the provider portion should be paid per contract.",
+    isAdministrative: false,
+    correctedClaimFirst: false,
+  },
+  {
+    code: "2",
+    descriptor: "Coinsurance amount",
+    strategyId: "contractual",
+    primaryArgument:
+      "Coinsurance was applied incorrectly or the provider payment portion was denied in error.",
+    isAdministrative: false,
+    correctedClaimFirst: false,
+  },
+  {
+    code: "4",
+    descriptor: "The service/equipment/drug is not covered by the plan.",
+    strategyId: "non-covered",
+    primaryArgument:
+      "The service is a covered benefit under the patient's plan and should be reimbursed.",
+    isAdministrative: false,
+    correctedClaimFirst: false,
+  },
+  {
+    code: "5",
+    descriptor: "The procedure code/type of bill is inconsistent with the place of service",
+    strategyId: "claim-defect",
+    primaryArgument:
+      "Correct the place-of-service or procedure coding inconsistency and request reprocessing.",
+    isAdministrative: true,
+    correctedClaimFirst: true,
+  },
+  {
+    code: "11",
+    descriptor: "The diagnosis is inconsistent with the procedure",
+    strategyId: "claim-defect",
+    primaryArgument:
+      "The diagnosis supports the billed procedure; request reconsideration with corrected coding alignment.",
+    isAdministrative: true,
+    correctedClaimFirst: true,
+  },
+  {
     code: "15",
     descriptor:
       "Payment adjusted because the submitted authorization number is missing, invalid, or does not apply to the billed services or provider",
@@ -48,6 +93,24 @@ const ENTRIES: CarcEntry[] = [
       "The claim is not a duplicate; distinguish this service from any prior adjudicated claim.",
     isAdministrative: true,
     correctedClaimFirst: true,
+  },
+  {
+    code: "22",
+    descriptor: "This care may be covered by another payer per coordination of benefits",
+    strategyId: "wrong-payer",
+    primaryArgument:
+      "This payer is primary for this service; coordination of benefits does not apply.",
+    isAdministrative: true,
+    correctedClaimFirst: true,
+  },
+  {
+    code: "27",
+    descriptor: "Expenses incurred after coverage terminated",
+    strategyId: "claim-defect",
+    primaryArgument:
+      "Coverage was active on the date of service; eligibility records confirm the member was covered.",
+    isAdministrative: true,
+    correctedClaimFirst: false,
   },
   {
     code: "29",
@@ -115,6 +178,15 @@ const ENTRIES: CarcEntry[] = [
     correctedClaimFirst: false,
   },
   {
+    code: "119",
+    descriptor: "Benefit maximum for this time period or occurrence has been reached",
+    strategyId: "non-covered",
+    primaryArgument:
+      "The member has not exhausted applicable benefit limits for this service.",
+    isAdministrative: false,
+    correctedClaimFirst: false,
+  },
+  {
     code: "125",
     descriptor: "Submission/billing error(s)",
     strategyId: "claim-defect",
@@ -129,6 +201,51 @@ const ENTRIES: CarcEntry[] = [
     strategyId: "dx-not-covered",
     primaryArgument:
       "The diagnosis is covered under the plan for the billed service.",
+    isAdministrative: false,
+    correctedClaimFirst: false,
+  },
+  {
+    code: "170",
+    descriptor: "Payment is denied when performed/billed by this provider type",
+    strategyId: "non-covered",
+    primaryArgument:
+      "The rendering provider type is eligible to perform and bill this service under plan rules.",
+    isAdministrative: false,
+    correctedClaimFirst: false,
+  },
+  {
+    code: "171",
+    descriptor: "Payment is denied when performed/billed in this place of service",
+    strategyId: "claim-defect",
+    primaryArgument:
+      "The place of service is appropriate and covered for this procedure.",
+    isAdministrative: true,
+    correctedClaimFirst: true,
+  },
+  {
+    code: "181",
+    descriptor: "Procedure code was invalid on the date of service",
+    strategyId: "claim-defect",
+    primaryArgument:
+      "The CPT/HCPCS code was valid and active on the date of service.",
+    isAdministrative: true,
+    correctedClaimFirst: true,
+  },
+  {
+    code: "182",
+    descriptor: "Procedure modifier was invalid on the date of service",
+    strategyId: "claim-defect",
+    primaryArgument:
+      "The modifier was valid and appropriate on the date of service.",
+    isAdministrative: true,
+    correctedClaimFirst: true,
+  },
+  {
+    code: "185",
+    descriptor: "The rendering provider is not eligible to perform the service billed",
+    strategyId: "non-covered",
+    primaryArgument:
+      "The rendering provider is credentialed and eligible to perform this service.",
     isAdministrative: false,
     correctedClaimFirst: false,
   },
@@ -150,6 +267,16 @@ const ENTRIES: CarcEntry[] = [
       "The service is a covered benefit under the patient's current plan.",
     isAdministrative: false,
     correctedClaimFirst: false,
+  },
+  {
+    code: "227",
+    descriptor:
+      "Information requested from the patient/insured/responsible party was not provided or was insufficient/incomplete",
+    strategyId: "claim-defect",
+    primaryArgument:
+      "All requested information has been provided or was not required for adjudication.",
+    isAdministrative: true,
+    correctedClaimFirst: true,
   },
   {
     code: "233",
@@ -177,6 +304,10 @@ const TABLE = new Map<string, CarcEntry>();
 for (const entry of ENTRIES) {
   TABLE.set(entry.code, entry);
 }
+
+/** Descriptor used when CO-4 pairs with RARC M144 (NCCI bundling). */
+export const CARC4_M144_BUNDLING_DESCRIPTOR =
+  "The service/equipment/drug is not covered by the plan (NCCI bundling edit — modifier 25 may apply).";
 
 /** CO-15 and 15 resolve to the same entry. */
 export function lookupCarc(raw: string): CarcEntry | null {

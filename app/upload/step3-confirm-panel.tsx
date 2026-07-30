@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { PreviewPaywallBlock } from "@/components/PreviewPaywallBlock";
 import { ensureLedger } from "@/lib/appeal/ledger/intakeToLedger";
 import { DEFAULT_ENCLOSURES } from "@/lib/appeal/ledger/keys";
 import type { EnclosureItem, FactLedger, PlanType } from "@/lib/appeal/ledger/types";
 import { routeDenial } from "@/lib/appeal/router/index";
+import { isCarc4M144Bundling } from "@/lib/appeal/router/bundling-detect";
 import type { DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 
 const WIZARD_PANEL =
@@ -35,9 +36,14 @@ type Props = {
 };
 
 const BUNDLING_BRANCH_OPTIONS: Array<{
-  id: "modifier-59" | "no-ncci-edit" | "modifier-indicator-0";
+  id: "modifier-25" | "modifier-59" | "no-ncci-edit" | "modifier-indicator-0";
   label: string;
 }> = [
+  {
+    id: "modifier-25",
+    label:
+      "Modifier 25 — significant, separately identifiable E/M with same-day procedure",
+  },
   {
     id: "modifier-59",
     label: "Modifier 59 / X{EPSU} applied — distinct procedural service",
@@ -112,6 +118,13 @@ const PLAN_TYPE_OPTIONS: Array<{ value: PlanType; label: string }> = [
   { value: "unknown", label: "I'm not sure" },
 ];
 
+function icdExtractedFromDocument(ledger: FactLedger | null): boolean {
+  const fact = ledger?.facts?.["claim.icd10Codes"];
+  if (!fact?.value) return false;
+  if (Array.isArray(fact.value) && !fact.value.length) return false;
+  return fact.provenance === "document";
+}
+
 export function Step3ConfirmPanel({
   intake,
   ledger,
@@ -141,6 +154,8 @@ export function Step3ConfirmPanel({
   const needsPlanType = intake.planType == null;
   const needsPrimaryDiagnosis =
     route.strategy.id === "medical-necessity" && !intake.primaryDiagnosis?.trim();
+  const icdFromDocument = icdExtractedFromDocument(ledger);
+  const needsIcd10Codes = !icdFromDocument && intake.icdCodes.length === 0;
   const effectiveSignerName =
     intake.signerName?.trim() || intake.providerName?.trim() || "";
   const needsProviderDetails =
@@ -150,6 +165,21 @@ export function Step3ConfirmPanel({
     !intake.providerPhone?.trim() ||
     !effectiveSignerName ||
     !intake.signerTitle?.trim();
+
+  useEffect(() => {
+    if (
+      route.strategy.id === "bundling" &&
+      isCarc4M144Bundling(workingLedger) &&
+      !intake.bundlingBranch
+    ) {
+      onIntakeChange({ bundlingBranch: "modifier-25" });
+    }
+  }, [
+    intake.bundlingBranch,
+    onIntakeChange,
+    route.strategy.id,
+    workingLedger,
+  ]);
 
   const list =
     enclosures.length > 0
@@ -446,8 +476,14 @@ export function Step3ConfirmPanel({
         </label>
         <label className="block sm:col-span-2">
           <span className="mb-1 block text-sm font-semibold">
-            ICD-10 codes (optional — enter only if confirmed)
+            ICD-10 Code(s)
+            {needsIcd10Codes ? " — required for appeal letter" : " (optional)"}
           </span>
+          {needsIcd10Codes ? (
+            <span className="mb-1 block text-xs text-[#5a6a7a]">
+              Enter the diagnosis code(s) from the medical record (e.g., M16.11).
+            </span>
+          ) : null}
           <input
             value={intake.icdCodes.join(", ")}
             onChange={(e) =>
@@ -458,10 +494,20 @@ export function Step3ConfirmPanel({
                   .filter(Boolean),
               })
             }
-            placeholder="User-supplied only; never inferred from CPT"
+            placeholder={
+              needsIcd10Codes
+                ? "e.g. M16.11"
+                : "User-supplied only; never inferred from CPT"
+            }
             style={inputStyle}
           />
         </label>
+        {needsIcd10Codes ? (
+          <p className="sm:col-span-2 text-sm font-medium text-[#b45309]" role="alert">
+            ICD-10 diagnosis code(s) are required before continuing — they were not
+            found on the denial document.
+          </p>
+        ) : null}
         <label className="block sm:col-span-2">
           <span className="mb-1 block text-sm font-semibold">
             Conservative care tried (optional)

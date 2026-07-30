@@ -6,6 +6,7 @@ import {
   allowedCitationNeedles,
   getAuthorities,
 } from "../authorities/gate";
+import { GLOBAL_PREAPPROVED_CITATIONS } from "../authorities/allowlist";
 
 const CITATION_PATTERNS: RegExp[] = [
   /\d+\s+U\.S\.C\.\s*§?\s*\d+[a-zA-Z0-9()\-]*/gi,
@@ -81,7 +82,7 @@ function allowedForLedger(ledger?: FactLedger): string[] {
     branch ? String(branch) : undefined,
     ledger
   );
-  return allowedCitationNeedles(authorities);
+  return [...GLOBAL_PREAPPROVED_CITATIONS, ...allowedCitationNeedles(authorities)];
 }
 
 /**

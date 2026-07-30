@@ -1,10 +1,15 @@
 import { emptyLedger, setFact } from "./builder";
+import {
+  extractProviderNameFromRaw,
+  sanitizeProviderName,
+} from "./providerExtract";
 import type { FactKey, FactLedger, FactValue } from "./types";
 
 /** Closed set of non-clinical keys the extraction LLM may return. */
 export const EXTRACTION_LEDGER_KEYS = [
   "claim.number",
   "claim.payerName",
+  "provider.name",
   "claim.payerAppealAddress",
   "claim.dateOfService",
   "claim.dateProcessed",
@@ -31,6 +36,7 @@ export type ExtractionLedgerKey = (typeof EXTRACTION_LEDGER_KEYS)[number];
 /** Snake_case keys returned by the extraction LLM (closed set). */
 export type ExtractionLlmPayload = {
   claim_number: string | null;
+  provider_name: string | null;
   payer_name: string | null;
   payer_appeal_address: string | null;
   date_of_service: string | null;
@@ -54,6 +60,9 @@ export type ExtractionLlmPayload = {
   denial_reason_text?: string | null;
   // Alias drift (normalized before ledger write)
   payer?: string | null;
+  provider?: string | null;
+  rendering_provider?: string | null;
+  billing_provider?: string | null;
   patient?: string | null;
   member_name?: string | null;
   member?: string | null;
@@ -65,6 +74,7 @@ export type ExtractionLlmPayload = {
 
 const LLM_TO_FACT: Record<string, FactKey> = {
   claim_number: "claim.number",
+  provider_name: "provider.name",
   payer_name: "claim.payerName",
   payer_appeal_address: "claim.payerAppealAddress",
   date_of_service: "claim.dateOfService",
@@ -148,6 +158,26 @@ export function buildLedgerFromExtraction(opts: {
     const confidence = numericConfidence(value, rawText);
     const sourceRef = `doc:${documentId}:p1:${llmKey}`;
     ledger = setFact(ledger, factKey, value, "document", sourceRef, confidence);
+  }
+
+  const payerName = String(fields.payer_name ?? "").trim();
+  let providerName = sanitizeProviderName(
+    fields.provider_name != null ? String(fields.provider_name) : null,
+    payerName || null
+  );
+  if (!providerName) {
+    providerName = extractProviderNameFromRaw(rawText);
+  }
+  if (providerName) {
+    const confidence = numericConfidence(providerName, rawText);
+    ledger = setFact(
+      ledger,
+      "provider.name",
+      providerName,
+      "document",
+      `doc:${documentId}:p1:provider_name`,
+      confidence
+    );
   }
 
   // Derive denied amount when billed and paid are present and denied is null.

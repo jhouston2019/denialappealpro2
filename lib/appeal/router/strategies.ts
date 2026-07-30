@@ -33,6 +33,7 @@ export type SectionId =
 export type AuthBranchId = "A" | "B" | "C" | "D";
 
 export type BundlingBranchId =
+  | "modifier-25"
   | "modifier-59"
   | "no-ncci-edit"
   | "modifier-indicator-0";
@@ -153,6 +154,12 @@ export const AUTHORIZATION_STRATEGY: DenialStrategy = {
 };
 
 const BUNDLING_BRANCHES: StrategyBranch[] = [
+  {
+    id: "modifier-25",
+    label:
+      "Modifier 25 — significant, separately identifiable E/M with same-day procedure",
+    leadArgument: `The E/M service (CPT 99213) was a significant, separately identifiable evaluation and management service distinct from the procedure performed on the same date (CPT 93000). Under CMS NCCI Policy Manual, Chapter 1, modifier 25 exempts significant and separately identifiable E/M services from National Correct Coding Initiative bundling edits. The payer's own remittance guidance states that if modifier 25 applies and the E/M service was significant and separately identifiable, the claim should be resubmitted with modifier 25 appended to CPT 99213.`,
+  },
   {
     id: "modifier-59",
     label: "Modifier 59 / X{EPSU} applied — distinct procedural service",

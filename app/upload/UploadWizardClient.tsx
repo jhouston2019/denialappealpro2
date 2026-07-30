@@ -256,7 +256,19 @@ export default function UploadWizardClient({
         console.log("[Step 2] extract-denial raw response:", payload);
       }
       const mapped = mapExtractedToIntake(payload);
-      setIntake(mapped.intake);
+      setIntake((prev) => ({
+        ...mapped.intake,
+        providerName: mapped.intake.providerName || prev.providerName,
+        providerNpi: mapped.intake.providerNpi || prev.providerNpi,
+        providerAddress: mapped.intake.providerAddress || prev.providerAddress,
+        providerPhone: mapped.intake.providerPhone || prev.providerPhone,
+        providerFax: mapped.intake.providerFax || prev.providerFax,
+        signerName: mapped.intake.signerName || prev.signerName,
+        signerTitle: mapped.intake.signerTitle || prev.signerTitle,
+        signerCredentials:
+          mapped.intake.signerCredentials || prev.signerCredentials,
+        signerPhone: mapped.intake.signerPhone || prev.signerPhone,
+      }));
       setConfidence(mapped.confidence);
       if (mapped.ledger) {
         setLedger(mapped.ledger);
@@ -373,6 +385,15 @@ export default function UploadWizardClient({
     }
     if (intake.planType == null) {
       announce("Select plan type before continuing.");
+      return;
+    }
+    const icdFromDoc =
+      ledger?.facts?.["claim.icd10Codes"]?.provenance === "document" &&
+      (ledger?.facts?.["claim.icd10Codes"]?.value != null);
+    if (!icdFromDoc && !intake.icdCodes.length) {
+      announce(
+        "Enter ICD-10 diagnosis code(s) before continuing — they were not extracted from the document."
+      );
       return;
     }
     setLedger(nextLedger);

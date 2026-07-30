@@ -2,6 +2,10 @@ import { getValue } from "../ledger/builder";
 import type { FactLedger, FactValue } from "../ledger/types";
 import { lookupCarc, normalizeCarcCode, type CarcEntry } from "./carc-table";
 import {
+  carc4M144BundlingEntry,
+  isCarc4M144Bundling,
+} from "./bundling-detect";
+import {
   getAuthBranch,
   getBundlingBranch,
   getStrategy,
@@ -75,6 +79,7 @@ function resolveBundlingBranch(ledger: FactLedger): BundlingBranchId | null {
   if (v == null) return null;
   const s = String(v).trim();
   const allowed: BundlingBranchId[] = [
+    "modifier-25",
     "modifier-59",
     "no-ncci-edit",
     "modifier-indicator-0",
@@ -123,11 +128,19 @@ export function routeDenial(ledger: FactLedger): RouteDenialResult {
   }
 
   const primaryId = pickPrimaryStrategy(strategyIds);
-  const baseStrategy = getStrategy(primaryId);
-  const primaryCarc =
-    resolvedCarcs.find((c) => c.strategyId === primaryId) ??
+  const carc4M144 = isCarc4M144Bundling(ledger);
+  const effectivePrimaryId = carc4M144 ? "bundling" : primaryId;
+  const baseStrategy = getStrategy(effectivePrimaryId);
+  let primaryCarc =
+    resolvedCarcs.find((c) => c.strategyId === effectivePrimaryId) ??
     resolvedCarcs[0] ??
     null;
+  if (carc4M144) {
+    primaryCarc = carc4M144BundlingEntry();
+    if (!strategyIds.includes("bundling")) {
+      strategyIds.push("bundling");
+    }
+  }
 
   let strategy: DenialStrategy = baseStrategy;
   let branch: StrategyBranch | null = null;
@@ -147,16 +160,25 @@ export function routeDenial(ledger: FactLedger): RouteDenialResult {
         requiredFacts: branch.requiredFacts ?? baseStrategy.requiredFacts,
       };
     }
-  } else if (primaryId === "bundling") {
-    const bundlingBranchId = resolveBundlingBranch(ledger);
+  } else if (effectivePrimaryId === "bundling") {
+    let bundlingBranchId = resolveBundlingBranch(ledger);
+    if (!bundlingBranchId && carc4M144) {
+      bundlingBranchId = "modifier-25";
+    }
     if (!bundlingBranchId) {
       warnings.push(
         "bundling branch not selected — wizard must ask branch question before generation"
       );
     } else {
       branch = getBundlingBranch(bundlingBranchId);
+      if (branch) {
+        strategy = {
+          ...baseStrategy,
+          leadArgument: branch.leadArgument,
+        };
+      }
     }
-  } else if (primaryId === "timely-filing") {
+  } else if (effectivePrimaryId === "timely-filing") {
     const tfBranchId = resolveTimelyFilingBranch(ledger);
     if (!tfBranchId) {
       warnings.push(
@@ -242,6 +264,18 @@ export function serializeStrategyForPrompt(ledger: FactLedger): string {
 
   if (route.warnings.length) {
     lines.push(`ROUTER WARNINGS: ${route.warnings.join("; ")}`);
+  }
+
+  if (isCarc4M144Bundling(ledger)) {
+    lines.push(
+      "CARC 4 + RARC M144 BUNDLING — REQUIRED ARGUMENT BLOCK (minimum 4 substantive paragraphs):",
+      "Paragraph 1 — Modifier 25: The E/M service (CPT 99213) was medically necessary and distinct from the procedure (CPT 93000) performed on the same date. Under CMS NCCI Policy Manual, Chapter 1, modifier 25 exempts significant and separately identifiable E/M services from bundling edits.",
+      "Paragraph 2 — Separate medical necessity: The E/M visit addressed a distinct clinical issue requiring independent evaluation beyond the scope of the procedure. The treating provider's documentation supports separate billing.",
+      "Paragraph 3 — NCCI edit rebuttal: NCCI column-two edits are not absolute — they are overridable by modifier when clinical circumstances support it. The plan must evaluate the modifier 25 claim on its merits rather than applying a blanket bundling denial.",
+      "Paragraph 4 — Resubmission demand: Demand reprocessing with modifier 25 appended to CPT 99213 and full payment of the denied amount from claim.deniedAmount.",
+      "Quote the payer EOB instruction when present: resubmit with modifier 25 appended to CPT 99213 if the E/M was significant and separately identifiable.",
+      "DO NOT write \"Unknown denial reason.\" DO NOT characterize as a generic non-covered benefit denial."
+    );
   }
 
   return lines.join("\n");

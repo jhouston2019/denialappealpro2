@@ -238,6 +238,7 @@ export type DenialIntake = {
   additionalContext: string;
   authBranch: "A" | "B" | "C" | "D" | null;
   bundlingBranch:
+    | "modifier-25"
     | "modifier-59"
     | "no-ncci-edit"
     | "modifier-indicator-0"
