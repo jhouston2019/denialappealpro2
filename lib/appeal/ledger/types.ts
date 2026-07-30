@@ -23,6 +23,7 @@ export type FactKey =
   | "claim.carcCodes"
   | "claim.rarcCodes"
   | "claim.cptCodes"
+  | "claim.icd10Codes"
   | "claim.modifiers"
   | "claim.timelyFilingDays"
   | "claim.authorizationNumber"
@@ -35,7 +36,7 @@ export type FactKey =
   | "patient.groupNumber"
   | "patient.dateOfBirth"
   | "patient.planType"
-  // provider — user-supplied, pre-filled from public.users
+  // provider — user-supplied; defaults may pre-fill from public.users
   | "provider.name"
   | "provider.npi"
   | "provider.tin"

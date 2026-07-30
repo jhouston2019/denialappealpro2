@@ -129,14 +129,13 @@ const AUTH_BRANCH_D: StrategyBranch = {
   id: "D",
   label: "No authorization was obtained prior to service",
   leadArgument:
-    "No prior authorization was obtained. The appeal argues on three grounds: (1) retroactive authorization under the plan's own retro-auth policy, (2) notice/waiver — the plan's obligation to notify of auth requirements in advance, (3) disproportionate remedy — denial of payment is disproportionate to the administrative defect where medical necessity is not in dispute.",
+    "No authorization reference number appears in our records for this service. We request retroactive authorization review under the plan's retroactive authorization policy. Separately, the plan must demonstrate that advance authorization was required for this specific service and that adequate notice of that requirement was provided before the date of service. Denial of payment for an administrative authorization defect is a disproportionate remedy where the service was otherwise appropriate.",
   sectionOrder: [
     "relief-requested",
     "claim-summary",
     "denial-basis",
     "authorization-status",
     "administrative-argument",
-    "clinical-argument",
     "procedural-obligations",
     "escalation",
     "signature",

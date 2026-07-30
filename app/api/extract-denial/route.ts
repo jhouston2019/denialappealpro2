@@ -36,6 +36,7 @@ ALLOWED KEYS (non-clinical only):
 - date_of_service: service or DOS date; YYYY-MM-DD when possible
 - date_processed: claim processed / EOB date; YYYY-MM-DD when possible
 - cpt_codes: array of procedure codes
+- icd10_codes: array of ICD-10 diagnosis codes as printed on the document (e.g. "M16.11")
 - modifiers: array
 - carc_codes: array of numeric CARC values only (e.g. "50")
 - rarc_codes: array (e.g. "N115")
@@ -48,7 +49,7 @@ ALLOWED KEYS (non-clinical only):
 - appeal_address_block: full appeal address block if present
 - denial_reason_text: short exact denial wording from the document (1–2 sentences max)
 
-Do NOT return icd10_codes, icd_codes, diagnosis, clinical narrative, urgency, or any clinical fields.
+Do NOT return diagnosis narrative, clinical urgency, treatment history, or other clinical fields beyond icd10_codes.
 Do not rename keys. Do not nest patient name under another object.
 
 -----------------------------------
@@ -186,9 +187,13 @@ function applyAliases(data: RawExtract): RawExtract {
   if (!d.payer_appeal_address && d.appeal_address) {
     d.payer_appeal_address = d.appeal_address;
   }
-  // ICD must never flow into the ledger from extraction — drop aliases.
-  delete d.icd10_codes;
-  delete d.icd_codes;
+  if (
+    !Array.isArray(d.icd10_codes) &&
+    Array.isArray(d.icd_codes) &&
+    d.icd_codes.length
+  ) {
+    d.icd10_codes = d.icd_codes;
+  }
   return d;
 }
 
@@ -217,6 +222,15 @@ function postProcess(data: RawExtract | null | undefined): Record<string, unknow
     Array.isArray(raw.modifiers) ? raw.modifiers.map(String) : []
   );
 
+  const icdRaw = Array.isArray(raw.icd10_codes)
+    ? raw.icd10_codes
+    : Array.isArray(raw.icd_codes)
+      ? raw.icd_codes
+      : [];
+  const icd = dedupe(
+    icdRaw.map((c) => String(c).trim().toUpperCase()).filter(Boolean)
+  );
+
   return {
     payer_name: nullIfEmpty(
       raw.payer_name != null ? String(raw.payer_name) : null
@@ -240,6 +254,7 @@ function postProcess(data: RawExtract | null | undefined): Record<string, unknow
     date_of_service: normalizeDate(raw.date_of_service),
     date_processed: normalizeDate(raw.date_processed),
     cpt_codes: cpt.length ? cpt : null,
+    icd10_codes: icd.length ? icd : null,
     modifiers: modifiers.length ? modifiers : null,
     carc_codes: carc.length ? carc : null,
     rarc_codes: rarc.length ? rarc : null,

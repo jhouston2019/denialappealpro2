@@ -60,9 +60,13 @@ export function ledgerToLegacyShape(ledger: FactLedger): ExtractDenialResponse {
     paidAmountConfidence: factConf("claim.paidAmount"),
     cptCodes: asArray(getValue(ledger, "claim.cptCodes")),
     cptCodesConfidence: factConf("claim.cptCodes"),
-    // ICD-10 is clinical/user-only — never populated from document extraction.
-    icd10Codes: asArray(getValue(ledger, "clinical.icd10Codes")),
-    icd10CodesConfidence: factConf("clinical.icd10Codes"),
+    // ICD-10 codes from claim-level extraction (document) or user confirmation.
+    icd10Codes: asArray(getValue(ledger, "claim.icd10Codes")).length
+      ? asArray(getValue(ledger, "claim.icd10Codes"))
+      : asArray(getValue(ledger, "clinical.icd10Codes")),
+    icd10CodesConfidence: factConf("claim.icd10Codes") !== "low"
+      ? factConf("claim.icd10Codes")
+      : factConf("clinical.icd10Codes"),
     memberId: asString(getValue(ledger, "patient.memberId")),
     memberIdConfidence: factConf("patient.memberId"),
     deniedAmount: asString(denied),

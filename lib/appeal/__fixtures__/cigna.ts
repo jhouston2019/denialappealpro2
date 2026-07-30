@@ -56,6 +56,7 @@ const DOCUMENT_FACTS: Array<[FactKey, string | string[]]> = [
   ["claim.dateOfService", "2026-02-28"],
   ["claim.dateProcessed", "2026-03-12"],
   ["claim.cptCodes", ["27130"]],
+  ["claim.icd10Codes", ["M16.11"]],
   ["claim.carcCodes", ["15"]],
   ["claim.rarcCodes", ["N517"]],
   ["claim.billedAmount", "22000.00"],
@@ -164,6 +165,10 @@ export function cignaLetterBLedger(): FactLedger {
   L = apply(L, DOCUMENT_FACTS, "document");
   L = apply(L, PROVIDER_SIGNER, "user");
   L = apply(L, CLINICAL_ALL, "user");
+  L = apply(L, [
+    ["patient.planType", "fully-insured-group"],
+    ["appeal.authBranch", "D"],
+  ], "user");
   const checked = new Set(["operative_report", "office_notes", "eob_copy"]);
   return {
     ...L,

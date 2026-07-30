@@ -16,7 +16,7 @@ import {
 } from "../format/render";
 import { lookupCarc, routeDenial } from "../router/index";
 import { appendEnclosuresBlock } from "./enclosures";
-import { assembleSignatureBlock } from "./signature";
+import { assembleSignatureBlock, stripTrailingSignature } from "./signature";
 
 function str(v: FactValue | undefined): string {
   if (v == null) return "";
@@ -82,6 +82,21 @@ function formatDenialCodes(ledger: FactLedger): string {
   return parts.length ? parts.join(" / ") : req("claim.carcCodes");
 }
 
+function formatIcd10Line(ledger: FactLedger): string {
+  const codes = arr(getValue(ledger, "claim.icd10Codes"));
+  const fallback = arr(getValue(ledger, "clinical.icd10Codes"));
+  const allCodes = codes.length ? codes : fallback;
+  if (!allCodes.length) {
+    return `    ICD-10: ${req("claim.icd10Codes")}`;
+  }
+  const diagnosis = str(getValue(ledger, "clinical.primaryDiagnosis"));
+  const codePart = allCodes.join(", ");
+  if (diagnosis) {
+    return `    ICD-10: ${codePart} — ${diagnosis}`;
+  }
+  return `    ICD-10: ${codePart}`;
+}
+
 /** Whitespace-normalize for verbatim authority comparison. */
 export function normalizeAuthorityText(text: string): string {
   return String(text || "")
@@ -129,6 +144,10 @@ export function buildScaffold(ledger: FactLedger): string {
   );
 
   const appealLevel = str(getValue(ledger, "appeal.level")) || "First-level";
+  const planTypeRaw = str(getValue(ledger, "patient.planType"));
+  const planTypeLine = planTypeRaw
+    ? `    Plan Type: ${planTypeRaw.replace(/-/g, " ")}`
+    : "";
   const claim = orReq(str(getValue(ledger, "claim.number")), "claim.number");
   const patient = orReq(str(getValue(ledger, "patient.name")), "patient.name");
   const member = orReq(
@@ -141,6 +160,7 @@ export function buildScaffold(ledger: FactLedger): string {
   const dos = dosRaw ? formatLetterDate(dosRaw) : req("claim.dateOfService");
   const cptArr = arr(getValue(ledger, "claim.cptCodes"));
   const cpt = cptArr.length ? cptArr.join(", ") : req("claim.cptCodes");
+  const icdLine = formatIcd10Line(ledger);
   const billedRaw = str(getValue(ledger, "claim.billedAmount"));
   const billed = billedRaw
     ? formatCurrency(billedRaw)
@@ -181,9 +201,11 @@ export function buildScaffold(ledger: FactLedger): string {
     groupLine,
     `    DOS: ${dos}`,
     `    CPT: ${cpt} | Billed: ${billed}`,
+    icdLine,
     `    Denied: ${denied}`,
     `    Denial: ${denialCodes}`,
     timelyLine,
+    planTypeLine,
     "",
     "To the Appeals Review Department:",
     "",
@@ -246,7 +268,7 @@ export function buildProcedural(
       "",
       "The enrollee has the right to request an independent external review under 45 C.F.R. § 147.136 if this internal appeal is denied.",
       "",
-      "Applicable state prompt-pay and claims processing standards require timely adjudication of this appeal. Denial without a reasoned, documented response violates the plan's obligations to the enrollee and the state regulator.",
+      "Applicable state claims processing and timely-adjudication standards require prompt resolution of this appeal. Denial without a reasoned, documented response is inconsistent with the plan's obligations to the enrollee and the state regulator.",
     ].join("\n");
   }
 
@@ -316,8 +338,8 @@ export function buildEscalation(
       /\b([A-Z]{2})\s+\d{5}/
     )?.[1];
     const doiLine = stateHint
-      ? `Step 3 — State Department of Insurance: We will file a complaint with the ${stateHint} Department of Insurance if the plan fails to comply with state external review and prompt-pay requirements.`
-      : "Step 3 — State Department of Insurance: We will file a complaint with the applicable state Department of Insurance if the plan fails to comply with state external review and prompt-pay requirements.";
+      ? `Step 3 — State Department of Insurance: We will file a complaint with the ${stateHint} Department of Insurance if the plan fails to comply with state external review and timely payment requirements.`
+      : "Step 3 — State Department of Insurance: We will file a complaint with the applicable state Department of Insurance if the plan fails to comply with state external review and timely payment requirements.";
 
     return [
       "Escalation",
@@ -374,10 +396,9 @@ export function buildSignature(ledger: FactLedger): string {
 
 /** Strip model salutation / signature so only narrative sections 6–10 remain. */
 export function extractNarrativeBody(modelText: string): string {
-  let t = String(modelText || "").trim();
+  let t = stripTrailingSignature(String(modelText || "").trim());
   t = t.replace(/^[\s\S]*?(?=To the Appeals Review Department[:]?)/i, "");
   t = t.replace(/^To the Appeals Review Department:?\s*\n+/i, "").trim();
-  t = t.replace(/\nSincerely,?[\s\S]*$/i, "").trim();
   return t;
 }
 
@@ -447,7 +468,7 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
     "Write ONLY the following narrative sections (plain text, double newline between sections):",
     "",
     "6. RELIEF REQUESTED — One sentence stating what we want (reprocess / reverse / pay at contracted rate). Never demand payment equal to billed charges.",
-    "7. CLAIM SUMMARY — Factual summary: claim number, dates, codes, amounts from ledger only.",
+    "7. CLAIM SUMMARY — Factual summary: claim number, dates, CPT codes, ICD-10 codes (claim.icd10Codes), amounts from ledger only.",
     "8. DENIAL BASIS — CARC descriptor verbatim from CARC DESCRIPTOR below. RARC if available. No inference.",
   ];
 
@@ -482,6 +503,20 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
       "",
       "10. CLINICAL ARGUMENT — Omit entirely."
     );
+  } else if (strategyId === "authorization") {
+    lines.push(
+      "9. AUTHORIZATION STATUS — If claim.authorizationNumber is present, cite it exactly and request reprocessing. If absent, state that no authorization number is on file and request retroactive authorization review.",
+      "",
+      "10. STRATEGY ARGUMENT — Follow DENIAL STRATEGY and branch lead argument exactly.",
+      "NEVER claim the service was emergent, urgent, or unscheduled unless clinical.urgency is populated.",
+      "Include claim.icd10Codes and clinical.primaryDiagnosis in the claim summary when present.",
+      "Omit clinical argument entirely unless clinical.* facts are present in the ledger."
+    );
+    if (route.branch?.id === "D") {
+      lines.push(
+        "Branch D: argue retroactive authorization, notice/waiver, and disproportionate remedy only."
+      );
+    }
   } else {
     lines.push(
       "9. STRATEGY ARGUMENT — Follow DENIAL STRATEGY and branch lead argument exactly."
@@ -492,11 +527,6 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
       );
     } else {
       lines.push("10. CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in ledger).");
-    }
-    if (strategyId === "authorization" && route.branch?.id === "D") {
-      lines.push(
-        "   Branch D threads: (1) retroactive authorization, (2) notice/waiver, (3) disproportionate remedy."
-      );
     }
   }
 

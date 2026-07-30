@@ -75,7 +75,7 @@ export function mapExtractedToIntake(payload: ExtractDenialResponse): {
   const base = emptyIntake();
   const confidence = emptyConfidence();
 
-  // ICD-10 is clinical/user-only — do not populate from document extraction.
+  // ICD-10 diagnosis codes from document extraction populate claim.icd10Codes.
 
   const denied =
     str(payload.deniedAmount) ||
@@ -102,7 +102,7 @@ export function mapExtractedToIntake(payload: ExtractDenialResponse): {
     rarcCodes: arr(payload.rarcCodes),
     cptCodes: arr(payload.cptCodes),
     modifiers: arr(payload.modifiers).join(", "),
-    icdCodes: [],
+    icdCodes: arr(payload.icd10Codes),
     billedAmount: str(payload.billedAmount),
     paidAmount: str(payload.paidAmount),
     deniedAmount: denied,
@@ -122,7 +122,7 @@ export function mapExtractedToIntake(payload: ExtractDenialResponse): {
   confidence.paidAmount = conf(payload.paidAmountConfidence);
   confidence.deniedAmount = conf(payload.deniedAmountConfidence);
   confidence.cptCodes = conf(payload.cptCodesConfidence);
-  confidence.icd10Codes = "low";
+  confidence.icd10Codes = conf(payload.icd10CodesConfidence);
 
   return {
     intake,

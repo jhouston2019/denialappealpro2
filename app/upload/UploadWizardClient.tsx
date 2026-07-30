@@ -37,6 +37,11 @@ import {
   wizardFetch,
 } from "@/lib/supabaseClient";
 import { Step2ExtractionPanel } from "./step2-extraction-panel";
+import {
+  loadUserProviderProfile,
+  mergeProviderProfileIntoIntake,
+  saveUserProviderProfile,
+} from "@/lib/user-provider-profile";
 import { Step3ConfirmPanel } from "./step3-confirm-panel";
 import { Step4GeneratePanel } from "./step4-generate-panel";
 import "./dap-wizard.css";
@@ -206,12 +211,21 @@ export default function UploadWizardClient({
 
       const { data: userRow } = await supabase
         .from("users")
-        .select("plan_type")
+        .select(
+          "plan_type, provider_name, provider_npi, provider_address, provider_phone, provider_fax, signer_name, signer_title, signer_credentials, signer_phone"
+        )
         .eq("id", data.session!.user!.id)
         .maybeSingle();
 
       const plan = userRow?.plan_type;
       setIsPaid(Boolean(plan) || !isPreviewMode);
+      if (userRow) {
+        setIntake((prev) =>
+          mergeProviderProfileIntoIntake(prev, userRow as Parameters<
+            typeof mergeProviderProfileIntoIntake
+          >[1])
+        );
+      }
       setSessionReady(true);
     };
 
@@ -312,11 +326,23 @@ export default function UploadWizardClient({
     }
   }, [announce, confidence, currentStep, enclosures, intake, ledger, uploadedFile]);
 
-  const handleStep3Continue = useCallback(() => {
+  const handleStep3Continue = useCallback(async () => {
     const nextLedger = ensureLedger(ledger, intake, enclosures);
     const route = routeDenial(nextLedger);
     if (route.strategy.id === "authorization" && !intake.authBranch) {
       announce("Select authorization status before continuing.");
+      return;
+    }
+    if (!intake.providerName?.trim() || !intake.providerNpi?.trim()) {
+      announce("Complete provider name and NPI before continuing.");
+      return;
+    }
+    if (!intake.providerAddress?.trim() || !intake.providerPhone?.trim()) {
+      announce("Complete provider address and phone before continuing.");
+      return;
+    }
+    if (!intake.signerName?.trim() || !intake.signerTitle?.trim()) {
+      announce("Complete signer name and title before continuing.");
       return;
     }
     if (route.strategy.id === "bundling" && !intake.bundlingBranch) {
@@ -339,6 +365,14 @@ export default function UploadWizardClient({
       return;
     }
     setLedger(nextLedger);
+    if (isAuthenticated) {
+      const supabase = createSupabaseBrowserClient();
+      const { data } = await supabase.auth.getSession();
+      const userId = data.session?.user?.id;
+      if (userId) {
+        await saveUserProviderProfile(supabase, userId, intake);
+      }
+    }
     if (isPreviewMode || !isAuthenticated || !isPaid) {
       writeDapWizardResume(
         buildSnapshot(

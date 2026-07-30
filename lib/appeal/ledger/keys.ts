@@ -46,6 +46,7 @@ export const FACT_LABELS: Record<FactKey, string> = {
   "claim.carcCodes": "CARC codes",
   "claim.rarcCodes": "RARC codes",
   "claim.cptCodes": "CPT codes",
+  "claim.icd10Codes": "ICD-10 codes",
   "claim.modifiers": "Modifiers",
   "claim.timelyFilingDays": "Timely filing days",
   "claim.authorizationNumber": "Authorization number",

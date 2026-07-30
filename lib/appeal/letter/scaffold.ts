@@ -84,6 +84,12 @@ export function renderLetterScaffold(ledger: FactLedger): string {
     : req("claim.dateOfService");
   const cptArr = arr(getValue(ledger, "claim.cptCodes"));
   const cpt = cptArr.length ? cptArr.join(", ") : req("claim.cptCodes");
+  const icdCodes = arr(getValue(ledger, "claim.icd10Codes"));
+  const icdFallback = arr(getValue(ledger, "clinical.icd10Codes"));
+  const icdAll = icdCodes.length ? icdCodes : icdFallback;
+  const icdLine = icdAll.length
+    ? `    ICD-10: ${icdAll.join(", ")}${str(getValue(ledger, "clinical.primaryDiagnosis")) ? ` — ${str(getValue(ledger, "clinical.primaryDiagnosis"))}` : ""}`
+    : `    ICD-10: ${req("claim.icd10Codes")}`;
   const billedRaw = str(getValue(ledger, "claim.billedAmount"));
   const billed = billedRaw
     ? formatCurrency(billedRaw)
@@ -126,6 +132,7 @@ export function renderLetterScaffold(ledger: FactLedger): string {
     groupLine,
     `    DOS: ${dos}`,
     `    CPT: ${cpt} | Billed: ${billed}`,
+    icdLine,
     `    Denied: ${denied}`,
     `    Denial Codes: ${denialCodes}`,
     `    Appeal Level: ${appealLevel}`,

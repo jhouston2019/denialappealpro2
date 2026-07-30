@@ -10,6 +10,15 @@ import { assembleLetter, hasClinicalFacts } from "../letter/assembler";
 import { routeDenial } from "../router/index";
 import type { GenerationResult } from "./types";
 
+function arr(v: FactValue | undefined): string[] {
+  if (v == null) return [];
+  if (Array.isArray(v)) return v.map(String).filter(Boolean);
+  return String(v)
+    .split(/[,;\s]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 function fmt(v: FactValue | undefined): string {
   if (v == null) return "";
   if (Array.isArray(v)) return v.map(String).join(", ");
@@ -46,6 +55,15 @@ export function deterministicGroundedDraft(ledger: FactLedger): GenerationResult
     ? formatLetterDate(String(dosRaw))
     : req("claim.dateOfService");
   const cpt = valOrRequired(ledger, "claim.cptCodes");
+  const icdCodes = arr(getValue(ledger, "claim.icd10Codes"));
+  const icdFallback = arr(getValue(ledger, "clinical.icd10Codes"));
+  const icdPart = (icdCodes.length ? icdCodes : icdFallback).join(", ");
+  const diagnosis = fmt(getValue(ledger, "clinical.primaryDiagnosis"));
+  const icdPhrase = icdPart
+    ? diagnosis
+      ? `ICD-10: ${icdPart} — ${diagnosis}`
+      : `ICD-10: ${icdPart}`
+    : req("claim.icd10Codes");
   const billed =
     formatCurrency(fmt(getValue(ledger, "claim.billedAmount"))) ||
     req("claim.billedAmount");
@@ -58,7 +76,7 @@ export function deterministicGroundedDraft(ledger: FactLedger): GenerationResult
 
   const relief = `We request reversal of the denial and payment for claim ${claim} at the contracted rate.`;
 
-  const claimSummary = `Claim ${claim} was submitted for services rendered on ${dos}. CPT ${cpt}. The billed amount is ${billed}; the denied amount is ${denied}.`;
+  const claimSummary = `Claim ${claim} was submitted for services rendered on ${dos}. CPT ${cpt}. ${icdPhrase}. The billed amount is ${billed}; the denied amount is ${denied}.`;
 
   const denialBasis = `The payer denied this claim citing: ${descriptor}.`;
 

@@ -15,7 +15,8 @@ ABSOLUTE CONSTRAINTS — violating any of these invalidates the output:
    value. You may not infer clinical facts from a CPT code.
 
 2. You may not characterize a service as emergent, urgent, or unscheduled unless
-   clinical.urgency is present and says so.
+   clinical.urgency is present and says so. Never use emergent justification to
+   excuse missing prior authorization for elective procedures.
 
 3. You may not reference, mention, or allude to any enclosure, attachment, or
    accompanying document anywhere in the letter body. Enclosures are rendered
@@ -24,7 +25,12 @@ ABSOLUTE CONSTRAINTS — violating any of these invalidates the output:
 
 4. You may not cite any statute, regulation, NCD, LCD, NCCI edit, payer policy, or
    specialty guideline. Authority citations and argument paragraphs are rendered
-   separately by the system after your output.
+   separately by the system after your output. Never cite a specific guideline,
+   organization recommendation, NCD, LCD, CPT editorial policy, or statute unless
+   it is provided in the input data or exists in the Authority Library. If clinical
+   support is needed but no verified citation is available, use general language:
+   "This procedure is supported by established clinical guidelines and payer coverage
+   policies." Do not fabricate specific document names, versions, or URLs.
 
 5. You may not allege breach of contract, breach of a participation agreement, or
    violation of any law.

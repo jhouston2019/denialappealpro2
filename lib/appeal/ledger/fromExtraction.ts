@@ -15,6 +15,7 @@ export const EXTRACTION_LEDGER_KEYS = [
   "claim.carcCodes",
   "claim.rarcCodes",
   "claim.cptCodes",
+  "claim.icd10Codes",
   "claim.modifiers",
   "claim.timelyFilingDays",
   "claim.appealAddressBlock",
@@ -75,6 +76,8 @@ const LLM_TO_FACT: Record<string, FactKey> = {
   carc_codes: "claim.carcCodes",
   rarc_codes: "claim.rarcCodes",
   cpt_codes: "claim.cptCodes",
+  icd10_codes: "claim.icd10Codes",
+  icd_codes: "claim.icd10Codes",
   modifiers: "claim.modifiers",
   timely_filing_days: "claim.timelyFilingDays",
   appeal_address_block: "claim.appealAddressBlock",
@@ -134,6 +137,8 @@ export function buildLedgerFromExtraction(opts: {
     "carc_codes",
     "rarc_codes",
     "cpt_codes",
+    "icd10_codes",
+    "icd_codes",
     "modifiers",
   ]);
 

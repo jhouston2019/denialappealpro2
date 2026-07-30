@@ -269,6 +269,53 @@ export function validateLetter(
     });
   }
 
+  // 8b. icd10_codes_required — diagnosis codes from extraction must reach the letter
+  const icdValue = getValue(ledger, "claim.icd10Codes");
+  if (!isPresent(icdValue)) {
+    errors.push({
+      rule: "icd10_codes_required",
+      message: "ICD-10 diagnosis code(s) are required before letter export",
+      factKey: "claim.icd10Codes",
+      wizardStep: 2,
+    });
+  } else {
+    const needles = renderNeedles("claim.icd10Codes", icdValue);
+    const hay = text.toLowerCase();
+    const found = needles.some((n) => n && hay.includes(n.toLowerCase()));
+    if (!found) {
+      errors.push({
+        rule: "icd10_codes_rendered",
+        message: "ICD-10 code(s) are populated but not rendered in the letter",
+        factKey: "claim.icd10Codes",
+        wizardStep: 4,
+      });
+    }
+  }
+
+  // 8c. signature_provider_fields — closing block must include provider identity
+  const sigMatch = text.match(/\nSincerely,?\s*\n([\s\S]*?)(?:\n\s*Enclosures:|$)/i);
+  if (sigMatch) {
+    const sigBlock = sigMatch[1];
+    const npiRaw = String(getValue(ledger, "provider.npi") ?? "").replace(/\D/g, "");
+    if (npiRaw && !sigBlock.includes(npiRaw)) {
+      errors.push({
+        rule: "signature_provider_npi",
+        message: "Signature block must include provider NPI",
+        factKey: "provider.npi",
+        wizardStep: 3,
+      });
+    }
+    const providerName = String(getValue(ledger, "provider.name") ?? "").trim();
+    if (providerName && !sigBlock.toLowerCase().includes(providerName.toLowerCase())) {
+      errors.push({
+        rule: "signature_provider_name",
+        message: "Signature block must include provider/practice name",
+        factKey: "provider.name",
+        wizardStep: 3,
+      });
+    }
+  }
+
   // 9. all_required_facts_rendered — every non-null ALWAYS_REQUIRED value must appear
   for (const key of ALWAYS_REQUIRED) {
     const v = getValue(ledger, key);
@@ -688,6 +735,12 @@ function renderNeedles(key: FactKey, value: FactValue): string[] {
   }
   if (key === "claim.rarcCodes" || key.endsWith("rarcCodes")) {
     out.push(formatRarc(raw));
+  }
+  if (key === "claim.icd10Codes" || key === "clinical.icd10Codes") {
+    out.push(raw.toUpperCase());
+  }
+  if (key === "patient.planType") {
+    out.push(raw.replace(/-/g, " "));
   }
   if (key === "provider.npi") {
     out.push(formatNpi(raw));

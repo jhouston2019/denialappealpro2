@@ -217,11 +217,26 @@ export function serializeStrategyForPrompt(ledger: FactLedger): string {
     lines.push(
       "TONE: Corrective, not adversarial. Request reprocessing of the claim with the authorization number on file."
     );
+    lines.push(
+      "AUTHORIZATION STATUS: Cite claim.authorizationNumber exactly, including date obtained and approving entity if present in the ledger."
+    );
   }
 
   if (strategy.id === "authorization" && branch?.id === "D") {
     lines.push(
-      "REQUIRED ARGUMENT THREADS: (1) retroactive authorization, (2) notice/waiver of auth requirements, (3) disproportionate remedy. Clinical argument follows administrative sections only if clinical.* facts are present."
+      "REQUIRED ARGUMENT THREADS: (1) retroactive authorization review, (2) notice/waiver of auth requirements, (3) disproportionate remedy."
+    );
+    lines.push(
+      "DO NOT characterize the service as emergent, urgent, or unscheduled. Elective procedures are never excused from authorization requirements on an emergent basis."
+    );
+    lines.push(
+      "If claim.authorizationNumber is absent, state that no authorization number is on file and request retroactive authorization review — do not invent a clinical excuse."
+    );
+  }
+
+  if (strategy.id === "authorization") {
+    lines.push(
+      "AUTHORIZATION ARGUMENT HIERARCHY: (1) If claim.authorizationNumber is present, cite it and request reprocessing. (2) If auth was not required per plan terms, cite only plan provisions present in the ledger. (3) If auth was denied or lapsed, argue medical necessity only when clinical.* facts are present and request retroactive review. (4) NEVER fabricate emergent/urgent justification for missing authorization."
     );
   }
 

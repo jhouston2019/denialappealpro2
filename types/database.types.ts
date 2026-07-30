@@ -764,7 +764,16 @@ export type Database = {
           email: string
           id: string
           plan_type: string | null
+          provider_address: string | null
+          provider_fax: string | null
+          provider_name: string | null
+          provider_npi: string | null
+          provider_phone: string | null
           role: string | null
+          signer_credentials: string | null
+          signer_name: string | null
+          signer_phone: string | null
+          signer_title: string | null
           stripe_customer_id: string | null
           team_id: string | null
           updated_at: string | null
@@ -774,7 +783,16 @@ export type Database = {
           email: string
           id: string
           plan_type?: string | null
+          provider_address?: string | null
+          provider_fax?: string | null
+          provider_name?: string | null
+          provider_npi?: string | null
+          provider_phone?: string | null
           role?: string | null
+          signer_credentials?: string | null
+          signer_name?: string | null
+          signer_phone?: string | null
+          signer_title?: string | null
           stripe_customer_id?: string | null
           team_id?: string | null
           updated_at?: string | null
@@ -784,7 +802,16 @@ export type Database = {
           email?: string
           id?: string
           plan_type?: string | null
+          provider_address?: string | null
+          provider_fax?: string | null
+          provider_name?: string | null
+          provider_npi?: string | null
+          provider_phone?: string | null
           role?: string | null
+          signer_credentials?: string | null
+          signer_name?: string | null
+          signer_phone?: string | null
+          signer_title?: string | null
           stripe_customer_id?: string | null
           team_id?: string | null
           updated_at?: string | null

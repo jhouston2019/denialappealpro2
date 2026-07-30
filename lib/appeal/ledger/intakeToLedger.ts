@@ -56,6 +56,7 @@ export function applyIntakeToLedger(
   user("claim.carcCodes", arrOrNull(intake.carcCodes), "carcCodes", 2);
   user("claim.rarcCodes", arrOrNull(intake.rarcCodes), "rarcCodes", 2);
   user("claim.cptCodes", arrOrNull(intake.cptCodes), "cptCodes", 2);
+  user("claim.icd10Codes", arrOrNull(intake.icdCodes), "icdCodes", 3);
   user(
     "claim.modifiers",
     intake.modifiers?.trim()
