@@ -141,6 +141,15 @@ export function Step3ConfirmPanel({
   const needsPlanType = intake.planType == null;
   const needsPrimaryDiagnosis =
     route.strategy.id === "medical-necessity" && !intake.primaryDiagnosis?.trim();
+  const effectiveSignerName =
+    intake.signerName?.trim() || intake.providerName?.trim() || "";
+  const needsProviderDetails =
+    !intake.providerName?.trim() ||
+    !intake.providerNpi?.trim() ||
+    !intake.providerAddress?.trim() ||
+    !intake.providerPhone?.trim() ||
+    !effectiveSignerName ||
+    !intake.signerTitle?.trim();
 
   const list =
     enclosures.length > 0
@@ -399,6 +408,12 @@ export function Step3ConfirmPanel({
             style={inputStyle}
           />
         </label>
+        {needsProviderDetails ? (
+          <p className="sm:col-span-2 text-sm font-medium text-[#b45309]" role="alert">
+            Provider name, NPI, address, phone, and signer title are required before
+            continuing. Signer name defaults to provider name when left blank.
+          </p>
+        ) : null}
         <label className="block">
           <span className="mb-1 block text-sm font-semibold">Billed amount</span>
           <input
@@ -611,9 +626,16 @@ export function Step3ConfirmPanel({
             needsBundlingBranch ||
             needsTimelyFilingBranch ||
             needsPlanType ||
-            needsPrimaryDiagnosis
+            needsPrimaryDiagnosis ||
+            needsProviderDetails
           }
           onClick={() => {
+            if (needsProviderDetails) {
+              announce(
+                "Complete provider name, NPI, address, phone, and signer title before continuing."
+              );
+              return;
+            }
             if (needsPlanType) {
               announce("Select plan type before continuing.");
               return;
