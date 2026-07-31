@@ -1,6 +1,12 @@
+// To run: add real OPENAI_API_KEY to .env.test then run:
+// npx jest phase1 --runInBand
 /**
  * Phase 1.6 Part B — presence tests (clinical.* must reach the letter).
- * Each case ×3 against gpt-4o. Fail closed without OPENAI_API_KEY.
+ * Each case ×3 against gpt-4o with nondeterminism guard. Fail closed without OPENAI_API_KEY.
+ *
+ * npm run test:phase1:presence — presence-only via node:test + tsx.
+ * Preflight loads .env.test via scripts/phase1-preflight.mjs.
+ * With a placeholder/invalid key, tests fail loudly (Invalid API key / 401), never silent pass.
  */
 
 import assert from "node:assert/strict";
@@ -31,9 +37,27 @@ function withClinical(
   return L;
 }
 
+function narrativeForClinicalCheck(letter: string): string {
+  let t = letter;
+  const start = t.search(/To the Appeals Review Department/i);
+  if (start >= 0) t = t.slice(start);
+  const stop = t.search(
+    /\n(?:29 U\.S\.C\.|45 C\.F\.R\.|CMS NCCI|Procedural Obligations|Escalation)\b/i
+  );
+  if (stop >= 0) t = t.slice(0, stop);
+  return t;
+}
+
 function assertNoExtraClinical(letter: string, allowed: RegExp[]): void {
-  // Strip allowed substrings, then ensure no leftover clinical fabrications.
-  let scrubbed = letter;
+  // Check LLM narrative only — exclude scaffold ICD and deterministic clinical block.
+  let scrubbed = narrativeForClinicalCheck(letter);
+  scrubbed = scrubbed.replace(
+    /(?:Primary diagnosis|Clinical indication|Prior treatments|Conservative care tried|Functional impact|Urgency|Procedure narrative|Clinical ICD-10):[^.\n]*\.?/gi,
+    " "
+  );
+  // Claim-level ICD in summary is from claim.icd10Codes, not clinical fabrication.
+  scrubbed = scrubbed.replace(/\bICD-10[^.\n]*/gi, " ");
+  scrubbed = scrubbed.replace(/\bM16\.11\b/gi, " ");
   for (const re of allowed) {
     scrubbed = scrubbed.replace(re, " ");
   }

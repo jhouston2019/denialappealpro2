@@ -1,7 +1,12 @@
+// To run: add real OPENAI_API_KEY to .env.test then run:
+// npx jest phase1 --runInBand
 /**
  * Phase 1.6 Part H — Cigna fixture tests.
- * Tests 3–6 run against gpt-4o (fail closed without OPENAI_API_KEY).
+ * Tests 3–6 run against gpt-4o (×3, nondeterminism guard). Fail closed without OPENAI_API_KEY.
  * Wired into: npm run test:phase1
+ *
+ * Preflight loads .env.test via scripts/phase1-preflight.mjs.
+ * With a placeholder/invalid key, tests fail loudly (Invalid API key / 401), never silent pass.
  */
 
 import assert from "node:assert/strict";

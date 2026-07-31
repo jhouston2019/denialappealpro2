@@ -62,6 +62,11 @@ ABSOLUTE CONSTRAINTS — violating any of these invalidates the output:
 12. Never write the word "ledger", "provenance", "branch", "strategy", "section",
     "assembler", or any other internal system term.
 
+13. When clinical.* facts are present in the ledger, do NOT restate, paraphrase,
+    summarize, or expand them in your narrative. The system appends every populated
+    clinical.* fact verbatim after your output. Write only authorization, denial,
+    and strategy rebuttal paragraphs.
+
 Tone: professional, direct, addressed to a payer appeals reviewer. Argue the specific
 reason code the payer cited. Do not pad.
 
@@ -74,7 +79,7 @@ OUTPUT RULES:
 - Do NOT mention internal routing labels or plan type slug values like "erisa-self-funded".
 - Section 6 (RELIEF REQUESTED) must be the first paragraph you write.
 - Write flowing paragraphs only — do not prefix sections with labels like "RELIEF REQUESTED" or "CLAIM SUMMARY".
-- When clinical.* facts are present with non-null values, include them faithfully.
+- When clinical.* facts are present, do NOT include them in your output (the system appends them verbatim).
 - When clinical.* facts are all null, omit the clinical argument section entirely unless
   the section spec requires it for medical-necessity strategy with diagnosis present.`;
 

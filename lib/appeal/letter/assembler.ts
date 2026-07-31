@@ -54,6 +54,36 @@ function hasClinicalFacts(ledger: FactLedger): boolean {
   return CLINICAL_KEYS.some((key) => isPresent(getValue(ledger, key)));
 }
 
+/** Deterministic clinical block — every populated clinical.* fact, no expansion. */
+export function buildClinicalArgumentBlock(ledger: FactLedger): string {
+  if (!hasClinicalFacts(ledger)) return "";
+
+  const segments: string[] = [];
+  const fields: Array<[FactKey, string]> = [
+    ["clinical.primaryDiagnosis", "Primary diagnosis"],
+    ["clinical.indication", "Clinical indication"],
+    ["clinical.priorTreatments", "Prior treatments"],
+    ["clinical.conservativeCareTried", "Conservative care tried"],
+    ["clinical.functionalImpact", "Functional impact"],
+    ["clinical.urgency", "Urgency"],
+    ["clinical.procedureNarrative", "Procedure narrative"],
+  ];
+
+  for (const [key, label] of fields) {
+    const value = getValue(ledger, key);
+    if (isPresent(value)) {
+      segments.push(`${label}: ${str(value)}.`);
+    }
+  }
+
+  const icdClinical = arr(getValue(ledger, "clinical.icd10Codes"));
+  if (icdClinical.length) {
+    segments.push(`Clinical ICD-10: ${icdClinical.join(", ")}.`);
+  }
+
+  return segments.join(" ");
+}
+
 function resolvePlanType(ledger: FactLedger): PlanType {
   const v = getValue(ledger, "patient.planType");
   const s = String(v ?? "").trim();
@@ -104,31 +134,23 @@ export function stripContentAfterEnclosures(text: string): string {
   const match = t.match(/\n\s*Enclosures:\s*\n/i);
   if (!match || match.index == null) return t.replace(/\s+$/, "");
 
-  const start = match.index;
-  const tail = t.slice(start);
-  const lines = tail.split("\n");
-  let endOffset = 0;
-  let inList = false;
+  const head = t.slice(0, match.index);
+  const tailLines = t.slice(match.index + 1).split("\n");
+  const kept: string[] = [];
+  let i = 0;
+  while (i < tailLines.length && !/^\s*Enclosures:\s*$/i.test(tailLines[i])) {
+    i++;
+  }
+  if (i >= tailLines.length) return t.replace(/\s+$/, "");
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (/^\s*Enclosures:\s*$/i.test(line)) {
-      inList = true;
-      endOffset += line.length + 1;
-      continue;
-    }
-    if (inList && /^\s*-\s/.test(line)) {
-      endOffset += line.length + 1;
-      continue;
-    }
-    if (inList && !line.trim()) {
-      endOffset += line.length + 1;
-      break;
-    }
-    if (inList) break;
+  kept.push(tailLines[i]);
+  i++;
+  while (i < tailLines.length && /^\s*-\s/.test(tailLines[i])) {
+    kept.push(tailLines[i]);
+    i++;
   }
 
-  return t.slice(0, start + endOffset).replace(/\s+$/, "");
+  return `${head}\n${kept.join("\n")}`.replace(/\s+$/, "");
 }
 
 /** System-rendered modifier-25 / NCCI bundling argument for CARC 4 + M144. */
@@ -492,6 +514,10 @@ export function assembleLetterParts(
     const bundlingBlock = buildCarc4M144BundlingArgument(ledger);
     narrative = [narrative.trim(), bundlingBlock].filter(Boolean).join("\n\n");
   }
+  const clinicalBlock = buildClinicalArgumentBlock(ledger);
+  if (clinicalBlock) {
+    narrative = [narrative.trim(), clinicalBlock].filter(Boolean).join("\n\n");
+  }
   const authSection = buildAuthorities(ledger, authorities);
   const procedural = buildProcedural(ledger, planType);
   const escalation = buildEscalation(ledger, planType);
@@ -537,7 +563,7 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
 
   if (strategyId === "medical-necessity") {
     lines.push(
-      "9. CLINICAL ARGUMENT — All populated clinical.* facts from ledger. This section leads the rebuttal. No expansion beyond ledger content.",
+      "9. CLINICAL ARGUMENT — Omit from your output; the system appends populated clinical.* facts verbatim after your narrative.",
       "",
       "10. STRATEGY ARGUMENT — Medical necessity rebuttal. Structure:",
       "Paragraph 1 — Lead: State that the payer's necessity determination is not supported by the clinical record. Do not restate the denial reason; challenge it directly.",
@@ -579,7 +605,9 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
       "10. STRATEGY ARGUMENT — Follow DENIAL STRATEGY and branch lead argument exactly.",
       "NEVER claim the service was emergent, urgent, or unscheduled unless clinical.urgency is populated.",
       "Include claim.icd10Codes and clinical.primaryDiagnosis in the claim summary when present.",
-      "Omit clinical argument entirely unless clinical.* facts are present in the ledger."
+      hasClinicalFacts(ledger)
+        ? "10. CLINICAL ARGUMENT — Omit from your output; the system appends populated clinical.* facts verbatim after your narrative."
+        : "10. CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in the ledger)."
     );
     if (route.branch?.id === "D") {
       lines.push(
@@ -592,7 +620,7 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
     );
     if (clinical) {
       lines.push(
-        "10. CLINICAL ARGUMENT — All populated clinical.* facts from ledger. No expansion beyond ledger content."
+        "10. CLINICAL ARGUMENT — Omit from your output; the system appends populated clinical.* facts verbatim after your narrative."
       );
     } else {
       lines.push("10. CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in ledger).");

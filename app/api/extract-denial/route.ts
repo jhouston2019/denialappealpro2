@@ -23,6 +23,10 @@ import {
   EXTRACT_DENIAL_RATE_LIMIT_MESSAGE,
 } from "@/lib/rate-limit/extractDenialRateLimit";
 import { captureRouteException } from "@/lib/sentry/captureRouteException";
+import {
+  MalformedPdfError,
+  parsePdfBuffer,
+} from "@/lib/appeal/extract/parsePdfBuffer";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -126,9 +130,7 @@ Use null for unknown scalars and [] for unknown arrays (not empty string for sca
 type RawExtract = Record<string, unknown>;
 
 async function extractTextFromPDF(pdfBuffer: Buffer): Promise<string> {
-  const pdfParse = (await import("pdf-parse")).default;
-  const data = await pdfParse(pdfBuffer);
-  return String(data.text || "").trim();
+  return parsePdfBuffer(pdfBuffer);
 }
 
 function dedupe(arr: unknown[]): string[] {
@@ -385,7 +387,17 @@ export async function POST(request: NextRequest) {
       }
       documentId = file.name || "upload";
       const arrayBuffer = await file.arrayBuffer();
-      rawText = await extractTextFromPDF(Buffer.from(arrayBuffer));
+      try {
+        rawText = await extractTextFromPDF(Buffer.from(arrayBuffer));
+      } catch (err) {
+        if (err instanceof MalformedPdfError) {
+          return NextResponse.json(
+            { success: false, error: err.message },
+            { status: 422 }
+          );
+        }
+        throw err;
+      }
     } else {
       let body: { text?: string } = {};
       try {

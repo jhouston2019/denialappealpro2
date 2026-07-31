@@ -16,6 +16,7 @@
     "test:phase1": "node scripts/phase1-preflight.mjs && npx tsx --test lib/appeal/ledger/__tests__/builder.test.ts lib/appeal/__tests__/phase1.test.ts __tests__/appeal/part-h-cigna.test.ts __tests__/appeal/grounding-presence.test.ts",
     "test:phase1:adversarial": "node scripts/phase1-preflight.mjs && npx tsx --test __tests__/appeal/grounding-adversarial.test.ts",
     "test:phase1:presence": "node scripts/phase1-preflight.mjs && npx tsx --test __tests__/appeal/grounding-presence.test.ts",
+    "test:phase1.6": "node scripts/phase1-preflight.mjs && npx tsx --test __tests__/appeal/part-h-cigna.test.ts __tests__/appeal/grounding-presence.test.ts __tests__/appeal/grounding-adversarial.test.ts",
     "test:phase1:golden-letters": "node scripts/phase1-preflight.mjs && npx tsx scripts/phase1-golden-letters.mjs",
     "test:phase2": "node scripts/phase1-preflight.mjs && npx tsx --test __tests__/appeal/phase2.test.ts",
     "test:phase2:letters": "node scripts/phase1-preflight.mjs && npx tsx scripts/phase2-sample-letters.mjs",

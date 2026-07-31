@@ -6,7 +6,7 @@ import {
   formatLetterDate,
 } from "../format/render";
 import { getAuthoritiesForLedger } from "../authorities/gate";
-import { assembleLetter, hasClinicalFacts } from "../letter/assembler";
+import { assembleLetter } from "../letter/assembler";
 import { routeDenial } from "../router/index";
 import type { GenerationResult } from "./types";
 
@@ -88,35 +88,7 @@ export function deterministicGroundedDraft(ledger: FactLedger): GenerationResult
 
   const strategyArg = route.strategy.leadArgument;
 
-  const clinicalParas: string[] = [];
-  if (hasClinicalFacts(ledger)) {
-    const diagnosis = getValue(ledger, "clinical.primaryDiagnosis");
-    const indication = getValue(ledger, "clinical.indication");
-    const prior = getValue(ledger, "clinical.priorTreatments");
-    const conservative = getValue(ledger, "clinical.conservativeCareTried");
-    const functional = getValue(ledger, "clinical.functionalImpact");
-
-    if (!valueEmpty(diagnosis as FactValue)) {
-      clinicalParas.push(`Primary diagnosis: ${fmt(diagnosis)}.`);
-    }
-    if (!valueEmpty(indication as FactValue)) {
-      clinicalParas.push(`Clinical indication: ${fmt(indication)}.`);
-    }
-    if (!valueEmpty(prior as FactValue)) {
-      clinicalParas.push(`Prior treatments: ${fmt(prior)}.`);
-    }
-    if (!valueEmpty(conservative as FactValue)) {
-      clinicalParas.push(`Conservative care tried: ${fmt(conservative)}.`);
-    }
-    if (!valueEmpty(functional as FactValue)) {
-      clinicalParas.push(`Functional impact: ${fmt(functional)}.`);
-    }
-  }
-
   const narrativeParts = [relief, claimSummary, denialBasis, strategyArg];
-  if (clinicalParas.length) {
-    narrativeParts.push(clinicalParas.join(" "));
-  }
   if (missing.length) {
     narrativeParts.push(missing.map((k) => req(k)).join(" "));
   }

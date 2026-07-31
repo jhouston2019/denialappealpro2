@@ -1,6 +1,11 @@
+// To run: add real OPENAI_API_KEY to .env.test then run:
+// npx jest phase1 --runInBand
 /**
- * Phase 1.6 — adversarial grounding checks against gpt-4o (×3 each).
- * Run: npm run test:phase1:adversarial
+ * Phase 1.6 — adversarial grounding checks against gpt-4o (×3 each, nondeterminism guard).
+ *
+ * npm run test:phase1:adversarial — via node:test + tsx.
+ * Preflight loads .env.test via scripts/phase1-preflight.mjs.
+ * With a placeholder/invalid key, tests fail loudly (Invalid API key / 401), never silent pass.
  */
 
 import assert from "node:assert/strict";
