@@ -69,8 +69,28 @@ function patientNameFromLedger(ledger) {
   return s || null;
 }
 
+function captureSentryException(error, context) {
+  if (!process.env.SENTRY_DSN) return;
+  try {
+    const Sentry = require("@sentry/node");
+    Sentry.init({ dsn: process.env.SENTRY_DSN, tracesSampleRate: 0.1 });
+    if (context) {
+      Sentry.withScope((scope) => {
+        scope.setContext("generate-appeal", context);
+        Sentry.captureException(error);
+      });
+      return;
+    }
+    Sentry.captureException(error);
+  } catch {
+    /* Sentry optional */
+  }
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return optionsResponse();
+
+  try {
 
   if (event.httpMethod !== "POST") {
     return {
@@ -146,6 +166,7 @@ exports.handler = async (event) => {
       model: "gpt-4o",
     });
   } catch (e) {
+    captureSentryException(e, { route: "generate-appeal" });
     console.error("[generate-appeal] generate:", e);
     return {
       statusCode: 502,
@@ -220,4 +241,16 @@ exports.handler = async (event) => {
       generatorPath,
     }),
   };
+  } catch (err) {
+    captureSentryException(err, { route: "generate-appeal", stage: "handler" });
+    console.error("[generate-appeal] unhandled:", err);
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        success: false,
+        error: err?.message || "Internal server error",
+      }),
+    };
+  }
 };

@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Suspense } from "react";
-import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
+import { BrandLogo } from "@/components/BrandLogo";
+import { Suspense } from "react";import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
 import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
 import { DeliverablesHubClient } from "./DeliverablesHubClient";
 import "@/app/upload/dap-wizard.css";
@@ -27,18 +26,11 @@ export default async function DeliverablesPage() {
     <div className="dap-wizard-shell flex min-h-screen flex-col bg-[#0f2744]">
       <header className="sticky top-0 z-[100] border-b border-[#1e3f6e] bg-[#091c33] text-white">
         <div className="mx-auto flex min-h-12 max-w-6xl flex-col gap-2 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:px-6 sm:py-0">
-          <Link
+          <BrandLogo
+            size="sm"
             href="/"
-            className="flex min-w-0 items-center gap-2"
-            aria-label="Denial Appeal Pro home"
-          >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#f0a050]">
-              <span className="text-xs font-black text-white">ER</span>
-            </div>
-            <span className="truncate text-xs font-semibold text-[#e8f0f8] sm:text-sm">
-              Denial Appeal Pro
-            </span>
-          </Link>
+            className="[&_span]:text-[#e8f0f8]"
+          />
         </div>
       </header>
 

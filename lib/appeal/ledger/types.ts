@@ -62,7 +62,12 @@ export type FactKey =
   | "appeal.deadline"
   | "appeal.authBranch"
   | "appeal.bundlingBranch"
-  | "appeal.timelyFilingBranch";
+  | "appeal.timelyFilingBranch"
+  | "appeal.claimDefectBranch"
+  | "appeal.nonCoveredBranch"
+  | "appeal.duplicateBranch"
+  | "appeal.experimentalBranch"
+  | "appeal.wrongPayerBranch";
 
 export type FactValue = string | number | string[] | null;
 

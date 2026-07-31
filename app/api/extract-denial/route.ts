@@ -16,6 +16,13 @@ import {
   sanitizeProviderName,
 } from "@/lib/appeal/ledger/providerExtract";
 import type { FactLedger } from "@/lib/appeal/ledger/types";
+import { createSupabaseRouteHandlerClient } from "@/lib/supabaseServer";
+import {
+  checkExtractDenialRateLimit,
+  clientIpFromRequest,
+  EXTRACT_DENIAL_RATE_LIMIT_MESSAGE,
+} from "@/lib/rate-limit/extractDenialRateLimit";
+import { captureRouteException } from "@/lib/sentry/captureRouteException";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -343,6 +350,26 @@ async function extractWithOpenAI(rawText: string): Promise<RawExtract> {
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = clientIpFromRequest(request);
+    let authenticated = false;
+    try {
+      const supabase = await createSupabaseRouteHandlerClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      authenticated = Boolean(user?.id);
+    } catch {
+      authenticated = false;
+    }
+
+    const rate = checkExtractDenialRateLimit({ ip, authenticated });
+    if (!rate.allowed) {
+      return NextResponse.json(
+        { success: false, error: EXTRACT_DENIAL_RATE_LIMIT_MESSAGE },
+        { status: 429 }
+      );
+    }
+
     const contentType = request.headers.get("content-type") || "";
     let rawText = "";
     let documentId = "upload";
@@ -420,6 +447,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (e) {
+    await captureRouteException(e, { route: "extract-denial" });
     console.error("[extract-denial]", e);
     const message = e instanceof Error ? e.message : "Extraction failed";
     return NextResponse.json(

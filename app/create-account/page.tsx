@@ -42,7 +42,7 @@ export default async function CreateAccountPage({
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2563EB]">
-              <span className="text-sm font-black text-white">ER</span>
+              <span className="text-sm font-black text-white">DAP</span>
             </div>
             <span className="text-sm font-semibold text-white">
               Denial Appeal Pro

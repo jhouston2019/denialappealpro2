@@ -44,6 +44,31 @@ export type TimelyFilingBranchId =
   | "good-cause"
   | "plan-error";
 
+export type ClaimDefectBranchId =
+  | "missing-info"
+  | "invalid-info"
+  | "duplicate-submission-flag";
+
+export type NonCoveredBranchId =
+  | "categorical-exclusion"
+  | "frequency-limit"
+  | "benefit-exhausted";
+
+export type DuplicateBranchId =
+  | "true-duplicate-error"
+  | "resubmission-after-correction"
+  | "split-billing";
+
+export type ExperimentalBranchId =
+  | "fda-approved"
+  | "off-label"
+  | "no-ncd";
+
+export type WrongPayerBranchId =
+  | "primary"
+  | "secondary"
+  | "medicare-secondary";
+
 export interface StrategyBranch {
   id: string;
   label: string;
@@ -278,6 +303,385 @@ export const MEDICAL_NECESSITY_STRATEGY: DenialStrategy = {
   clinicalWarning: `Medical necessity appeal: clinical.primaryDiagnosis is required. Populate in Step 3 before generating. Other clinical fields strengthen the argument significantly — conservativeCareTried and functionalImpact are highest value.`,
 };
 
+const CLAIM_DEFECT_BRANCHES: StrategyBranch[] = [
+  {
+    id: "missing-info",
+    label: "Missing information cited — information is on file or enclosed",
+    leadArgument:
+      "The payer denied this claim for missing information. The cited deficiency does not reflect the actual submission record. All required data elements are present on the original claim or are enclosed with this appeal. The denial is a technical processing error, not a clinical or coverage determination. Correct the record and reprocess.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "procedural-obligations",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.number", "patient.name", "patient.memberId"],
+  },
+  {
+    id: "invalid-info",
+    label: "Invalid information cited — values are correct on the claim",
+    leadArgument:
+      "The payer identified invalid claim data. The billed codes, modifiers, dates, and identifiers are valid and consistent with the clinical record and payer files. The defect asserted by the payer does not exist or has been corrected. Request reprocessing with the corrected claim data reflected in the enclosed documentation.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "procedural-obligations",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.number", "claim.cptCodes", "claim.dateOfService"],
+  },
+  {
+    id: "duplicate-submission-flag",
+    label: "Claim flagged as duplicate submission in error",
+    leadArgument:
+      "The payer treated this resubmission as a defective duplicate filing. This claim is a corrected or original submission distinct from any prior transaction. The technical submission flag does not negate coverage or medical necessity. Reprocess as a valid claim, not as a duplicate denial.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.number"],
+  },
+];
+
+export const CLAIM_DEFECT_STRATEGY: DenialStrategy = {
+  id: "claim-defect",
+  leadArgument:
+    "This claim was denied for a technical deficiency, not for clinical reasons. The cited defect has been corrected or was not present on the original submission. The payer must reprocess the claim and cannot use an administrative coding error to avoid its coverage obligation.",
+  sectionOrder: [
+    "relief-requested",
+    "claim-summary",
+    "denial-basis",
+    "administrative-argument",
+    "procedural-obligations",
+    "authority-sections",
+    "escalation",
+    "signature",
+  ],
+  requiredFacts: [
+    "claim.number",
+    "claim.cptCodes",
+    "patient.name",
+    "patient.memberId",
+  ],
+  branchQuestion: "What type of claim defect was cited?",
+  branches: CLAIM_DEFECT_BRANCHES,
+};
+
+const NON_COVERED_BRANCHES: StrategyBranch[] = [
+  {
+    id: "categorical-exclusion",
+    label: "Categorical exclusion — service is covered under the plan",
+    leadArgument:
+      "The payer applied a categorical exclusion that does not apply to this service. The procedure is a covered benefit under the patient's plan documents and, where applicable, under ACA essential health benefit requirements. Demand the specific plan provision supporting exclusion and reverse the denial.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "authority-sections",
+      "procedural-obligations",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.cptCodes", "patient.planType"],
+  },
+  {
+    id: "frequency-limit",
+    label: "Frequency or unit limit — limit not exceeded or medically necessary",
+    leadArgument:
+      "The payer denied based on a frequency or unit limit. The member has not exceeded the applicable benefit limit for this service period, or additional units are medically necessary based on the enclosed clinical documentation. Apply medical policy on its merits rather than a blanket frequency cap.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "clinical-argument",
+      "authority-sections",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.cptCodes", "clinical.primaryDiagnosis"],
+  },
+  {
+    id: "benefit-exhausted",
+    label: "Benefit exhausted — benefits remain or exception applies",
+    leadArgument:
+      "The payer asserts that plan benefits for this service category are exhausted. Plan records and the member's benefit summary demonstrate remaining eligibility, or an exception applies for medically necessary care. Provide the benefit verification and demand payment for the denied amount.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "authority-sections",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["patient.memberId", "patient.planType"],
+  },
+];
+
+export const NON_COVERED_STRATEGY: DenialStrategy = {
+  id: "non-covered",
+  leadArgument:
+    "The service is covered under the plan's essential health benefits or the provider's participation agreement. The exclusion cited by the payer is inapplicable, unsupported by plan language, or contradicted by the member's active benefit election.",
+  sectionOrder: [
+    "relief-requested",
+    "claim-summary",
+    "denial-basis",
+    "administrative-argument",
+    "authority-sections",
+    "procedural-obligations",
+    "escalation",
+    "signature",
+  ],
+  requiredFacts: [
+    "claim.number",
+    "claim.cptCodes",
+    "claim.deniedAmount",
+    "patient.name",
+    "patient.memberId",
+    "patient.planType",
+  ],
+  branchQuestion: "What type of non-covered denial was asserted?",
+  branches: NON_COVERED_BRANCHES,
+};
+
+const DUPLICATE_BRANCHES: StrategyBranch[] = [
+  {
+    id: "true-duplicate-error",
+    label: "Not a duplicate — DOS, service, or provider differs",
+    leadArgument:
+      "This is not a duplicate claim. The date of service, procedure code, rendering provider, or claim number differs from the allegedly matching paid or denied claim. Identify the duplicate claim number the payer relied upon and demonstrate that the services are distinct. Demand reprocessing and payment.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "procedural-obligations",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.number", "claim.dateOfService", "claim.cptCodes"],
+  },
+  {
+    id: "resubmission-after-correction",
+    label: "Corrected resubmission after payer rejection",
+    leadArgument:
+      "This submission is a corrected claim following payer rejection or request for correction, not a duplicate of a paid service. The original was never paid in full. Reprocess the corrected claim and apply payment to the denied balance.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.number"],
+  },
+  {
+    id: "split-billing",
+    label: "Split billing — distinct line items or modifiers",
+    leadArgument:
+      "The payer improperly treated separately billable line items as duplicates. Modifier usage, distinct procedure codes, or separate dates of service support independent payment. Unbundle and pay each eligible line.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "bundling-argument",
+      "administrative-argument",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.cptCodes", "claim.modifiers"],
+  },
+];
+
+export const DUPLICATE_STRATEGY: DenialStrategy = {
+  id: "duplicate",
+  leadArgument:
+    "This is not a duplicate claim. Either the date of service, service, rendering provider, or billed amount differs from the previously adjudicated claim, or the original claim was never paid. Request identification of the alleged duplicate claim number and demand reprocessing.",
+  sectionOrder: [
+    "relief-requested",
+    "claim-summary",
+    "denial-basis",
+    "administrative-argument",
+    "procedural-obligations",
+    "escalation",
+    "signature",
+  ],
+  requiredFacts: [
+    "claim.number",
+    "claim.dateOfService",
+    "claim.cptCodes",
+    "patient.name",
+  ],
+  branchQuestion: "Why is this not a duplicate?",
+  branches: DUPLICATE_BRANCHES,
+};
+
+const EXPERIMENTAL_BRANCHES: StrategyBranch[] = [
+  {
+    id: "fda-approved",
+    label: "FDA-approved or cleared for this indication",
+    leadArgument:
+      "The service is not experimental. It is FDA-approved or FDA-cleared for the billed indication, widely adopted in clinical practice, and supported by peer-reviewed literature. The payer's technology assessment or medical policy is outdated or misapplied. Demand coverage consistent with FDA labeling and CMS national coverage determinations where applicable.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "clinical-argument",
+      "authority-sections",
+      "procedural-obligations",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.cptCodes", "clinical.primaryDiagnosis"],
+  },
+  {
+    id: "off-label",
+    label: "Off-label use supported by clinical evidence",
+    leadArgument:
+      "Even if the payer characterizes use as off-label, the treatment is supported by compendia listings, specialty society guidelines, and peer-reviewed evidence for this diagnosis. Off-label use does not equate to experimental or investigational status. Request independent medical review under plan and state external review requirements.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "clinical-argument",
+      "authority-sections",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["clinical.primaryDiagnosis", "clinical.procedureNarrative"],
+  },
+  {
+    id: "no-ncd",
+    label: "No applicable NCD/LCD — local coverage supports payment",
+    leadArgument:
+      "No CMS national coverage determination prohibits payment for this service in this clinical context. Applicable local coverage determinations and plan medical policy, when correctly applied, support coverage. The payer must cite a specific, binding coverage rule rather than a generic experimental denial.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "clinical-argument",
+      "authority-sections",
+      "procedural-obligations",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["claim.cptCodes"],
+  },
+];
+
+export const EXPERIMENTAL_STRATEGY: DenialStrategy = {
+  id: "experimental",
+  leadArgument:
+    "The service is not experimental or investigational. It is supported by peer-reviewed literature, FDA approval or clearance where applicable, and established clinical guidelines for this patient population.",
+  sectionOrder: [
+    "relief-requested",
+    "claim-summary",
+    "denial-basis",
+    "clinical-argument",
+    "authority-sections",
+    "procedural-obligations",
+    "escalation",
+    "signature",
+  ],
+  requiredFacts: [
+    "claim.cptCodes",
+    "clinical.primaryDiagnosis",
+    "patient.name",
+  ],
+  branchQuestion: "What evidence rebuts the experimental denial?",
+  branches: EXPERIMENTAL_BRANCHES,
+  clinicalWarning:
+    "Experimental/investigational appeal: clinical.primaryDiagnosis and clinical.procedureNarrative strongly recommended before generation.",
+};
+
+const WRONG_PAYER_BRANCHES: StrategyBranch[] = [
+  {
+    id: "primary",
+    label: "This payer is the primary payer",
+    leadArgument:
+      "This payer is the primary payer of record for this service. Coordination of benefits does not shift liability to another carrier. The claim was correctly directed here. Reprocess and pay the provider portion.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "procedural-obligations",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["patient.memberId", "patient.planType"],
+  },
+  {
+    id: "secondary",
+    label: "Secondary payer — primary EOB attached",
+    leadArgument:
+      "This payer is the secondary payer under coordination of benefits rules. Primary payer adjudication is complete and the explanation of benefits is enclosed. Calculate secondary liability from the primary allowed amount and pay the remaining covered balance.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "authority-sections",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["patient.memberId", "claim.paidAmount"],
+  },
+  {
+    id: "medicare-secondary",
+    label: "Medicare secondary payer rules apply",
+    leadArgument:
+      "Medicare secondary payer rules govern payment order for this claim. The enclosed eligibility and primary payer records establish that this plan remains liable either as primary or as secondary under MSP provisions. Reprocess under the correct COB hierarchy.",
+    sectionOrder: [
+      "relief-requested",
+      "claim-summary",
+      "denial-basis",
+      "administrative-argument",
+      "authority-sections",
+      "procedural-obligations",
+      "escalation",
+      "signature",
+    ],
+    requiredFacts: ["patient.memberId", "patient.dateOfBirth"],
+  },
+];
+
+export const WRONG_PAYER_STRATEGY: DenialStrategy = {
+  id: "wrong-payer",
+  leadArgument:
+    "This payer is the correct primary or secondary payer under coordination of benefits rules. Provide the primary payer EOB or eligibility verification and demand reprocessing under the correct COB order.",
+  sectionOrder: [
+    "relief-requested",
+    "claim-summary",
+    "denial-basis",
+    "administrative-argument",
+    "authority-sections",
+    "procedural-obligations",
+    "escalation",
+    "signature",
+  ],
+  requiredFacts: [
+    "claim.number",
+    "patient.name",
+    "patient.memberId",
+    "patient.planType",
+  ],
+  branchQuestion: "What is the correct payer order?",
+  branches: WRONG_PAYER_BRANCHES,
+};
+
 function stub(
   id: StrategyId,
   leadArgument: string,
@@ -289,24 +693,8 @@ function stub(
 
 const STRATEGIES: Record<StrategyId, DenialStrategy> = {
   authorization: AUTHORIZATION_STRATEGY,
-  "claim-defect": stub(
-    "claim-defect",
-    "Correct the identified claim submission or billing defect and request reprocessing.",
-    [
-      "relief-requested",
-      "claim-summary",
-      "denial-basis",
-      "administrative-argument",
-      "procedural-obligations",
-      "escalation",
-      "signature",
-    ]
-  ),
-  duplicate: stub(
-    "duplicate",
-    "Demonstrate this claim is not a duplicate of a previously paid or denied service.",
-    BASE_SECTIONS
-  ),
+  "claim-defect": CLAIM_DEFECT_STRATEGY,
+  duplicate: DUPLICATE_STRATEGY,
   "timely-filing": TIMELY_FILING_STRATEGY,
   contractual: stub(
     "contractual",
@@ -314,18 +702,7 @@ const STRATEGIES: Record<StrategyId, DenialStrategy> = {
     [...BASE_SECTIONS.slice(0, 3), "clinical-argument", ...BASE_SECTIONS.slice(3)]
   ),
   "medical-necessity": MEDICAL_NECESSITY_STRATEGY,
-  experimental: stub(
-    "experimental",
-    "Establish the service is not experimental or investigational.",
-    [
-      "relief-requested",
-      "claim-summary",
-      "denial-basis",
-      "clinical-argument",
-      "escalation",
-      "signature",
-    ]
-  ),
+  experimental: EXPERIMENTAL_STRATEGY,
   "not-proven": stub(
     "not-proven",
     "Establish the service is proven effective for this patient.",
@@ -338,11 +715,7 @@ const STRATEGIES: Record<StrategyId, DenialStrategy> = {
       "signature",
     ]
   ),
-  "non-covered": stub(
-    "non-covered",
-    "Establish the charge is a covered benefit under the plan.",
-    BASE_SECTIONS
-  ),
+  "non-covered": NON_COVERED_STRATEGY,
   bundling: BUNDLING_STRATEGY,
   "dx-not-covered": stub(
     "dx-not-covered",
@@ -361,11 +734,7 @@ const STRATEGIES: Record<StrategyId, DenialStrategy> = {
     "Establish the service is covered under the patient's current benefit plan.",
     BASE_SECTIONS
   ),
-  "wrong-payer": stub(
-    "wrong-payer",
-    "Establish this payer is responsible, not workers comp or auto liability.",
-    BASE_SECTIONS
-  ),
+  "wrong-payer": WRONG_PAYER_STRATEGY,
   unknown: stub(
     "unknown",
     "Request reconsideration based on claim identifiers and payer-stated denial codes.",
@@ -392,6 +761,36 @@ export function getBundlingBranch(id: BundlingBranchId): StrategyBranch {
 export function getTimelyFilingBranch(id: TimelyFilingBranchId): StrategyBranch {
   const branch = TIMELY_FILING_STRATEGY.branches!.find((b) => b.id === id);
   if (!branch) throw new Error(`Unknown timely filing branch: ${id}`);
+  return branch;
+}
+
+export function getClaimDefectBranch(id: ClaimDefectBranchId): StrategyBranch {
+  const branch = CLAIM_DEFECT_STRATEGY.branches!.find((b) => b.id === id);
+  if (!branch) throw new Error(`Unknown claim defect branch: ${id}`);
+  return branch;
+}
+
+export function getNonCoveredBranch(id: NonCoveredBranchId): StrategyBranch {
+  const branch = NON_COVERED_STRATEGY.branches!.find((b) => b.id === id);
+  if (!branch) throw new Error(`Unknown non-covered branch: ${id}`);
+  return branch;
+}
+
+export function getDuplicateBranch(id: DuplicateBranchId): StrategyBranch {
+  const branch = DUPLICATE_STRATEGY.branches!.find((b) => b.id === id);
+  if (!branch) throw new Error(`Unknown duplicate branch: ${id}`);
+  return branch;
+}
+
+export function getExperimentalBranch(id: ExperimentalBranchId): StrategyBranch {
+  const branch = EXPERIMENTAL_STRATEGY.branches!.find((b) => b.id === id);
+  if (!branch) throw new Error(`Unknown experimental branch: ${id}`);
+  return branch;
+}
+
+export function getWrongPayerBranch(id: WrongPayerBranchId): StrategyBranch {
+  const branch = WRONG_PAYER_STRATEGY.branches!.find((b) => b.id === id);
+  if (!branch) throw new Error(`Unknown wrong payer branch: ${id}`);
   return branch;
 }
 

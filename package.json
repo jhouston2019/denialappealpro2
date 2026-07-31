@@ -33,6 +33,7 @@
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.69.0",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.3",
     "cookie": "^1.1.1",
@@ -47,6 +48,7 @@
     "pg": "^8.18.0",
     "react": "19.2.1",
     "react-dom": "19.2.1",
+    "resend": "^6.18.1",
     "stripe": "^20.0.0",
     "wink-nlp": "^2.2.1",
     "zod": "^4.1.13"

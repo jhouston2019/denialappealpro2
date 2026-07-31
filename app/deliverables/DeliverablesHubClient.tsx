@@ -12,6 +12,7 @@ import {
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
 import { createSupabaseBrowserClient, wizardFetch } from "@/lib/supabaseClient";
 import { ReviewNavCtaLink } from "@/components/billing/ReviewNavCtaLink";
+import { LegalDisclaimer } from "@/components/legal/LegalDisclaimer";
 import type { ReviewNavBillingInput } from "@/lib/billing/reviewNavCta";
 import { DELIVERABLES_REVIEW_ID_KEY } from "@/lib/wizard-snapshot";
 import type { DenialIntake } from "@/lib/wizard/denialIntakeEngine";
@@ -309,6 +310,8 @@ export function DeliverablesHubClient({
           <p className="mt-1 text-xs text-[#8aacc8]">Saved {createdLabel}</p>
         ) : null}
       </div>
+
+      <LegalDisclaimer variant="banner" className="mb-2" />
 
       <div className="flex flex-wrap gap-3">
         <button

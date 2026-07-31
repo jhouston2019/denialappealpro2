@@ -116,7 +116,7 @@ export default function ResetPasswordPage() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-3 py-4 sm:px-6">
           <Link href="/" className="flex min-w-0 items-center gap-2">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#1e3a8a] shadow-lg shadow-[#1e3a8a]/30">
-              <span className="text-sm font-black text-white">ER</span>
+              <span className="text-sm font-black text-white">DAP</span>
             </div>
             <span className="truncate text-sm font-semibold text-slate-50">
               Denial Appeal Pro

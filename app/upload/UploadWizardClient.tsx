@@ -533,7 +533,7 @@ export default function UploadWizardClient({
             aria-label="Denial Appeal Pro home"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#f0a050]">
-              <span className="text-xs font-black text-white">ER</span>
+              <span className="text-xs font-black text-white">DAP</span>
             </div>
             <span className="truncate text-xs font-semibold text-[#e8f0f8] sm:text-sm">
               Denial Appeal Pro

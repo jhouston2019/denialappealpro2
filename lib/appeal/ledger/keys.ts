@@ -81,6 +81,11 @@ export const FACT_LABELS: Record<FactKey, string> = {
   "appeal.authBranch": "Authorization status branch",
   "appeal.bundlingBranch": "Bundling basis branch",
   "appeal.timelyFilingBranch": "Timely filing basis branch",
+  "appeal.claimDefectBranch": "Claim defect basis branch",
+  "appeal.nonCoveredBranch": "Non-covered denial branch",
+  "appeal.duplicateBranch": "Duplicate claim branch",
+  "appeal.experimentalBranch": "Experimental denial branch",
+  "appeal.wrongPayerBranch": "Wrong payer / COB branch",
 };
 
 export const DEFAULT_ENCLOSURES: ReadonlyArray<{ id: string; label: string }> = [

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
+import { LegalDisclaimer } from "@/components/legal/LegalDisclaimer";
 
 const HOW_IT_WORKS = [
   {
@@ -56,14 +58,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col bg-[#0F172A]">
       <header className="border-b border-slate-800/50 bg-[#0F172A]/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2563EB]">
-              <span className="text-sm font-black text-white">ER</span>
-            </div>
-            <span className="text-sm font-semibold text-white">
-              Denial Appeal Pro
-            </span>
-          </Link>
+          <BrandLogo size="md" />
           <nav className="flex items-center gap-6 text-sm font-medium">
             <Link
               href="/pricing"
@@ -200,12 +195,18 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-slate-800/50 bg-[#0F172A]/95">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-slate-500 sm:flex-row">
-          <p>
-            © {new Date().getFullYear()} Denial Appeal Pro. All rights
-            reserved.
-          </p>
-          <div className="flex gap-6">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-6 py-8 text-sm text-slate-500">
+          <LegalDisclaimer className="max-w-2xl text-center" />
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <Link href="/privacy" className="transition hover:text-slate-300">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="transition hover:text-slate-300">
+              Terms of Service
+            </Link>
+            <Link href="/hipaa" className="transition hover:text-slate-300">
+              HIPAA Notice
+            </Link>
             <Link href="/pricing" className="transition hover:text-slate-300">
               Pricing
             </Link>
@@ -216,6 +217,10 @@ export default function Home() {
               Admin
             </Link>
           </div>
+          <p>
+            © {new Date().getFullYear()} Denial Appeal Pro. All rights
+            reserved.
+          </p>
         </div>
       </footer>
     </div>

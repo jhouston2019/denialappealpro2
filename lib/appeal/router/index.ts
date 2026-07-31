@@ -8,15 +8,25 @@ import {
 import {
   getAuthBranch,
   getBundlingBranch,
+  getClaimDefectBranch,
+  getDuplicateBranch,
+  getExperimentalBranch,
+  getNonCoveredBranch,
   getStrategy,
   getTimelyFilingBranch,
+  getWrongPayerBranch,
   pickPrimaryStrategy,
   type AuthBranchId,
   type BundlingBranchId,
+  type ClaimDefectBranchId,
   type DenialStrategy,
+  type DuplicateBranchId,
+  type ExperimentalBranchId,
+  type NonCoveredBranchId,
   type StrategyBranch,
   type StrategyId,
   type TimelyFilingBranchId,
+  type WrongPayerBranchId,
 } from "./strategies";
 
 export type { CarcEntry } from "./carc-table";
@@ -100,6 +110,86 @@ function resolveTimelyFilingBranch(
     "plan-error",
   ];
   return allowed.find((b) => b === s) ?? null;
+}
+
+function resolveClaimDefectBranch(
+  ledger: FactLedger
+): ClaimDefectBranchId | null {
+  const v = getValue(ledger, "appeal.claimDefectBranch");
+  if (v == null) return null;
+  const s = String(v).trim();
+  const allowed: ClaimDefectBranchId[] = [
+    "missing-info",
+    "invalid-info",
+    "duplicate-submission-flag",
+  ];
+  return allowed.find((b) => b === s) ?? null;
+}
+
+function resolveNonCoveredBranch(
+  ledger: FactLedger
+): NonCoveredBranchId | null {
+  const v = getValue(ledger, "appeal.nonCoveredBranch");
+  if (v == null) return null;
+  const s = String(v).trim();
+  const allowed: NonCoveredBranchId[] = [
+    "categorical-exclusion",
+    "frequency-limit",
+    "benefit-exhausted",
+  ];
+  return allowed.find((b) => b === s) ?? null;
+}
+
+function resolveDuplicateBranch(ledger: FactLedger): DuplicateBranchId | null {
+  const v = getValue(ledger, "appeal.duplicateBranch");
+  if (v == null) return null;
+  const s = String(v).trim();
+  const allowed: DuplicateBranchId[] = [
+    "true-duplicate-error",
+    "resubmission-after-correction",
+    "split-billing",
+  ];
+  return allowed.find((b) => b === s) ?? null;
+}
+
+function resolveExperimentalBranch(
+  ledger: FactLedger
+): ExperimentalBranchId | null {
+  const v = getValue(ledger, "appeal.experimentalBranch");
+  if (v == null) return null;
+  const s = String(v).trim();
+  const allowed: ExperimentalBranchId[] = [
+    "fda-approved",
+    "off-label",
+    "no-ncd",
+  ];
+  return allowed.find((b) => b === s) ?? null;
+}
+
+function resolveWrongPayerBranch(
+  ledger: FactLedger
+): WrongPayerBranchId | null {
+  const v = getValue(ledger, "appeal.wrongPayerBranch");
+  if (v == null) return null;
+  const s = String(v).trim();
+  const allowed: WrongPayerBranchId[] = [
+    "primary",
+    "secondary",
+    "medicare-secondary",
+  ];
+  return allowed.find((b) => b === s) ?? null;
+}
+
+function applyBranchToStrategy(
+  baseStrategy: DenialStrategy,
+  branch: StrategyBranch
+): DenialStrategy {
+  return {
+    ...baseStrategy,
+    leadArgument: branch.leadArgument,
+    sectionOrder: branch.sectionOrder ?? baseStrategy.sectionOrder,
+    requiredFacts: branch.requiredFacts ?? baseStrategy.requiredFacts,
+  };
 }
 
 export function routeDenial(ledger: FactLedger): RouteDenialResult {
@@ -186,6 +276,57 @@ export function routeDenial(ledger: FactLedger): RouteDenialResult {
       );
     } else {
       branch = getTimelyFilingBranch(tfBranchId);
+      strategy = applyBranchToStrategy(baseStrategy, branch);
+    }
+  } else if (effectivePrimaryId === "claim-defect") {
+    const defectBranchId = resolveClaimDefectBranch(ledger);
+    if (!defectBranchId) {
+      warnings.push(
+        "claim defect branch not selected — wizard must ask branch question before generation"
+      );
+    } else {
+      branch = getClaimDefectBranch(defectBranchId);
+      strategy = applyBranchToStrategy(baseStrategy, branch);
+    }
+  } else if (effectivePrimaryId === "non-covered") {
+    const ncBranchId = resolveNonCoveredBranch(ledger);
+    if (!ncBranchId) {
+      warnings.push(
+        "non-covered branch not selected — wizard must ask branch question before generation"
+      );
+    } else {
+      branch = getNonCoveredBranch(ncBranchId);
+      strategy = applyBranchToStrategy(baseStrategy, branch);
+    }
+  } else if (effectivePrimaryId === "duplicate") {
+    const dupBranchId = resolveDuplicateBranch(ledger);
+    if (!dupBranchId) {
+      warnings.push(
+        "duplicate branch not selected — wizard must ask branch question before generation"
+      );
+    } else {
+      branch = getDuplicateBranch(dupBranchId);
+      strategy = applyBranchToStrategy(baseStrategy, branch);
+    }
+  } else if (effectivePrimaryId === "experimental") {
+    const expBranchId = resolveExperimentalBranch(ledger);
+    if (!expBranchId) {
+      warnings.push(
+        "experimental branch not selected — wizard must ask branch question before generation"
+      );
+    } else {
+      branch = getExperimentalBranch(expBranchId);
+      strategy = applyBranchToStrategy(baseStrategy, branch);
+    }
+  } else if (effectivePrimaryId === "wrong-payer") {
+    const wpBranchId = resolveWrongPayerBranch(ledger);
+    if (!wpBranchId) {
+      warnings.push(
+        "wrong payer branch not selected — wizard must ask branch question before generation"
+      );
+    } else {
+      branch = getWrongPayerBranch(wpBranchId);
+      strategy = applyBranchToStrategy(baseStrategy, branch);
     }
   }
 

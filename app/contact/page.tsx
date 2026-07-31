@@ -17,7 +17,7 @@ export default function ContactPage() {
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#1e3a8a]">
-              <span className="text-xs font-black text-white">ER</span>
+              <span className="text-xs font-black text-white">DAP</span>
             </div>
             <span className="text-sm font-semibold text-slate-50">
               Denial Appeal Pro

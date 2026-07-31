@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { applyAdminAppMetadataForUserId } from "@/lib/auth/adminAppMetadata";
 import { getPlanReviewLimit } from "@/lib/billing/planLimits";
+import { sendWelcomeEmail } from "@/lib/email/welcomeEmail";
 import {
   ensureUserForPaidCheckout,
   ensureUserForStripeSubscription,
@@ -422,8 +423,24 @@ export async function syncStripeCheckoutSession(
     }
   }
 
-  // TODO: Optional idempotent post-purchase welcome email from webhook (Resend/Edge Function);
-  // not sent here — Auth has no generic transactional "welcome" API.
+  // Welcome email (graceful skip when RESEND_API_KEY unset)
+  const welcomeEmail =
+    session.customer_details?.email ??
+    session.customer_email ??
+    null;
+  if (welcomeEmail) {
+    const welcomePlan =
+      metadata?.plan_type ??
+      (session.mode === "subscription" ? "subscription" : "single");
+    try {
+      await sendWelcomeEmail({
+        email: welcomeEmail,
+        planType: welcomePlan,
+      });
+    } catch (welcomeErr) {
+      console.error("[syncStripeCheckoutSession] welcome email failed:", welcomeErr);
+    }
+  }
 
   return userId;
 }

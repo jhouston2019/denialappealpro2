@@ -82,7 +82,7 @@ export default async function DashboardPage({
             aria-label="Denial Appeal Pro home"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#1e3a8a] shadow-lg shadow-[#1e3a8a]/30">
-              <span className="text-xs font-black text-white">ER</span>
+              <span className="text-xs font-black text-white">DAP</span>
             </div>
             <span className="truncate text-xs font-semibold text-slate-50 sm:text-sm">
               Denial Appeal Pro

@@ -102,7 +102,7 @@ export default async function ReportDetailPage({
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#1e3a8a] shadow-lg shadow-[#1e3a8a]/30">
-              <span className="text-xs font-black text-white">ER</span>
+              <span className="text-xs font-black text-white">DAP</span>
             </div>
             <span className="text-sm font-semibold text-slate-50">
               Denial Appeal Pro

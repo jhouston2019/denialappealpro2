@@ -47,7 +47,7 @@ export function SeoLandingPage({
         <div className="max-w-4xl mx-auto px-4 py-6 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2563EB]">
-              <span className="text-xs font-black text-white">ER</span>
+              <span className="text-xs font-black text-white">DAP</span>
             </div>
             <span className="text-white font-semibold">Denial Appeal Pro</span>
           </Link>
