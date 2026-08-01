@@ -15,6 +15,7 @@ import { ReviewNavCtaLink } from "@/components/billing/ReviewNavCtaLink";
 import { LegalDisclaimer } from "@/components/legal/LegalDisclaimer";
 import type { ReviewNavBillingInput } from "@/lib/billing/reviewNavCta";
 import { DELIVERABLES_REVIEW_ID_KEY } from "@/lib/wizard-snapshot";
+import { primaryCarcDescriptor } from "@/lib/appeal/format/render";
 import { ensureLetterDisclaimer } from "@/lib/appeal/letter/disclaimer";
 import type { DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 
@@ -71,12 +72,14 @@ function intakeSummary(intake: StoredIntake | null, row: ReviewRow) {
   const provider = intake?.providerName || "—";
   const npi = intake?.providerNpi || "—";
   const carc = (intake?.carcCodes || []).join(", ") || "—";
+  const carcDescription =
+    primaryCarcDescriptor(intake?.carcCodes || []) || "—";
   const rarc = (intake?.rarcCodes || []).join(", ") || "—";
   const cpt = (intake?.cptCodes || []).join(", ") || "—";
   const icd = (intake?.icdCodes || intake?.icd10Codes || []).join(", ") || "—";
   const billed = intake?.billedAmount || "—";
   const paid = intake?.paidAmount || "—";
-  return { patient, payer, claim, dos, provider, npi, carc, rarc, cpt, icd, billed, paid };
+  return { patient, payer, claim, dos, provider, npi, carc, carcDescription, rarc, cpt, icd, billed, paid };
 }
 
 type DeliverablesHubClientProps = {
@@ -398,6 +401,12 @@ export function DeliverablesHubClient({
           <div>
             <dt className="text-xs font-semibold uppercase text-[#8a9aaa]">CARC</dt>
             <dd>{summary.carc}</dd>
+          </div>
+          <div className="sm:col-span-2">
+            <dt className="text-xs font-semibold uppercase text-[#8a9aaa]">
+              CARC description
+            </dt>
+            <dd className="text-sm text-[#5a6a7a]">{summary.carcDescription}</dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase text-[#8a9aaa]">RARC</dt>

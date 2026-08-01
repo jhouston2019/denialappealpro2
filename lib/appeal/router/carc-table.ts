@@ -1,3 +1,4 @@
+import { sanitizeCarcDescription } from "../format/sanitizeCodes";
 import type { StrategyId } from "./strategies";
 import {
   defaultPrimaryArgument,
@@ -6,6 +7,14 @@ import {
   inferStrategyId,
 } from "./carc-strategy-infer";
 import officialDescriptions from "./carc-official-descriptions.json";
+
+export { sanitizeCarcDescription } from "../format/sanitizeCodes";
+
+/** Clean payer-facing descriptors (no X12/835 remark suffixes). */
+const DESCRIPTOR_OVERRIDES: Partial<Record<string, string>> = {
+  "50":
+    "These are non-covered services because this is not deemed a medical necessity by the payer.",
+};
 
 export interface CarcEntry {
   code: string;
@@ -70,8 +79,11 @@ const PRIMARY_ARGUMENT_OVERRIDES: Partial<Record<string, string>> = {
 
 function buildEntries(): CarcEntry[] {
   const entries: CarcEntry[] = [];
-  for (const [code, descriptor] of Object.entries(officialDescriptions)) {
-    const strategyId = inferStrategyId(code, descriptor);
+  for (const [code, rawDescriptor] of Object.entries(officialDescriptions)) {
+    const strategyId = inferStrategyId(code, rawDescriptor);
+    const descriptor =
+      DESCRIPTOR_OVERRIDES[code] ??
+      sanitizeCarcDescription(String(rawDescriptor));
     entries.push({
       code,
       descriptor,

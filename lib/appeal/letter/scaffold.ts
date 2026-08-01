@@ -2,8 +2,8 @@ import { getValue } from "../ledger/builder";
 import { FACT_LABELS } from "../ledger/keys";
 import type { FactKey, FactLedger, FactValue } from "../ledger/types";
 import {
-  formatCodesList,
   formatCurrency,
+  formatLedgerDenialCodes,
   formatLetterDate,
   formatNpi,
 } from "../format/render";
@@ -99,10 +99,8 @@ export function renderLetterScaffold(ledger: FactLedger): string {
   const denied = deniedRaw
     ? formatCurrency(deniedRaw)
     : req("claim.deniedAmount");
-  const carc = formatCodesList(getValue(ledger, "claim.carcCodes"), "carc");
-  const rarc = formatCodesList(getValue(ledger, "claim.rarcCodes"), "rarc");
   const denialCodes =
-    [carc, rarc].filter(Boolean).join(" / ") || req("claim.carcCodes");
+    formatLedgerDenialCodes(ledger) || req("claim.carcCodes");
   const appealLevel = str(getValue(ledger, "appeal.level")) || "First-level";
 
   // Group number is not ALWAYS_REQUIRED; show a placeholder only when group

@@ -8,13 +8,12 @@ import type {
 } from "../ledger/types";
 import type { AuthorityRecord } from "../authorities/records";
 import {
-  formatCarc,
   formatCurrency,
+  formatLedgerDenialCodes,
   formatLetterDate,
   formatNpi,
-  formatRarc,
 } from "../format/render";
-import { lookupCarc, routeDenial } from "../router/index";
+import { routeDenial } from "../router/index";
 import { isCarc4M144Bundling } from "../router/bundling-detect";
 import { appendEnclosuresBlock } from "./enclosures";
 import { appendLetterDisclaimer } from "./disclaimer";
@@ -104,17 +103,8 @@ function resolvePlanType(ledger: FactLedger): PlanType {
 }
 
 function formatDenialCodes(ledger: FactLedger): string {
-  const carcCodes = arr(getValue(ledger, "claim.carcCodes"));
-  const rarcCodes = arr(getValue(ledger, "claim.rarcCodes"));
-  const carcParts = carcCodes.map((c) => {
-    const entry = lookupCarc(c);
-    return entry
-      ? formatCarc(c, entry.descriptor)
-      : formatCarc(c);
-  });
-  const rarcParts = rarcCodes.map((c) => formatRarc(c));
-  const parts = [...carcParts, ...rarcParts].filter(Boolean);
-  return parts.length ? parts.join(" / ") : req("claim.carcCodes");
+  const formatted = formatLedgerDenialCodes(ledger);
+  return formatted || req("claim.carcCodes");
 }
 
 function formatIcd10Line(ledger: FactLedger): string {

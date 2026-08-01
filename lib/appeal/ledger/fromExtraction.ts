@@ -1,3 +1,4 @@
+import { sanitizeCarcDescription } from "../format/sanitizeCodes";
 import { emptyLedger, setFact } from "./builder";
 import { normalizeIcd10Array } from "../format/normalizeIcd10";
 import {
@@ -220,10 +221,13 @@ export function buildLedgerFromExtraction(opts: {
     }
   }
 
-  const denialReasonText =
+  const rawDenialReason =
     fields.denial_reason_text != null && String(fields.denial_reason_text).trim()
       ? String(fields.denial_reason_text).trim()
-      : null;
+      : "";
+  const denialReasonText = rawDenialReason
+    ? sanitizeCarcDescription(rawDenialReason)
+    : null;
 
   return { ledger, denialReasonText };
 }

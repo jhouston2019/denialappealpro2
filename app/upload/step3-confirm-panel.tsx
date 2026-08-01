@@ -409,10 +409,14 @@ export function Step3ConfirmPanel({
       ) : null}
 
       {route.strategy.id === "medical-necessity" ? (
-        <div className="mt-6 rounded-lg border border-[#cbd5e1] bg-[#fffbeb] px-4 py-4">
-          <p className="text-sm text-[#5a6a7a]">
-            Medical necessity appeal: primary diagnosis is required. Conservative
-            care tried and functional impact strengthen the argument significantly.
+        <div
+          className="mt-6 rounded-lg border border-[#f59e0b] bg-[#fffbeb] px-4 py-4"
+          role="note"
+        >
+          <p className="text-sm font-medium text-[#92400e]">
+            ⚠️ Medical necessity appeals require clinical documentation to be
+            effective. Please complete the fields below — letters without clinical
+            details are significantly weaker and less likely to succeed.
           </p>
         </div>
       ) : null}
@@ -563,7 +567,16 @@ export function Step3ConfirmPanel({
         ) : null}
         <label className="block sm:col-span-2">
           <span className="mb-1 block text-sm font-semibold">
-            Conservative care tried (optional)
+            {route.strategy.id === "medical-necessity" ? (
+              <>
+                Conservative care tried{" "}
+                <span className="font-medium text-[#b45309]">
+                  (recommended for med nec)
+                </span>
+              </>
+            ) : (
+              "Conservative care tried (optional)"
+            )}
           </span>
           <textarea
             rows={2}
@@ -577,7 +590,16 @@ export function Step3ConfirmPanel({
         </label>
         <label className="block sm:col-span-2">
           <span className="mb-1 block text-sm font-semibold">
-            Functional impact (optional)
+            {route.strategy.id === "medical-necessity" ? (
+              <>
+                Functional impact{" "}
+                <span className="font-medium text-[#b45309]">
+                  (recommended for med nec)
+                </span>
+              </>
+            ) : (
+              "Functional impact (optional)"
+            )}
           </span>
           <textarea
             rows={2}
@@ -591,7 +613,16 @@ export function Step3ConfirmPanel({
         </label>
         <label className="block sm:col-span-2">
           <span className="mb-1 block text-sm font-semibold">
-            Clinical indication (optional)
+            {route.strategy.id === "medical-necessity" ? (
+              <>
+                Clinical indication{" "}
+                <span className="font-medium text-[#b45309]">
+                  (recommended for med nec)
+                </span>
+              </>
+            ) : (
+              "Clinical indication (optional)"
+            )}
           </span>
           <textarea
             rows={3}

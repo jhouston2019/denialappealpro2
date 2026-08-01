@@ -5,6 +5,7 @@ import {
   type FieldConfidence,
 } from "@/lib/dap-wizard-snapshot";
 import { normalizeIcd10Array } from "@/lib/appeal/format/normalizeIcd10";
+import { sanitizeCarcDescription } from "@/lib/appeal/format/sanitizeCodes";
 import type { FactLedger } from "@/lib/appeal/ledger/types";
 
 export type ExtractDenialResponse = {
@@ -98,7 +99,7 @@ export function mapExtractedToIntake(payload: ExtractDenialResponse): {
     payer: str(payload.payerName),
     claimNumber: str(payload.claimNumber),
     dateOfService: str(payload.dateOfService),
-    denialReason: str(payload.denialReason),
+    denialReason: sanitizeCarcDescription(str(payload.denialReason)),
     carcCodes: arr(payload.carcCodes),
     rarcCodes: arr(payload.rarcCodes),
     cptCodes: arr(payload.cptCodes),
