@@ -14,6 +14,7 @@ import type { DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 type Step1RecentAppealsProps = {
   isAuthenticated: boolean;
   sessionReady: boolean;
+  isPreviewMode?: boolean;
   onPrefillProvider: (patch: Partial<DenialIntake>) => void;
   announce: (message: string) => void;
 };
@@ -77,14 +78,18 @@ function AppealActions({
 export function Step1RecentAppeals({
   isAuthenticated,
   sessionReady,
+  isPreviewMode = false,
   onPrefillProvider,
   announce,
 }: Step1RecentAppealsProps) {
   const [appeals, setAppeals] = useState<RecentAppealSummary[]>([]);
   const [loaded, setLoaded] = useState(false);
 
+  const canLoadRecentAppeals =
+    sessionReady && isAuthenticated && !isPreviewMode;
+
   useEffect(() => {
-    if (!isAuthenticated || !sessionReady) {
+    if (!canLoadRecentAppeals) {
       setAppeals([]);
       setLoaded(false);
       return;
@@ -132,9 +137,9 @@ export function Step1RecentAppeals({
     return () => {
       cancelled = true;
     };
-  }, [isAuthenticated, sessionReady]);
+  }, [canLoadRecentAppeals]);
 
-  if (!isAuthenticated || !loaded || appeals.length === 0) {
+  if (!canLoadRecentAppeals || !loaded || appeals.length === 0) {
     return null;
   }
 

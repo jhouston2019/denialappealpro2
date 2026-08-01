@@ -571,6 +571,9 @@ export default function UploadWizardClient({
     []
   );
 
+  const showRecentAppeals =
+    sessionReady && isAuthenticated && !isPreviewMode;
+
   return (
     <div className="dap-wizard-shell flex min-h-screen flex-col bg-[#0f2744]">
       {!isPreviewMode ? <PostPaymentSessionRefresh /> : null}
@@ -839,12 +842,15 @@ export default function UploadWizardClient({
               </p>
             ) : null}
 
-            <Step1RecentAppeals
-              isAuthenticated={isAuthenticated}
-              sessionReady={sessionReady}
-              onPrefillProvider={handlePrefillProviderFromReview}
-              announce={announce}
-            />
+            {showRecentAppeals ? (
+              <Step1RecentAppeals
+                isAuthenticated={isAuthenticated}
+                sessionReady={sessionReady}
+                isPreviewMode={isPreviewMode}
+                onPrefillProvider={handlePrefillProviderFromReview}
+                announce={announce}
+              />
+            ) : null}
           </section>
         ) : null}
 
