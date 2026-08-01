@@ -85,7 +85,7 @@ OUTPUT RULES:
 
 export function buildGenerationUserMessage(ledger: FactLedger): string {
   return (
-    "FACT LEDGER — use only these facts. Null means unavailable.\n\n" +
+    "SOURCE FACTS — use only these facts. Null means unavailable.\n\n" +
     serializeLedgerForPrompt(ledger) +
     "\n\n" +
     serializeStrategyForPrompt(ledger) +

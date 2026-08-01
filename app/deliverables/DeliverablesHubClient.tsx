@@ -15,6 +15,7 @@ import { ReviewNavCtaLink } from "@/components/billing/ReviewNavCtaLink";
 import { LegalDisclaimer } from "@/components/legal/LegalDisclaimer";
 import type { ReviewNavBillingInput } from "@/lib/billing/reviewNavCta";
 import { DELIVERABLES_REVIEW_ID_KEY } from "@/lib/wizard-snapshot";
+import { ensureLetterDisclaimer } from "@/lib/appeal/letter/disclaimer";
 import type { DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 
 const WIZARD_PANEL =
@@ -155,7 +156,7 @@ export function DeliverablesHubClient({
     [intake, review]
   );
 
-  const letterText = review?.letter_text?.trim() || "";
+  const letterText = ensureLetterDisclaimer(review?.letter_text?.trim() || "");
 
   const exportGate = useMemo(() => {
     if (!letterText) {

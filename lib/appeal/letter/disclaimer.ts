@@ -11,3 +11,12 @@ export function appendLetterDisclaimer(text: string): string {
     .replace(/\s+$/, "");
   return `${withoutPartial}\n\n${LETTER_DISCLAIMER}`;
 }
+
+/** Idempotent — guarantees the canonical disclaimer is the final line. */
+export function ensureLetterDisclaimer(text: string): string {
+  const trimmed = String(text || "").replace(/\s+$/, "");
+  if (trimmed.endsWith(LETTER_DISCLAIMER)) {
+    return trimmed;
+  }
+  return appendLetterDisclaimer(trimmed);
+}

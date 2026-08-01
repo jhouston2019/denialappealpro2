@@ -18,6 +18,9 @@ import {
   getAuthorities,
   normalizePayerSlug,
 } from "../authorities/gate";
+import { GLOBAL_PREAPPROVED_CITATIONS } from "../authorities/allowlist";
+import { LETTER_DISCLAIMER } from "../letter/disclaimer";
+import { stripInternalLanguageFromLetter } from "../letter/internalLanguage";
 import {
   CORE_ERISA_AUTHORITY_IDS,
   AUTHORITY_RECORDS,
@@ -44,8 +47,8 @@ const PLACEHOLDER_RE = /\[\[REQUIRED:[^\]]+\]\]/g;
 const ENCLOSURE_REF_RE =
   /\b(enclosed\s+herewith|enclosed\s+please\s+find|attached\s+please\s+find|attached\s+hereto|please\s+find\s+attached|accompanying\s+documents?|enclosed\s+is|enclosed\s+are|see\s+attached|as\s+attached|\benclosed\b|\bherewith\b|\battached\b|please\s+find)\b/gi;
 
-const BREACH_RE =
-  /\b(breach(?:es|ed|ing)?|violat(?:e|es|ed|ing|ion|ions)|participation\s+agreement)\b/gi;
+const CONTRACT_ALLEGATION_RE =
+  /\b(breach(?:es|ed|ing)?(?:\s+of\s+(?:contract|the\s+participation\s+agreement))?|contractual\s+violation|violation\s+of\s+(?:the\s+)?participation\s+agreement|participation\s+agreement)\b/gi;
 
 const INTERNAL_ROUTING_RE =
   /\b(authorization status branch|branch a\b|branch b\b|branch c\b|branch d\b|strategy id|section order|generatorpath|under plan type|plan type erisa|plan type fully-insured|plan type medicare|plan type medicaid|plan type marketplace|plan type unknown)\b|(?:erisa-self-funded|fully-insured-group|medicare-advantage|medicaid-mco|marketplace-individual|medicare-traditional)\b/gi;
@@ -85,7 +88,7 @@ function resolvePlanType(ledger: FactLedger): PlanType {
 }
 
 const INTERNAL_GROUNDING_RE =
-  /\b(no clinical narrative|not offered|beyond the procedure code|as billed\.|ledger|provenance|not present in the source|no information (was )?(provided|available))\b/gi;
+  /\b(no clinical narrative|not offered|beyond the procedure code|as billed\.|provenance|not present in the source|no information (was )?(provided|available))\b/gi;
 
 /** Minimum clinical assertion terms for clinical_claims_grounded. */
 export const CLINICAL_ASSERTION_RE =
@@ -138,13 +141,25 @@ const PROCEDURAL_AUTH_COMPLIANCE_RE =
 const PROCEDURAL_COMPLETENESS_RE =
   /\b(submitted with all (?:necessary|required)|all necessary (?:details|information)|complete(?:ness)? of (?:the )?information|claim was complete)\b/i;
 
+/** Letter body for validation — excludes disclaimer and strips internal vocabulary. */
+export function letterTextForValidation(letterText: string): string {
+  const stripped = stripInternalLanguageFromLetter(String(letterText || ""));
+  const idx = stripped.lastIndexOf(LETTER_DISCLAIMER);
+  if (idx >= 0) {
+    return stripped.slice(0, idx).trimEnd();
+  }
+  return stripped
+    .replace(/\n*Denial Appeal Pro is not a law firm[\s\S]*$/i, "")
+    .trimEnd();
+}
+
 export function validateLetter(
   letterText: string,
   ledger: FactLedger
 ): ValidationError[] {
   const errors: ValidationError[] = [];
-  const text = String(letterText || "");
-  const body = letterBodyWithoutEnclosuresBlock(text);
+  const text = stripInternalLanguageFromLetter(String(letterText || ""));
+  const body = letterBodyWithoutEnclosuresBlock(letterTextForValidation(text));
 
   // 1. placeholders
   const placeholders = text.match(PLACEHOLDER_RE) || [];
@@ -240,11 +255,11 @@ export function validateLetter(
     }
   }
 
-  // 7. no_contract_breach_allegation
-  BREACH_RE.lastIndex = 0;
+  // 7. no_contract_breach_allegation — contract/participation agreement only (not ERISA/procedural violations)
+  CONTRACT_ALLEGATION_RE.lastIndex = 0;
   const breachHits = new Set<string>();
   let bm: RegExpExecArray | null;
-  while ((bm = BREACH_RE.exec(body)) !== null) {
+  while ((bm = CONTRACT_ALLEGATION_RE.exec(body)) !== null) {
     breachHits.add(bm[0]);
   }
   for (const hit of breachHits) {
@@ -464,7 +479,10 @@ export function validateLetter(
     authBranch ? String(authBranch) : undefined,
     ledger
   );
-  const allowedNeedles = allowedCitationNeedles(authorities);
+  const allowedNeedles = [
+    ...GLOBAL_PREAPPROVED_CITATIONS,
+    ...allowedCitationNeedles(authorities),
+  ];
 
   // 14. plan_type_selected
   if (!isPresent(getValue(ledger, "patient.planType"))) {

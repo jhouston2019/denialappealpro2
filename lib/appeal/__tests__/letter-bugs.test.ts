@@ -9,6 +9,14 @@ import { getRecordById } from "../authorities/records";
 import { getAuthoritiesForLedger } from "../authorities/gate";
 import { stripIcd10PlaceholdersFromText } from "../format/normalizeIcd10";
 import { assembleLetter } from "../letter/assembler";
+import {
+  LETTER_DISCLAIMER,
+  ensureLetterDisclaimer,
+} from "../letter/disclaimer";
+import { stripInternalLanguageFromLetter } from "../letter/internalLanguage";
+import { validateLetter, canExportLetter } from "../validate/index";
+import { findUnapprovedCitations } from "../validate/citations";
+import { cignaFullRequiredLedger } from "../__fixtures__/cigna";
 
 describe("letter generation bug fixes — BCBS bundling", () => {
   it("omits XXX.XXX placeholder ICD-10 from header and body", () => {
@@ -58,5 +66,43 @@ describe("letter generation bug fixes — BCBS bundling", () => {
     assert.ok(result.checks.erisaUsesClaim, letter);
     assert.ok(result.checks.erisaUsesBundlingCodes, letter);
     assert.ok(result.checks.noCignaClaimLeak, letter);
+    const lines = letter.trim().split("\n");
+    assert.equal(lines[lines.length - 1], LETTER_DISCLAIMER);
+  });
+
+  it("approves ERISA procedural violation language without contract allegation error", () => {
+    const L = cignaFullRequiredLedger();
+    const body =
+      "Under ERISA § 502(a)(1)(B) and 29 C.F.R. § 2560.503-1(i), this procedural violation warrants reversal.";
+    const letter = ensureLetterDisclaimer(body);
+    const errors = validateLetter(letter, L).filter(
+      (e) => e.rule === "no_contract_breach_allegation"
+    );
+    assert.equal(errors.length, 0);
+    assert.deepEqual(findUnapprovedCitations(body, L), []);
+  });
+
+  it("strips internal ledger vocabulary before validation", () => {
+    const L = cignaFullRequiredLedger();
+    const cleaned = stripInternalLanguageFromLetter(
+      "The fact ledger shows medical necessity."
+    );
+    assert.ok(!/\bledger\b/i.test(cleaned));
+    const errors = validateLetter(
+      ensureLetterDisclaimer(`${cleaned}\n\nTo the Appeals Review Department:\n\nAppeal text.`),
+      L
+    ).filter((e) => e.rule === "no_internal_grounding_language");
+    assert.equal(errors.length, 0);
+  });
+
+  it("ends assembled letters with the full disclaimer text", () => {
+    const result = runBcbsBundlingAcceptance({ icd10Codes: ["M54.5"] });
+    const letter = assembleLetter(
+      result.ledger,
+      "We request reprocessing at the contracted rate.",
+      getAuthoritiesForLedger(result.ledger)
+    );
+    assert.ok(letter.endsWith(LETTER_DISCLAIMER));
+    assert.match(letter, /Generated letters are for administrative use only\.$/);
   });
 });

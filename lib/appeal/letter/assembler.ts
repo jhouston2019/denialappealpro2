@@ -18,6 +18,7 @@ import { lookupCarc, routeDenial } from "../router/index";
 import { isCarc4M144Bundling } from "../router/bundling-detect";
 import { appendEnclosuresBlock } from "./enclosures";
 import { appendLetterDisclaimer } from "./disclaimer";
+import { stripInternalLanguageFromLetter } from "./internalLanguage";
 import { assembleSignatureBlock, stripTrailingSignature } from "./signature";
 import { normalizeIcd10Array, stripIcd10PlaceholdersFromText } from "../format/normalizeIcd10";
 import { resolveIcd10CodesForLetter } from "../format/icd10ForLetter";
@@ -538,6 +539,7 @@ export function assembleLetterParts(
   full = appendEnclosuresBlock(full, ledger.enclosures || []);
   full = stripContentAfterEnclosures(full);
   full = stripIcd10PlaceholdersFromText(full);
+  full = stripInternalLanguageFromLetter(full);
   full = appendLetterDisclaimer(full);
 
   return {
@@ -561,7 +563,7 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
     "Write ONLY the following narrative sections (plain text, double newline between sections):",
     "",
     "6. RELIEF REQUESTED — One sentence stating what we want (reprocess / reverse / pay at contracted rate). Never demand payment equal to billed charges.",
-    "7. CLAIM SUMMARY — Factual summary: claim number, dates, CPT codes, amounts from ledger only. Include ICD-10 codes ONLY when claim.icd10Codes are populated in the ledger; never write XXX.XXX or invent a diagnosis code.",
+    "7. CLAIM SUMMARY — Factual summary: claim number, dates, CPT codes, amounts from source facts only. Include ICD-10 codes ONLY when claim.icd10Codes are populated; never write XXX.XXX or invent a diagnosis code.",
     "8. DENIAL BASIS — CARC descriptor verbatim from CARC DESCRIPTOR below. RARC if available. No inference.",
   ];
 
@@ -571,17 +573,17 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
       "",
       "10. STRATEGY ARGUMENT — Medical necessity rebuttal. Structure:",
       "Paragraph 1 — Lead: State that the payer's necessity determination is not supported by the clinical record. Do not restate the denial reason; challenge it directly.",
-      "Paragraph 2 — Criteria match: Using only clinical facts in the ledger, show the patient satisfies coverage criteria. Cite diagnosis, failed conservative care, and functional impact explicitly.",
+      "Paragraph 2 — Criteria match: Using only clinical facts provided, show the patient satisfies coverage criteria. Cite diagnosis, failed conservative care, and functional impact explicitly.",
       "Paragraph 3 — Payer's burden: The plan's denial must identify the specific clinical criterion the service fails to satisfy. A conclusory determination without specifying the unmet criterion does not constitute a valid adverse benefit determination."
     );
   } else if (strategyId === "bundling") {
     lines.push(
       "9. BUNDLING ARGUMENT — Structure:",
       "Paragraph 1 — Lead: The services are distinct and separately reimbursable.",
-      "Paragraph 2 — Branch argument: Use the BRANCH ARGUMENT text from the strategy block verbatim as the basis; expand only with ledger facts.",
+      "Paragraph 2 — Branch argument: Use the BRANCH ARGUMENT text from the strategy block verbatim as the basis; expand only with documented facts.",
       "Paragraph 3 — Payer's burden: The plan must identify the specific NCCI edit or coverage policy requiring bundling. A bundling denial without citing the edit number and modifier indicator is not a valid coding determination.",
       "",
-      "10. CLINICAL ARGUMENT — Omit unless clinical.* facts are present in the ledger."
+      "10. CLINICAL ARGUMENT — Omit unless clinical.* facts are present in the source record."
     );
     if (isCarc4M144Bundling(ledger)) {
       lines.push(
@@ -630,7 +632,7 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
       "NEVER claim the service was emergent, urgent, or unscheduled unless clinical.urgency is populated.",
       hasClinicalFacts(ledger)
         ? "CLINICAL ARGUMENT — Omit from your output; the system appends populated clinical.* facts verbatim after your narrative."
-        : "CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in the ledger)."
+        : "CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in the source record)."
     );
   } else {
     lines.push(
@@ -641,7 +643,7 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
         "10. CLINICAL ARGUMENT — Omit from your output; the system appends populated clinical.* facts verbatim after your narrative."
       );
     } else {
-      lines.push("10. CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in ledger).");
+      lines.push("10. CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in source record).");
     }
   }
 

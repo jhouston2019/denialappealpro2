@@ -1,6 +1,7 @@
-import { BrandLogo } from "@/components/BrandLogo";
-import { Suspense } from "react";import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
+import { Suspense } from "react";
+import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
 import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
+import { DeliverablesSiteHeader } from "@/components/deliverables/DeliverablesSiteHeader";
 import { DeliverablesHubClient } from "./DeliverablesHubClient";
 import "@/app/upload/dap-wizard.css";
 
@@ -24,15 +25,7 @@ export default async function DeliverablesPage() {
 
   return (
     <div className="dap-wizard-shell flex min-h-screen flex-col bg-[#0f2744]">
-      <header className="sticky top-0 z-[100] border-b border-[#1e3f6e] bg-[#091c33] text-white">
-        <div className="mx-auto flex min-h-12 max-w-6xl flex-col gap-2 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:px-6 sm:py-0">
-          <BrandLogo
-            size="sm"
-            href="/"
-            className="[&_span]:text-[#e8f0f8]"
-          />
-        </div>
-      </header>
+      <DeliverablesSiteHeader />
 
       <Suspense fallback={<DeliverablesFallback />}>
         <DeliverablesHubClient
