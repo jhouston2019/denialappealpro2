@@ -7,7 +7,7 @@ import {
 } from "../format/render";
 import { getAuthoritiesForLedger } from "../authorities/gate";
 import { assembleLetter } from "../letter/assembler";
-import { normalizeIcd10Array } from "../format/normalizeIcd10";
+import { resolveIcd10CodesForLetter } from "../format/icd10ForLetter";
 import { routeDenial } from "../router/index";
 import type { GenerationResult } from "./types";
 
@@ -56,9 +56,8 @@ export function deterministicGroundedDraft(ledger: FactLedger): GenerationResult
     ? formatLetterDate(String(dosRaw))
     : req("claim.dateOfService");
   const cpt = valOrRequired(ledger, "claim.cptCodes");
-  const icdCodes = normalizeIcd10Array(arr(getValue(ledger, "claim.icd10Codes")));
-  const icdFallback = normalizeIcd10Array(arr(getValue(ledger, "clinical.icd10Codes")));
-  const icdPart = (icdCodes.length ? icdCodes : icdFallback).join(", ");
+  const icdCodes = resolveIcd10CodesForLetter(ledger);
+  const icdPart = icdCodes.join(", ");
   const diagnosis = fmt(getValue(ledger, "clinical.primaryDiagnosis"));
   const icdPhrase = icdPart
     ? diagnosis

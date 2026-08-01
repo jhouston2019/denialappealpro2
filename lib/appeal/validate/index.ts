@@ -24,6 +24,7 @@ import {
   getRecordById,
 } from "../authorities/records";
 import { normalizeAuthorityText } from "../letter/assembler";
+import { resolveIcd10CodesForLetter } from "../format/icd10ForLetter";
 import {
   collectCitationHits,
   findUnapprovedCitations,
@@ -270,14 +271,8 @@ export function validateLetter(
   }
 
   // 8b. icd10_codes_required — required after Step 3 (document extraction or manual entry)
-  const icdClaim = getValue(ledger, "claim.icd10Codes");
-  const icdClinical = getValue(ledger, "clinical.icd10Codes");
-  const icdValue = isPresent(icdClaim)
-    ? icdClaim
-    : isPresent(icdClinical)
-      ? icdClinical
-      : null;
-  if (!isPresent(icdValue)) {
+  const icdValue = resolveIcd10CodesForLetter(ledger);
+  if (!icdValue.length) {
     errors.push({
       rule: "icd10_codes_required",
       message: "ICD-10 diagnosis code(s) are required before letter export",
@@ -285,7 +280,7 @@ export function validateLetter(
       wizardStep: 3,
     });
   } else {
-    const needles = renderNeedles("claim.icd10Codes", icdValue);
+    const needles = icdValue.flatMap((code) => renderNeedles("claim.icd10Codes", code));
     const hay = text.toLowerCase();
     const found = needles.some((n) => n && hay.includes(n.toLowerCase()));
     if (!found) {
@@ -296,6 +291,15 @@ export function validateLetter(
         wizardStep: 4,
       });
     }
+  }
+
+  if (/\bXXX\.XXX\b/i.test(text)) {
+    errors.push({
+      rule: "no_icd10_placeholder",
+      message: "Letter contains placeholder ICD-10 code XXX.XXX",
+      factKey: "claim.icd10Codes",
+      wizardStep: 4,
+    });
   }
 
   // 8c. signature_provider_fields — closing block must include provider identity

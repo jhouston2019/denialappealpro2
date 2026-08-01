@@ -1,5 +1,5 @@
 import type { PlanType } from "../ledger/types";
-import type { StrategyId } from "../router/strategies";
+import type { BundlingBranchId, StrategyId } from "../router/strategies";
 
 export interface AuthorityRecord {
   id: string;
@@ -7,6 +7,8 @@ export interface AuthorityRecord {
   shortLabel: string;
   planTypes: PlanType[];
   strategies: StrategyId[];
+  /** When set, record is included only for these bundling branches. */
+  bundlingBranches?: BundlingBranchId[];
   argument: string;
   quotable: string;
   blocked: PlanType[];
@@ -31,7 +33,7 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
       "experimental",
       "claim-defect",
     ],
-    argument: `ERISA § 1133 and 29 C.F.R. § 2560.503-1 require that every adverse benefit determination set forth the specific reason for the denial and the specific plan provision on which the denial is based. The denial of claim CIG-2026-887731 cites only CARC CO-15 and RARC N517 without identifying the plan provision that imposes the prior authorization requirement or the criteria applied in determining that the submitted authorization number was missing, invalid, or inapplicable. A denial that fails to cite the specific plan provision relied upon is procedurally defective under § 2560.503-1(g)(1)(i)–(ii) and does not constitute a valid adverse benefit determination.`,
+    argument: `ERISA § 1133 and 29 C.F.R. § 2560.503-1 require that every adverse benefit determination set forth the specific reason for the denial and the specific plan provision on which the denial is based. The denial must identify the specific plan provision relied upon and the criteria applied. A denial that fails to cite the specific plan provision relied upon is procedurally defective under § 2560.503-1(g)(1)(i)–(ii) and does not constitute a valid adverse benefit determination.`,
     quotable:
       "specific reason for the denial and the specific plan provision on which the denial is based",
     blocked: [
@@ -74,7 +76,7 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
       "non-covered",
       "not-covered-benefit",
     ],
-    argument: `Pursuant to 29 C.F.R. § 2560.503-1(h)(2)(iii), the plan must provide, upon request and free of charge, copies of all documents, records, and other information relevant to the claimant's claim for benefits. We hereby request production of: (1) the plan provision or coverage policy imposing the prior authorization requirement for CPT 27130; (2) the authorization criteria applied; (3) all communications regarding this claim; and (4) the identity and qualifications of any clinical reviewer. Failure to produce these documents within the appeal review period will constitute an additional procedural violation under § 2560.503-1.`,
+    argument: `Pursuant to 29 C.F.R. § 2560.503-1(h)(2)(iii), the plan must provide, upon request and free of charge, copies of all documents, records, and other information relevant to the claimant's claim for benefits. We hereby request production of all plan provisions, coverage policies, coding criteria, communications regarding this claim, and the identity and qualifications of any clinical reviewer. Failure to produce these documents within the appeal review period will constitute an additional procedural violation under § 2560.503-1.`,
     quotable:
       "all documents, records, and other information relevant to the claimant's claim",
     blocked: [
@@ -137,8 +139,8 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
   },
   {
     id: "cms-ncci-modifier-25",
-    citation: "CMS NCCI Policy Manual — bundling edits",
-    shortLabel: "CMS NCCI Policy Manual",
+    citation: "CMS NCCI Policy Manual for Medicare Services, Chapter 1",
+    shortLabel: "CMS NCCI Policy Manual Ch. 1",
     planTypes: [
       "erisa-self-funded",
       "fully-insured-group",
@@ -146,7 +148,8 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
       "marketplace-individual",
     ],
     strategies: ["bundling"],
-    argument: `Under the CMS National Correct Coding Initiative (NCCI) Policy Manual, Chapter 1, modifier 25 indicates that a significant, separately identifiable evaluation and management service was performed by the same physician on the same day as a procedure. NCCI procedure-to-procedure edits are not absolute when modifier 25 applies and the medical record documents a separately identifiable E/M service above and beyond the work ordinarily associated with the procedure. Denial without evaluation of modifier 25 on its merits is inconsistent with CMS NCCI edit policy.`,
+    bundlingBranches: ["modifier-25"],
+    argument: `Under the CMS National Correct Coding Initiative (NCCI) Policy Manual for Medicare Services, Chapter 1, modifier 25 indicates that a significant, separately identifiable evaluation and management service was performed by the same physician on the same day as a procedure. NCCI procedure-to-procedure edits are not absolute when modifier 25 applies and the medical record documents a separately identifiable E/M service above and beyond the work ordinarily associated with the procedure. Correct coding requires reporting the service actually rendered and evaluating the applicable modifier indicators. Denial without evaluation of modifier 25 on its merits is inconsistent with CMS NCCI edit policy.`,
     quotable:
       "significant, separately identifiable evaluation and management service",
     blocked: ["medicaid-mco", "medicare-traditional"],
@@ -286,6 +289,7 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
       "medicare-traditional",
     ],
     strategies: ["bundling"],
+    bundlingBranches: ["modifier-59", "no-ncci-edit", "modifier-indicator-0"],
     argument: `The CMS National Correct Coding Initiative Policy Manual for Medicare Services, Chapter 1, establishes that correct coding requires reporting the service actually rendered. Where a procedure is performed and documented in the operative record, denial based on bundling or administrative coding grounds must be evaluated against the NCCI procedure-to-procedure edit table and the applicable modifier indicators. A modifier indicator of '1' permits unbundling with an appropriate modifier; denial without evaluation of the applicable modifier is inconsistent with NCCI policy.`,
     quotable: "correct coding requires reporting the service actually rendered",
     blocked: ["medicaid-mco"],
@@ -305,6 +309,7 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
       "medicaid-mco",
     ],
     strategies: ["bundling"],
+    bundlingBranches: ["modifier-59"],
     argument: `The AMA CPT® Guidelines provide that a procedure designated as a "separate procedure" may be reported separately when performed independently and not immediately related to another service. When the operative record documents that the separate procedure was performed as a distinct service, bundling without application of the appropriate modifier — specifically modifier 59 or the applicable X{EPSU} modifier — is inconsistent with CPT guidelines and NCCI unbundling policy.`,
     quotable:
       "may be reported separately when performed independently and not immediately related to another service",

@@ -19,7 +19,8 @@ import { isCarc4M144Bundling } from "../router/bundling-detect";
 import { appendEnclosuresBlock } from "./enclosures";
 import { appendLetterDisclaimer } from "./disclaimer";
 import { assembleSignatureBlock, stripTrailingSignature } from "./signature";
-import { normalizeIcd10Array } from "../format/normalizeIcd10";
+import { normalizeIcd10Array, stripIcd10PlaceholdersFromText } from "../format/normalizeIcd10";
+import { resolveIcd10CodesForLetter } from "../format/icd10ForLetter";
 
 function str(v: FactValue | undefined): string {
   if (v == null) return "";
@@ -78,7 +79,7 @@ export function buildClinicalArgumentBlock(ledger: FactLedger): string {
     }
   }
 
-  const icdClinical = arr(getValue(ledger, "clinical.icd10Codes"));
+  const icdClinical = normalizeIcd10Array(arr(getValue(ledger, "clinical.icd10Codes")));
   if (icdClinical.length) {
     segments.push(`Clinical ICD-10: ${icdClinical.join(", ")}.`);
   }
@@ -116,9 +117,7 @@ function formatDenialCodes(ledger: FactLedger): string {
 }
 
 function formatIcd10Line(ledger: FactLedger): string {
-  const codes = normalizeIcd10Array(arr(getValue(ledger, "claim.icd10Codes")));
-  const fallback = normalizeIcd10Array(arr(getValue(ledger, "clinical.icd10Codes")));
-  const allCodes = codes.length ? codes : fallback;
+  const allCodes = resolveIcd10CodesForLetter(ledger);
   if (!allCodes.length) {
     return "";
   }
@@ -520,6 +519,7 @@ export function assembleLetterParts(
   if (clinicalBlock) {
     narrative = [narrative.trim(), clinicalBlock].filter(Boolean).join("\n\n");
   }
+  narrative = stripIcd10PlaceholdersFromText(narrative);
   const authSection = buildAuthorities(ledger, authorities);
   const procedural = buildProcedural(ledger, planType);
   const escalation = buildEscalation(ledger, planType);
@@ -537,6 +537,7 @@ export function assembleLetterParts(
   let full = sections.join("\n\n");
   full = appendEnclosuresBlock(full, ledger.enclosures || []);
   full = stripContentAfterEnclosures(full);
+  full = stripIcd10PlaceholdersFromText(full);
   full = appendLetterDisclaimer(full);
 
   return {
@@ -560,7 +561,7 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
     "Write ONLY the following narrative sections (plain text, double newline between sections):",
     "",
     "6. RELIEF REQUESTED — One sentence stating what we want (reprocess / reverse / pay at contracted rate). Never demand payment equal to billed charges.",
-    "7. CLAIM SUMMARY — Factual summary: claim number, dates, CPT codes, ICD-10 codes (claim.icd10Codes), amounts from ledger only.",
+    "7. CLAIM SUMMARY — Factual summary: claim number, dates, CPT codes, amounts from ledger only. Include ICD-10 codes ONLY when claim.icd10Codes are populated in the ledger; never write XXX.XXX or invent a diagnosis code.",
     "8. DENIAL BASIS — CARC descriptor verbatim from CARC DESCRIPTOR below. RARC if available. No inference.",
   ];
 

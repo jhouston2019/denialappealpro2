@@ -3,9 +3,12 @@ import type { FactKey, FactLedger } from "../ledger/types";
 import { applyIntakeToLedger } from "../ledger/intakeToLedger";
 import { emptyIntake, type DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 import { deterministicGroundedDraft } from "../generate/deterministicDraft";
+import { getAuthoritiesForLedger } from "../authorities/gate";
 import { validateLetter } from "../validate/index";
 import { routeDenial } from "../router/index";
 import { isCarc4M144Bundling } from "../router/bundling-detect";
+
+export const BCBS_BUNDLING_CLAIM_NUMBER = "BCBS-2026-991234";
 
 export const BCBS_BUNDLING_RAW_TEXT = `
 BLUE CROSS BLUE SHIELD
@@ -14,7 +17,7 @@ Detroit, MI 48290
 
 Member: Robert Tatum
 Member ID: XYZ123456789
-Claim Number: BCBS-2026-445821
+Claim Number: BCBS-2026-991234
 Provider: Riverside Medical Group
 Date of Service: 01/15/2026
 Date Processed: 01/28/2026
@@ -52,14 +55,16 @@ function apply(
 
 export function buildBcbsBundlingLedger(opts?: {
   icd10Codes?: string[];
+  planType?: DenialIntake["planType"];
 }): FactLedger {
   const icd = opts?.icd10Codes ?? [];
+  const planType = opts?.planType ?? "fully-insured-group";
 
   let L = emptyLedger(["bcbs-bundling"]);
   L = apply(
     L,
     [
-      ["claim.number", "BCBS-2026-445821"],
+      ["claim.number", BCBS_BUNDLING_CLAIM_NUMBER],
       ["claim.payerName", "Blue Cross Blue Shield"],
       ["claim.payerAppealAddress", "P.O. Box 990123, Detroit, MI 48290"],
       ["claim.dateOfService", "2026-01-15"],
@@ -71,7 +76,7 @@ export function buildBcbsBundlingLedger(opts?: {
       ["claim.cptCodes", ["99213", "93000"]],
       ["patient.name", "Robert Tatum"],
       ["patient.memberId", "XYZ123456789"],
-      ["patient.planType", "fully-insured-group"],
+      ["patient.planType", planType],
       ["provider.name", "Riverside Medical Group"],
       ["provider.npi", "1568890123"],
       [
@@ -94,7 +99,7 @@ export function buildBcbsBundlingLedger(opts?: {
     patientName: "Robert Tatum",
     memberId: "XYZ123456789",
     payer: "Blue Cross Blue Shield",
-    claimNumber: "BCBS-2026-445821",
+    claimNumber: BCBS_BUNDLING_CLAIM_NUMBER,
     dateOfService: "2026-01-15",
     providerName: "Riverside Medical Group",
     providerNpi: "1568890123",
@@ -106,7 +111,7 @@ export function buildBcbsBundlingLedger(opts?: {
     billedAmount: "525.00",
     paidAmount: "100.00",
     deniedAmount: "425.00",
-    planType: "fully-insured-group",
+    planType,
     bundlingBranch: "modifier-25",
     icdCodes: icd,
     signerName: "Jordan Hale",
@@ -116,18 +121,25 @@ export function buildBcbsBundlingLedger(opts?: {
   return applyIntakeToLedger(L, intake);
 }
 
-export function runBcbsBundlingAcceptance(opts?: { icd10Codes?: string[] }) {
+export function runBcbsBundlingAcceptance(opts?: {
+  icd10Codes?: string[];
+  planType?: DenialIntake["planType"];
+}) {
   const ledger = buildBcbsBundlingLedger(opts);
   const route = routeDenial(ledger);
   const draft = deterministicGroundedDraft(ledger);
   const errors = validateLetter(draft.text, ledger);
   const text = draft.text;
+  const authorities = getAuthoritiesForLedger(ledger);
+  const ncciCitationMatches =
+    text.match(/CMS NCCI Policy Manual for Medicare Services, Chapter 1/g) || [];
 
   return {
     ledger,
     route,
     text,
     errors,
+    authorities,
     checks: {
       providerCorrect: text.includes("Riverside Medical Group"),
       payerCorrect: text.includes("Blue Cross Blue Shield"),
@@ -138,6 +150,16 @@ export function runBcbsBundlingAcceptance(opts?: { icd10Codes?: string[] }) {
       bundlingStrategy: route.strategy.id === "bundling",
       modifier25Arg: /modifier\s*25/i.test(text),
       ncciArg: /NCCI/i.test(text),
+      singleNcciCitation: ncciCitationMatches.length === 1,
+      noModifier59Citation: !/modifier 59|X\{EPSU\}/i.test(text),
+      noPlaceholderIcd: !/\bXXX\.XXX\b/i.test(text),
+      noCignaClaimLeak: !/CIG-2026-887731/.test(text),
+      erisaUsesClaim:
+        opts?.planType !== "erisa-self-funded" ||
+        text.includes(BCBS_BUNDLING_CLAIM_NUMBER),
+      erisaUsesBundlingCodes:
+        opts?.planType !== "erisa-self-funded" ||
+        (/CO-4|M144/.test(text) && !/CO-15|N517/.test(text)),
       noPlaceholder: !/\[\[REQUIRED:/.test(text),
       noUnknownDenial: !/Unknown denial reason/i.test(text),
       exportPass: errors.length === 0,

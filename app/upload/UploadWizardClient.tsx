@@ -26,6 +26,10 @@ import {
 import { DEFAULT_ENCLOSURES } from "@/lib/appeal/ledger/keys";
 import { ensureLedger } from "@/lib/appeal/ledger/intakeToLedger";
 import type { EnclosureItem, FactLedger } from "@/lib/appeal/ledger/types";
+import {
+  hasValidIcd10Codes,
+  resolveIcd10CodesForLetter,
+} from "@/lib/appeal/format/icd10ForLetter";
 import { routeDenial } from "@/lib/appeal/router/index";
 import { emptyIntake, type DenialIntake } from "@/lib/wizard/denialIntakeEngine";
 import {
@@ -390,8 +394,8 @@ export default function UploadWizardClient({
     }
     const icdFromDoc =
       ledger?.facts?.["claim.icd10Codes"]?.provenance === "document" &&
-      (ledger?.facts?.["claim.icd10Codes"]?.value != null);
-    if (!icdFromDoc && !intake.icdCodes.length) {
+      resolveIcd10CodesForLetter(nextLedger).length > 0;
+    if (!icdFromDoc && !hasValidIcd10Codes(intake.icdCodes)) {
       announce(
         "Enter ICD-10 diagnosis code(s) before continuing — they were not extracted from the document."
       );
@@ -444,6 +448,13 @@ export default function UploadWizardClient({
     setGenerateLoading(true);
     try {
       const factLedger = ensureLedger(ledger, intake, enclosures);
+      if (!resolveIcd10CodesForLetter(factLedger).length) {
+        announce(
+          "Enter valid ICD-10 diagnosis code(s) before generating — placeholder codes are not accepted."
+        );
+        setGenerateLoading(false);
+        return;
+      }
       setLedger(factLedger);
 
       const body = {

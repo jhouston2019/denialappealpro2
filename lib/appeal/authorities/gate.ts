@@ -1,12 +1,13 @@
 import { getValue } from "../ledger/builder";
 import type { FactLedger, FactValue, PlanType } from "../ledger/types";
 import { routeDenial } from "../router/index";
-import type { StrategyId } from "../router/strategies";
+import type { BundlingBranchId, StrategyId } from "../router/strategies";
 import {
   AUTHORITY_RECORDS,
   citationStringsFromRecords,
   type AuthorityRecord,
 } from "./records";
+import { renderAuthorityRecords } from "./renderRecord";
 import { GLOBAL_PREAPPROVED_CITATIONS } from "./allowlist";
 
 function isNcciAuthorityRecord(record: AuthorityRecord): boolean {
@@ -78,6 +79,31 @@ function passesLedgerFilters(
   return true;
 }
 
+function resolveBundlingBranch(ledger: FactLedger): BundlingBranchId | null {
+  const v = getValue(ledger, "appeal.bundlingBranch");
+  if (v == null) return null;
+  const s = String(v).trim();
+  const allowed: BundlingBranchId[] = [
+    "modifier-25",
+    "modifier-59",
+    "no-ncci-edit",
+    "modifier-indicator-0",
+  ];
+  return allowed.find((b) => b === s) ?? null;
+}
+
+function passesBundlingBranchFilter(
+  record: AuthorityRecord,
+  strategyId: StrategyId,
+  ledger?: FactLedger
+): boolean {
+  if (!record.bundlingBranches?.length) return true;
+  if (strategyId !== "bundling" || !ledger) return false;
+  const branch = resolveBundlingBranch(ledger);
+  if (!branch) return false;
+  return record.bundlingBranches.includes(branch);
+}
+
 export function getAuthorities(
   planType: PlanType,
   strategyId: StrategyId,
@@ -87,14 +113,17 @@ export function getAuthorities(
   void branch;
   if (planType === "unknown") return [];
 
-  return AUTHORITY_RECORDS.filter(
+  const selected = AUTHORITY_RECORDS.filter(
     (r) =>
       r.planTypes.includes(planType) &&
       !r.blocked.includes(planType) &&
       r.strategies.includes(strategyId) &&
       (!isNcciAuthorityRecord(r) || ncciAllowedForStrategy(strategyId)) &&
+      passesBundlingBranchFilter(r, strategyId, ledger) &&
       passesLedgerFilters(r, ledger)
   );
+
+  return ledger ? renderAuthorityRecords(selected, ledger) : selected;
 }
 
 export function getAuthoritiesForLedger(ledger: FactLedger): AuthorityRecord[] {

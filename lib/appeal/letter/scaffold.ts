@@ -7,6 +7,7 @@ import {
   formatLetterDate,
   formatNpi,
 } from "../format/render";
+import { normalizeIcd10Array } from "../format/normalizeIcd10";
 
 function str(v: FactValue | undefined): string {
   if (v == null) return "";
@@ -84,12 +85,12 @@ export function renderLetterScaffold(ledger: FactLedger): string {
     : req("claim.dateOfService");
   const cptArr = arr(getValue(ledger, "claim.cptCodes"));
   const cpt = cptArr.length ? cptArr.join(", ") : req("claim.cptCodes");
-  const icdCodes = arr(getValue(ledger, "claim.icd10Codes"));
-  const icdFallback = arr(getValue(ledger, "clinical.icd10Codes"));
+  const icdCodes = normalizeIcd10Array(arr(getValue(ledger, "claim.icd10Codes")));
+  const icdFallback = normalizeIcd10Array(arr(getValue(ledger, "clinical.icd10Codes")));
   const icdAll = icdCodes.length ? icdCodes : icdFallback;
   const icdLine = icdAll.length
     ? `    ICD-10: ${icdAll.join(", ")}${str(getValue(ledger, "clinical.primaryDiagnosis")) ? ` — ${str(getValue(ledger, "clinical.primaryDiagnosis"))}` : ""}`
-    : `    ICD-10: ${req("claim.icd10Codes")}`;
+    : "";
   const billedRaw = str(getValue(ledger, "claim.billedAmount"));
   const billed = billedRaw
     ? formatCurrency(billedRaw)
