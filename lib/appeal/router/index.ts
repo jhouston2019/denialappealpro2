@@ -1,3 +1,5 @@
+import { formatCurrency } from "../format/render";
+import { resolveFactKeyPlaceholders } from "../format/resolveFactPlaceholders";
 import { getValue } from "../ledger/builder";
 import type { FactLedger, FactValue } from "../ledger/types";
 import { lookupCarc, normalizeCarcCode, type CarcEntry } from "./carc-table";
@@ -403,16 +405,19 @@ export function serializeStrategyForPrompt(ledger: FactLedger): string {
   }
 
   if (isCarc4M144Bundling(ledger)) {
+    const deniedRaw = getValue(ledger, "claim.deniedAmount");
+    const denied =
+      deniedRaw != null && String(deniedRaw).trim()
+        ? formatCurrency(String(deniedRaw))
+        : "the denied amount";
     lines.push(
-      "CARC 4 + RARC M144 BUNDLING — REQUIRED ARGUMENT BLOCK (minimum 4 substantive paragraphs):",
-      "Paragraph 1 — Modifier 25: The E/M service (CPT 99213) was medically necessary and distinct from the procedure (CPT 93000) performed on the same date. Under CMS NCCI Policy Manual, Chapter 1, modifier 25 exempts significant and separately identifiable E/M services from bundling edits.",
-      "Paragraph 2 — Separate medical necessity: The E/M visit addressed a distinct clinical issue requiring independent evaluation beyond the scope of the procedure. The treating provider's documentation supports separate billing.",
-      "Paragraph 3 — NCCI edit rebuttal: NCCI column-two edits are not absolute — they are overridable by modifier when clinical circumstances support it. The plan must evaluate the modifier 25 claim on its merits rather than applying a blanket bundling denial.",
-      "Paragraph 4 — Resubmission demand: Demand reprocessing with modifier 25 appended to CPT 99213 and full payment of the denied amount from claim.deniedAmount.",
+      "CARC 4 + RARC M144 BUNDLING — OMIT bundling/modifier-25 argument paragraphs from your narrative. The system appends a deterministic bundling block after generation.",
+      "Do not repeat arguments. Each point must appear exactly once. Do not restate the modifier 25 exemption more than once.",
+      `When stating payment demand in other sections, use the denied amount ${denied} — never write raw fact keys like claim.deniedAmount.`,
       "Quote the payer EOB instruction when present: resubmit with modifier 25 appended to CPT 99213 if the E/M was significant and separately identifiable.",
       "DO NOT write \"Unknown denial reason.\" DO NOT characterize as a generic non-covered benefit denial."
     );
   }
 
-  return lines.join("\n");
+  return resolveFactKeyPlaceholders(lines.join("\n"), ledger);
 }

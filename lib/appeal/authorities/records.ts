@@ -149,7 +149,7 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
     ],
     strategies: ["bundling"],
     bundlingBranches: ["modifier-25"],
-    argument: `Under the CMS National Correct Coding Initiative (NCCI) Policy Manual for Medicare Services, Chapter 1, modifier 25 indicates that a significant, separately identifiable evaluation and management service was performed by the same physician on the same day as a procedure. NCCI procedure-to-procedure edits are not absolute when modifier 25 applies and the medical record documents a separately identifiable E/M service above and beyond the work ordinarily associated with the procedure. Correct coding requires reporting the service actually rendered and evaluating the applicable modifier indicators. Denial without evaluation of modifier 25 on its merits is inconsistent with CMS NCCI edit policy.`,
+    argument: `Under the CMS National Correct Coding Initiative (NCCI) Policy Manual for Medicare Services, Chapter 1, modifier 25 indicates that a significant, separately identifiable evaluation and management service was performed by the same physician on the same day as a procedure. NCCI procedure-to-procedure edits are not absolute when the modifier applies and the medical record documents a separately identifiable E/M service above and beyond the work ordinarily associated with the procedure. Denial without meaningful evaluation of the modifier claim is inconsistent with CMS NCCI edit policy.`,
     quotable:
       "significant, separately identifiable evaluation and management service",
     blocked: ["medicaid-mco", "medicare-traditional"],

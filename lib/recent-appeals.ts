@@ -25,13 +25,35 @@ type DapSummaryJson = {
   status?: string;
   exportAllowed?: boolean;
   validationErrors?: unknown[];
+  claim?: {
+    icd10Codes?: unknown;
+  };
   intake?: Record<string, unknown> & {
     ledger?: FactLedger;
     payerName?: string;
     carcCodes?: string[];
+    icd10Codes?: unknown;
+    icdCodes?: unknown;
   };
   ledger?: FactLedger;
 };
+
+function summaryIcd10Codes(summary: DapSummaryJson): string[] {
+  const fromClaim = arr(summary.claim?.icd10Codes);
+  if (fromClaim.length) return fromClaim;
+
+  const intake = summary.intake ?? {};
+  const fromIntake =
+    arr(intake.icd10Codes).length > 0
+      ? arr(intake.icd10Codes)
+      : arr(intake.icdCodes);
+  if (fromIntake.length) return fromIntake;
+
+  const ledger = summary.ledger ?? intake.ledger ?? null;
+  const fromLedger = ledgerArray(ledger, "claim.icd10Codes");
+  if (fromLedger.length) return fromLedger;
+  return ledgerArray(ledger, "clinical.icd10Codes");
+}
 
 function str(v: unknown): string {
   if (v == null) return "";
@@ -124,15 +146,21 @@ export function parseRecentAppealRow(row: RecentAppealRow): RecentAppealSummary 
   let statusLabel = "Ready";
   let statusTone: RecentAppealSummary["statusTone"] = "ready";
 
+  const icdPresent = summaryIcd10Codes(summary).length > 0;
+  const gaps = reviewValidationGaps(row);
+
   if (summary.status && summary.status !== "completed") {
     statusLabel = summary.status.replace(/_/g, " ");
     statusTone = "neutral";
-  } else if (summary.exportAllowed === false || (summary.validationErrors?.length ?? 0) > 0) {
-    statusLabel = "Needs review";
-    statusTone = "warning";
   } else if (!row.letter_text?.trim()) {
     statusLabel = "In progress";
     statusTone = "neutral";
+  } else if (gaps.length > 0) {
+    statusLabel = "Needs review";
+    statusTone = "warning";
+  } else if (summary.exportAllowed === false && !icdPresent) {
+    statusLabel = "Needs review";
+    statusTone = "warning";
   }
 
   return {
@@ -184,6 +212,7 @@ function pushUnique(list: string[], label: string) {
 /** Human-readable export gaps for dashboard "Needs Review" rows. */
 export function reviewValidationGaps(row: RecentAppealRow): string[] {
   const summary = (row.ai_summary_json ?? {}) as DapSummaryJson;
+  const icdPresent = summaryIcd10Codes(summary).length > 0;
   const gaps: string[] = [];
   const errors = (summary.validationErrors ?? []) as ValidationErrorLike[];
 
@@ -197,7 +226,10 @@ export function reviewValidationGaps(row: RecentAppealRow): string[] {
       message.includes("icd-10") ||
       message.includes("diagnosis")
     ) {
-      pushUnique(gaps, "Missing ICD-10");
+      if (!icdPresent) {
+        pushUnique(gaps, "Missing ICD-10");
+      }
+      continue;
     }
     if (rule.includes("npi") || message.includes("npi")) {
       pushUnique(gaps, "Missing provider NPI");
@@ -215,7 +247,7 @@ export function reviewValidationGaps(row: RecentAppealRow): string[] {
   }
 
   const letter = row.letter_text ?? "";
-  if (/XXX\.XXX/i.test(letter)) {
+  if (!icdPresent && /XXX\.XXX/i.test(letter)) {
     pushUnique(gaps, "Missing ICD-10");
   }
   if (/\[\[REQUIRED:/i.test(letter)) {

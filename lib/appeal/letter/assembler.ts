@@ -16,7 +16,8 @@ import {
 import { routeDenial } from "../router/index";
 import { isCarc4M144Bundling } from "../router/bundling-detect";
 import { appendEnclosuresBlock } from "./enclosures";
-import { appendLetterDisclaimer } from "./disclaimer";
+import { ensureLetterDisclaimer } from "./disclaimer";
+import { resolveFactKeyPlaceholders } from "../format/resolveFactPlaceholders";
 import { stripInternalLanguageFromLetter } from "./internalLanguage";
 import { assembleSignatureBlock, stripTrailingSignature } from "./signature";
 import { normalizeIcd10Array, stripIcd10PlaceholdersFromText } from "../format/normalizeIcd10";
@@ -158,11 +159,11 @@ export function buildCarc4M144BundlingArgument(ledger: FactLedger): string {
   const payer = str(getValue(ledger, "claim.payerName")) || "the plan";
 
   const paragraphs = [
-    `We demand reprocessing of claim ${claim} with modifier 25 appended to CPT ${emCode} and full payment of the denied amount of ${denied}. The evaluation and management service billed as CPT ${emCode} was a significant, separately identifiable E/M service performed on the same date of service as CPT ${procCode}. Under the CMS NCCI Policy Manual, Chapter 1, modifier 25 exempts significant and separately identifiable E/M services from National Correct Coding Initiative bundling edits when the E/M visit is above and beyond the work ordinarily associated with the procedure.`,
-    `The E/M visit addressed a distinct clinical issue requiring independent evaluation, medical decision-making, and documentation beyond the scope of the same-day procedure. The treating provider's record supports that the E/M service was medically necessary on its own merits and was not merely a routine or incidental component of the procedure. Separate billing with modifier 25 is appropriate when the physician's evaluation exceeds the pre- and post-procedure work included in the procedure code.`,
-    `NCCI column-two procedure-to-procedure edits are not absolute denials. They are overridable when modifier 25 applies and the clinical record demonstrates a separately identifiable E/M service. ${payer}'s own remittance guidance for this denial instructs that if modifier 25 applies and the E/M service was significant and separately identifiable, the claim should be resubmitted with modifier 25 appended to CPT ${emCode}. A blanket bundling denial without evaluating modifier 25 on its merits is not a valid coding determination.`,
-    `The plan must review the medical record, apply CMS NCCI modifier policy, and reprocess this claim with modifier 25 on CPT ${emCode}. Payment for the denied ${denied} must be remitted upon reprocessing. Denial without consideration of modifier 25 and the separately identifiable E/M service is inconsistent with standard NCCI edit policy and the plan's own resubmission instructions.`,
-    `We reserve all rights to escalate this matter if the plan continues to apply an automated bundling edit without meaningful review of the modifier 25 claim.`,
+    `Under the CMS NCCI Policy Manual, Chapter 1, modifier 25 exempts significant and separately identifiable evaluation and management services from National Correct Coding Initiative bundling edits when the E/M visit is above and beyond the work ordinarily associated with the same-day procedure.`,
+    `The E/M service billed as CPT ${emCode} was a significant, separately identifiable evaluation and management service performed on the same date of service as CPT ${procCode}. The visit addressed a distinct clinical issue requiring independent evaluation, medical decision-making, and documentation beyond the scope of the procedure — not a routine or incidental component of the procedure.`,
+    `${payer}'s remittance guidance for this denial instructs that when the E/M service was significant and separately identifiable, the claim should be resubmitted with the applicable modifier appended to CPT ${emCode}.`,
+    `NCCI column-two procedure-to-procedure edits are overridable when the clinical record demonstrates a separately identifiable E/M service. A blanket bundling denial without evaluating the modifier claim on its merits is not a valid coding determination.`,
+    `We demand reprocessing of claim ${claim} with modifier 25 appended to CPT ${emCode} and full payment of the denied amount of ${denied}.`,
   ];
 
   return paragraphs.join("\n\n");
@@ -502,6 +503,7 @@ export function assembleLetterParts(
   const planType = resolvePlanType(ledger);
   const scaffold = buildScaffold(ledger);
   let narrative = extractNarrativeBody(narrativeBody);
+  narrative = resolveFactKeyPlaceholders(narrative, ledger);
   if (isCarc4M144Bundling(ledger)) {
     const bundlingBlock = buildCarc4M144BundlingArgument(ledger);
     narrative = [narrative.trim(), bundlingBlock].filter(Boolean).join("\n\n");
@@ -530,7 +532,8 @@ export function assembleLetterParts(
   full = stripContentAfterEnclosures(full);
   full = stripIcd10PlaceholdersFromText(full);
   full = stripInternalLanguageFromLetter(full);
-  full = appendLetterDisclaimer(full);
+  full = resolveFactKeyPlaceholders(full, ledger);
+  full = ensureLetterDisclaimer(full);
 
   return {
     scaffold,
@@ -578,7 +581,8 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
     if (isCarc4M144Bundling(ledger)) {
       lines.push(
         "",
-        "CARC 4 + M144: Write at least 4 substantive paragraphs covering modifier 25, separate medical necessity, NCCI edit rebuttal, and resubmission demand with modifier 25 on CPT 99213. Never write \"Unknown denial reason.\""
+        "CARC 4 + M144: OMIT the bundling argument from your output — the system appends it deterministically after generation.",
+        "Do not repeat arguments. Each point must appear exactly once. Do not restate the modifier 25 exemption more than once."
       );
     }
     if (clinical) {

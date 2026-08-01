@@ -183,6 +183,12 @@ exports.handler = async (event) => {
   const validationErrors = validateLetter(letterText, ledger);
   const exportAllowed = validationErrors.length === 0;
 
+  const icd10Codes =
+    ledger?.facts?.["claim.icd10Codes"]?.value ??
+    ledger?.facts?.["clinical.icd10Codes"]?.value ??
+    body.icd10Codes ??
+    [];
+
   const supabase = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -203,6 +209,13 @@ exports.handler = async (event) => {
         status: "completed",
         intake: intakePayload,
         ledger,
+        claim: {
+          icd10Codes: Array.isArray(icd10Codes)
+            ? icd10Codes
+            : icd10Codes
+              ? [String(icd10Codes)]
+              : [],
+        },
         validationErrors,
         exportAllowed,
         generatorPath,

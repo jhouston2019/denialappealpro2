@@ -104,5 +104,80 @@ describe("letter generation bug fixes — BCBS bundling", () => {
     );
     assert.ok(letter.endsWith(LETTER_DISCLAIMER));
     assert.match(letter, /Generated letters are for administrative use only\.$/);
+    const disclaimerCount = (
+      letter.match(/Denial Appeal Pro is not a law firm/gi) || []
+    ).length;
+    assert.equal(disclaimerCount, 1);
+    assert.ok(!letter.includes("© 2026 Denial Appeal Pro"));
+    assert.ok(!/Build\s+\d+/i.test(letter));
+  });
+
+  it("deduplicates disclaimer when model body already includes one", () => {
+    const result = runBcbsBundlingAcceptance({ icd10Codes: ["M54.5"] });
+    const letter = assembleLetter(
+      result.ledger,
+      `We request reprocessing.\n\n${LETTER_DISCLAIMER}\n\n© 2026 Denial Appeal Pro · Build 1 |`,
+      getAuthoritiesForLedger(result.ledger)
+    );
+    assert.equal(
+      (letter.match(/Denial Appeal Pro is not a law firm/gi) || []).length,
+      1
+    );
+    assert.ok(letter.endsWith(LETTER_DISCLAIMER));
+    assert.ok(!letter.includes("Build 1"));
+  });
+
+  it("resolves claim.deniedAmount placeholders in assembled letter", () => {
+    const result = runBcbsBundlingAcceptance({ icd10Codes: ["M54.5"] });
+    const letter = assembleLetter(
+      result.ledger,
+      "Pay full payment of the denied amount from claim.deniedAmount.",
+      getAuthoritiesForLedger(result.ledger)
+    );
+    assert.ok(!letter.includes("claim.deniedAmount"));
+    assert.match(letter, /\$425\.00/);
+  });
+
+  it("full BCBS bundling assembler regression — four deploy fixes", () => {
+    const result = runBcbsBundlingAcceptance({ icd10Codes: ["M54.5"] });
+    const narrative =
+      "We request reprocessing at the contracted rate. " +
+      "Pay full payment of the denied amount from claim.deniedAmount.";
+    const letter = assembleLetter(
+      result.ledger,
+      narrative,
+      getAuthoritiesForLedger(result.ledger)
+    );
+
+    const disclaimerCount = (
+      letter.match(/not a law firm/gi) || []
+    ).length;
+    assert.equal(
+      disclaimerCount,
+      1,
+      `disclaimer must appear exactly once, found ${disclaimerCount}`
+    );
+
+    assert.ok(
+      !letter.includes("claim.deniedAmount"),
+      "letter must not contain unresolved claim.deniedAmount"
+    );
+
+    const modifier25Count = (letter.match(/modifier\s*25/gi) || []).length;
+    assert.ok(
+      modifier25Count <= 4,
+      `modifier 25 must appear at most 4 times, found ${modifier25Count}`
+    );
+
+    assert.ok(!letter.includes("© 2026"), "letter must not contain copyright line");
+    assert.ok(!/\bBuild\s+\d+/i.test(letter), "letter must not contain Build footer");
+
+    const lines = letter.trimEnd().split("\n");
+    assert.equal(
+      lines[lines.length - 1],
+      LETTER_DISCLAIMER,
+      "letter must end with canonical disclaimer"
+    );
+    assert.ok(letter.endsWith(LETTER_DISCLAIMER));
   });
 });
