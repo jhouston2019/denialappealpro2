@@ -778,7 +778,22 @@ export default function UploadWizardClient({
               to 10 PDFs to extract claim details automatically.
             </p>
 
-            <div className="mt-6">
+            {!isPreviewMode && isAuthenticated && isPaid && inputTab !== "bulk" ? (
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border-l-4 border-[#22c55e] bg-[#f0fdf4] px-4 py-3">
+                <p className="text-sm font-medium text-[#1a2a3a]">
+                  Got multiple denials? Upload up to 10 PDFs at once.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => handleInputTabChange("bulk")}
+                  className="shrink-0 rounded-full bg-[#22c55e] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#16a34a]"
+                >
+                  Bulk Upload
+                </button>
+              </div>
+            ) : null}
+
+            <div className={!isPreviewMode && isAuthenticated && isPaid && inputTab !== "bulk" ? "mt-4" : "mt-6"}>
               <div
                 role="tablist"
                 aria-label="Denial input method"
@@ -824,13 +839,16 @@ export default function UploadWizardClient({
                   aria-controls="denial-input-panel-bulk"
                   tabIndex={inputTab === "bulk" ? 0 : -1}
                   onClick={() => handleInputTabChange("bulk")}
-                  className={`shrink-0 border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                  className={`inline-flex shrink-0 items-center gap-1.5 border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
                     inputTab === "bulk"
                       ? "border-[#22c55e] text-[#1a2a3a]"
-                      : "border-transparent text-[#94a3b8] hover:text-[#5a6a7a]"
+                      : "border-transparent text-[#16a34a] hover:text-[#15803d]"
                   }`}
                 >
-                  Bulk Upload
+                  Bulk Upload (up to 10)
+                  <span className="rounded bg-[#22c55e] px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none tracking-wide text-white">
+                    Pro
+                  </span>
                 </button>
               </div>
 
