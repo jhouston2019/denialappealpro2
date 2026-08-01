@@ -7,7 +7,13 @@ import UploadWizardClient from "./UploadWizardClient";
 export default async function UploadRoutePage({
   searchParams,
 }: {
-  searchParams: Promise<{ step?: string; reviewId?: string; new?: string }>;
+  searchParams: Promise<{
+    step?: string;
+    reviewId?: string;
+    new?: string;
+    resumed?: string;
+    payment?: string;
+  }>;
 }) {
   const { supabase, user } = await requireUserAndPaywall({
     unpaidRedirect: "/analysis-preview",
@@ -51,12 +57,17 @@ export default async function UploadRoutePage({
     : 1;
   const startFreshReview =
     (sp.new === "1" || sp.new === "true") && !resumeExistingReview;
+  const resumeAfterPayment =
+    sp.resumed === "1" || sp.resumed === "true";
+  const paymentConfirmed = sp.payment === "confirmed";
 
   return (
     <UploadWizardClient
       initialStep={initialStep}
       initialReviewId={resumeExistingReview ? reviewId : undefined}
       startFreshReview={startFreshReview}
+      resumeAfterPayment={resumeAfterPayment}
+      paymentConfirmed={paymentConfirmed}
     />
   );
 }

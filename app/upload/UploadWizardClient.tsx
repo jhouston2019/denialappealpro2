@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import DenialDocumentDropZone from "@/components/wizard/DenialDocumentDropZone";
+import { ProcessingSpinner } from "@/components/wizard/ProcessingSpinner";
 import { PostPaymentSessionRefresh } from "@/components/billing/PostPaymentSessionRefresh";
 import { netlifyFunctionUrl } from "@/lib/netlify-function-url";
 import {
@@ -12,9 +13,11 @@ import {
   PAID_RESUME_SESSION_KEY,
   UPLOAD_NEW_REVIEW_HREF,
 } from "@/lib/wizard-snapshot";
+import { clearPostPaymentResumeStorage } from "@/lib/post-payment-resume";
 import {
-  DAP_WIZARD_RESUME_KEY,
+  DAP_RESUME_AFTER_PAYMENT_KEY,
   DAP_WIZARD_STATE_KEY,
+  clearWizardResumeCheckoutFlags,
   emptyConfidence,
   readDapWizardResume,
   tryParseDapWizardSnapshot,
@@ -22,6 +25,7 @@ import {
   writeDapWizardState,
   type DapConfidenceMap,
   type DapWizardSnapshot,
+  type DapWizardStrategySnapshot,
 } from "@/lib/dap-wizard-snapshot";
 import { DEFAULT_ENCLOSURES } from "@/lib/appeal/ledger/keys";
 import { ensureLedger } from "@/lib/appeal/ledger/intakeToLedger";
@@ -71,6 +75,8 @@ type UploadWizardClientProps = {
   initialStep?: number;
   initialReviewId?: string;
   startFreshReview?: boolean;
+  resumeAfterPayment?: boolean;
+  paymentConfirmed?: boolean;
 };
 
 function buildSnapshot(
@@ -90,11 +96,45 @@ function buildSnapshot(
   };
 }
 
+function resolveStrategySnapshot(
+  ledger: FactLedger | null,
+  intake: DenialIntake
+): DapWizardStrategySnapshot {
+  const route = routeDenial(ensureLedger(ledger, intake, defaultEnclosures()));
+  return {
+    id: route.strategy.id,
+    branch:
+      route.branch?.id ??
+      intake.authBranch ??
+      intake.bundlingBranch ??
+      intake.timelyFilingBranch ??
+      null,
+  };
+}
+
+function savePreCheckoutResume(
+  snap: DapWizardSnapshot,
+  opts: {
+    extractedText?: string;
+    strategy: DapWizardStrategySnapshot;
+  }
+): void {
+  writeDapWizardResume({
+    ...snap,
+    extractedText: opts.extractedText ?? snap.extractedText ?? null,
+    strategy: opts.strategy,
+    claimNumber: snap.intake.claimNumber,
+    timestamp: Date.now(),
+  });
+}
+
 export default function UploadWizardClient({
   isPreviewMode = false,
   initialStep = 1,
   initialReviewId,
   startFreshReview = false,
+  resumeAfterPayment = false,
+  paymentConfirmed = false,
 }: UploadWizardClientProps = {}) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(() =>
@@ -145,7 +185,7 @@ export default function UploadWizardClient({
     if (startFreshReview && typeof window !== "undefined") {
       clearCompletedReviewSession();
       window.sessionStorage.removeItem(DAP_WIZARD_STATE_KEY);
-      window.sessionStorage.removeItem(DAP_WIZARD_RESUME_KEY);
+      clearWizardResumeCheckoutFlags();
     }
   }, [startFreshReview]);
 
@@ -218,6 +258,7 @@ export default function UploadWizardClient({
       }
 
       const pendingPostPayment =
+        window.localStorage.getItem(DAP_RESUME_AFTER_PAYMENT_KEY) === "true" ||
         window.sessionStorage.getItem(PAID_RESUME_SESSION_KEY) === "true" ||
         Boolean(initialReviewId?.trim()) ||
         Boolean(window.sessionStorage.getItem(DELIVERABLES_REVIEW_ID_KEY));
@@ -317,14 +358,19 @@ export default function UploadWizardClient({
     if (typeof window === "undefined") return;
     setPreviewUnlockBusy(true);
     try {
-      writeDapWizardResume(
+      const nextLedger = ledger ? { ...ledger, enclosures } : ledger;
+      savePreCheckoutResume(
         buildSnapshot(
           currentStep,
           intake,
           confidence,
           uploadedFile?.name ?? null,
-          ledger ? { ...ledger, enclosures } : ledger
-        )
+          nextLedger
+        ),
+        {
+          extractedText: pasteText.trim() || undefined,
+          strategy: resolveStrategySnapshot(nextLedger, intake),
+        }
       );
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
@@ -346,7 +392,7 @@ export default function UploadWizardClient({
     } finally {
       setPreviewUnlockBusy(false);
     }
-  }, [announce, confidence, currentStep, enclosures, intake, ledger, uploadedFile]);
+  }, [announce, confidence, currentStep, enclosures, intake, ledger, pasteText, uploadedFile]);
 
   const handleStep3Continue = useCallback(async () => {
     const nextLedger = ensureLedger(ledger, intake, enclosures);
@@ -415,14 +461,18 @@ export default function UploadWizardClient({
       }
     }
     if (isPreviewMode || !isAuthenticated || !isPaid) {
-      writeDapWizardResume(
+      savePreCheckoutResume(
         buildSnapshot(
           3,
           intake,
           confidence,
           uploadedFile?.name ?? null,
           nextLedger
-        )
+        ),
+        {
+          extractedText: pasteText.trim() || undefined,
+          strategy: resolveStrategySnapshot(nextLedger, intake),
+        }
       );
       router.push("/pricing");
       return;
@@ -438,90 +488,109 @@ export default function UploadWizardClient({
     ledger,
     router,
     uploadedFile,
+    pasteText,
   ]);
 
-  const handleGenerate = useCallback(async () => {
-    if (!isValidNpi(intake.providerNpi)) {
-      announce("Provider NPI must be exactly 10 digits before generating.");
-      return;
-    }
-    setGenerateLoading(true);
-    try {
-      const factLedger = ensureLedger(ledger, intake, enclosures);
-      if (!resolveIcd10CodesForLetter(factLedger).length) {
-        announce(
-          "Enter valid ICD-10 diagnosis code(s) before generating — placeholder codes are not accepted."
+  const handleGenerate = useCallback(
+    async (opts?: { snapshot?: DapWizardSnapshot }) => {
+      const activeIntake = opts?.snapshot?.intake ?? intake;
+      const activeEnclosures =
+        opts?.snapshot?.ledger?.enclosures?.length
+          ? opts.snapshot.ledger.enclosures
+          : enclosures;
+
+      if (!isValidNpi(activeIntake.providerNpi)) {
+        announce("Provider NPI must be exactly 10 digits before generating.");
+        return;
+      }
+      setGenerateLoading(true);
+      try {
+        const factLedger = ensureLedger(
+          opts?.snapshot?.ledger ?? ledger,
+          activeIntake,
+          activeEnclosures
         );
+        if (!resolveIcd10CodesForLetter(factLedger).length) {
+          announce(
+            "Enter valid ICD-10 diagnosis code(s) before generating — placeholder codes are not accepted."
+          );
+          setGenerateLoading(false);
+          return;
+        }
+        setIntake(activeIntake);
+        setLedger(factLedger);
+        if (activeEnclosures.length) {
+          setEnclosures(activeEnclosures);
+        }
+
+        const body = {
+          ledger: factLedger,
+          patientName: activeIntake.patientName,
+          providerName: activeIntake.providerName,
+          providerNpi: activeIntake.providerNpi,
+          payerName: activeIntake.payer,
+          claimNumber: activeIntake.claimNumber,
+          dateOfService: activeIntake.dateOfService,
+          denialReason: activeIntake.denialReason,
+          carcCodes: activeIntake.carcCodes,
+          rarcCodes: activeIntake.rarcCodes,
+          billedAmount: activeIntake.billedAmount,
+          paidAmount: activeIntake.paidAmount,
+          deniedAmount: activeIntake.deniedAmount,
+          icd10Codes: activeIntake.icdCodes,
+          cptCodes: activeIntake.cptCodes,
+          additionalContext: activeIntake.additionalContext,
+          providerAddress: activeIntake.providerAddress,
+          providerPhone: activeIntake.providerPhone,
+          providerFax: activeIntake.providerFax,
+          memberId: activeIntake.memberId,
+          signerName: activeIntake.signerName,
+          signerTitle: activeIntake.signerTitle,
+        };
+
+        const res = await wizardFetch(netlifyFunctionUrl("generate-appeal"), {
+          method: "POST",
+          body: JSON.stringify(body),
+        });
+        const data = (await res.json()) as {
+          success?: boolean;
+          reviewId?: string;
+          letterText?: string;
+          validationErrors?: Array<{ rule: string; message: string }>;
+          error?: string;
+        };
+
+        if (!res.ok || !data.success || !data.reviewId) {
+          announce(data.error || "Appeal generation failed. Try again.");
+          return;
+        }
+
+        if (typeof window !== "undefined") {
+          window.sessionStorage.setItem(
+            DELIVERABLES_REVIEW_ID_KEY,
+            data.reviewId
+          );
+          clearPostPaymentResumeStorage();
+          window.sessionStorage.removeItem(PAID_RESUME_SESSION_KEY);
+        }
+        if (data.validationErrors?.length) {
+          announce(
+            "Letter generated with unresolved gaps — export is blocked until facts are completed."
+          );
+        } else {
+          announce("Appeal letter generated.");
+        }
+        router.push(`/deliverables?reviewId=${data.reviewId}`);
+      } catch (err) {
+        announce(
+          err instanceof Error ? err.message : "Appeal generation failed."
+        );
+      } finally {
         setGenerateLoading(false);
-        return;
       }
-      setLedger(factLedger);
-
-      const body = {
-        ledger: factLedger,
-        // Legacy fields retained for backward-compatible logging only.
-        patientName: intake.patientName,
-        providerName: intake.providerName,
-        providerNpi: intake.providerNpi,
-        payerName: intake.payer,
-        claimNumber: intake.claimNumber,
-        dateOfService: intake.dateOfService,
-        denialReason: intake.denialReason,
-        carcCodes: intake.carcCodes,
-        rarcCodes: intake.rarcCodes,
-        billedAmount: intake.billedAmount,
-        paidAmount: intake.paidAmount,
-        deniedAmount: intake.deniedAmount,
-        icd10Codes: intake.icdCodes,
-        cptCodes: intake.cptCodes,
-        additionalContext: intake.additionalContext,
-        providerAddress: intake.providerAddress,
-        providerPhone: intake.providerPhone,
-        providerFax: intake.providerFax,
-        memberId: intake.memberId,
-        signerName: intake.signerName,
-        signerTitle: intake.signerTitle,
-      };
-
-      const res = await wizardFetch(netlifyFunctionUrl("generate-appeal"), {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
-      const data = (await res.json()) as {
-        success?: boolean;
-        reviewId?: string;
-        letterText?: string;
-        validationErrors?: Array<{ rule: string; message: string }>;
-        error?: string;
-      };
-
-      if (!res.ok || !data.success || !data.reviewId) {
-        announce(data.error || "Appeal generation failed. Try again.");
-        return;
-      }
-
-      if (typeof window !== "undefined") {
-        window.sessionStorage.setItem(
-          DELIVERABLES_REVIEW_ID_KEY,
-          data.reviewId
-        );
-      }
-      if (data.validationErrors?.length) {
-        announce(
-          "Letter generated with unresolved gaps — export is blocked until facts are completed."
-        );
-      } else {
-        announce("Appeal letter generated.");
-      }
-      router.push(`/deliverables?reviewId=${data.reviewId}`);
-    } catch (err) {
-      announce(
-        err instanceof Error ? err.message : "Appeal generation failed."
-      );
-    } finally {
-      setGenerateLoading(false);
-    }
-  }, [announce, enclosures, intake, ledger, router]);
+    },
+    [announce, enclosures, intake, ledger, router]
+  );
 
   const handleLogout = useCallback(async () => {
     const supabase = createSupabaseBrowserClient();
@@ -581,6 +650,19 @@ export default function UploadWizardClient({
         <div className="border-b border-[#c87830] bg-[#f0a050] px-4 py-2 text-center text-xs font-semibold text-[#091c33] sm:text-sm">
           Free preview — upload and review extraction; unlock to generate your
           appeal letter
+        </div>
+      ) : null}
+
+      {!isPreviewMode && resumeAfterPayment ? (
+        <div className="border-b border-[#bbf7d0] bg-[#f0fdf4] px-4 py-2 text-center text-sm font-semibold text-[#15803d]">
+          Payment confirmed — upload your denial letter to generate your first
+          appeal
+        </div>
+      ) : null}
+
+      {!isPreviewMode && paymentConfirmed && !resumeAfterPayment ? (
+        <div className="border-b border-[#bbf7d0] bg-[#f0fdf4] px-4 py-2 text-center text-sm font-semibold text-[#15803d]">
+          Payment confirmed — start your first appeal
         </div>
       ) : null}
 
@@ -753,6 +835,7 @@ export default function UploadWizardClient({
                     extractAfterDrop
                     enablePageDrop
                     extracting={extracting}
+                    onUploadingChange={setExtracting}
                     confirmedFile={uploadedFile}
                     onRemoveFile={() => {
                       setUploadedFile(null);
@@ -809,11 +892,18 @@ export default function UploadWizardClient({
                   />
                   <button
                     type="button"
-                    className="dap-btn-primary-green mt-3"
+                    className="dap-btn-primary-green mt-3 inline-flex items-center gap-2"
                     disabled={extracting || !pasteText.trim()}
                     onClick={() => void runTextExtraction(pasteText)}
                   >
-                    {extracting ? "Extracting…" : "Extract from text"}
+                    {extracting ? (
+                      <>
+                        <ProcessingSpinner className="h-4 w-4" />
+                        Extracting…
+                      </>
+                    ) : (
+                      "Extract from text"
+                    )}
                   </button>
                 </div>
               ) : (
@@ -832,8 +922,13 @@ export default function UploadWizardClient({
             </div>
 
             {inputTab !== "bulk" && extracting ? (
-              <p className="mt-4 text-sm font-medium text-[#2563EB]">
-                Extracting…
+              <p
+                className="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-[#2563EB]"
+                role="status"
+                aria-live="polite"
+              >
+                <ProcessingSpinner className="h-4 w-4" />
+                Processing document…
               </p>
             ) : null}
             {inputTab !== "bulk" && extractError ? (

@@ -1,32 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ProcessingSpinner } from "@/components/wizard/ProcessingSpinner";
 import { createSupabaseBrowserClient } from "@/lib/supabaseClient";
 import {
-  tryParseDapWizardSnapshot,
-  DAP_WIZARD_RESUME_KEY,
-  DAP_WIZARD_STATE_KEY,
-} from "@/lib/dap-wizard-snapshot";
+  clearPostPaymentResumeStorage,
+  generateAppealFromWizardSnapshot,
+  readWizardResumeFromStorage,
+  waitForPaidAccess,
+} from "@/lib/post-payment-resume";
 import {
   clearCompletedReviewSession,
   DELIVERABLES_REVIEW_ID_KEY,
   NEW_REVIEW_CHECKOUT_KEY,
   NEW_REVIEW_PLAN_KEY,
-  PAID_RESUME_SESSION_KEY,
 } from "@/lib/wizard-snapshot";
-
-function hasDapWizardStateInSession(): boolean {
-  if (typeof window === "undefined") return false;
-  for (const key of [DAP_WIZARD_STATE_KEY, DAP_WIZARD_RESUME_KEY] as const) {
-    const raw = window.sessionStorage.getItem(key);
-    if (tryParseDapWizardSnapshot(raw)) return true;
-  }
-  return false;
-}
 
 export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
   const router = useRouter();
+  const [status, setStatus] = useState("Confirming payment…");
 
   useEffect(() => {
     if (!sessionId) {
@@ -38,6 +31,7 @@ export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
 
     void (async () => {
       try {
+        setStatus("Confirming payment…");
         await fetch("/api/auth/create-session-from-stripe", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -56,30 +50,6 @@ export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
         return;
       }
 
-      console.info(
-        "[TODO] Post-purchase welcome email: not implemented. Supabase Auth has no built-in marketing/welcome email API — add Resend, SendGrid, or an Edge Function with your template (keep idempotent if also triggered from webhooks)."
-      );
-
-      const isNewReviewCheckout =
-        typeof window !== "undefined" &&
-        window.sessionStorage.getItem(NEW_REVIEW_CHECKOUT_KEY) === "true";
-      const newReviewPlan =
-        typeof window !== "undefined"
-          ? window.sessionStorage.getItem(NEW_REVIEW_PLAN_KEY)
-          : null;
-
-      if (isNewReviewCheckout && typeof window !== "undefined") {
-        window.sessionStorage.removeItem(NEW_REVIEW_CHECKOUT_KEY);
-        window.sessionStorage.removeItem(NEW_REVIEW_PLAN_KEY);
-        clearCompletedReviewSession();
-        if (newReviewPlan === "single") {
-          router.replace("/upload");
-        } else {
-          router.replace("/dashboard?payment=success");
-        }
-        return;
-      }
-
       const reviewId =
         typeof window !== "undefined"
           ? window.sessionStorage.getItem(DELIVERABLES_REVIEW_ID_KEY)?.trim() ||
@@ -93,26 +63,49 @@ export function SuccessRedirect({ sessionId }: { sessionId: string | null }) {
         return;
       }
 
-      if (hasDapWizardStateInSession() && typeof window !== "undefined") {
-        window.sessionStorage.setItem(PAID_RESUME_SESSION_KEY, "true");
-        router.replace("/upload?resumed=1");
+      setStatus("Confirming payment access…");
+      const paid = await waitForPaidAccess();
+
+      const snap = readWizardResumeFromStorage();
+
+      if (paid && snap && snap.currentStep >= 3) {
+        try {
+          setStatus("Generating your appeal letter…");
+          const { reviewId: generatedId } =
+            await generateAppealFromWizardSnapshot(snap);
+          clearPostPaymentResumeStorage();
+          router.replace(
+            `/deliverables?reviewId=${encodeURIComponent(generatedId)}`
+          );
+          return;
+        } catch (err) {
+          console.error("[SuccessRedirect] post-payment generation:", err);
+          clearPostPaymentResumeStorage();
+          router.replace("/upload?resumed=1&generateFailed=1");
+          return;
+        }
+      }
+
+      const isNewReviewCheckout =
+        typeof window !== "undefined" &&
+        window.sessionStorage.getItem(NEW_REVIEW_CHECKOUT_KEY) === "true";
+
+      if (isNewReviewCheckout && typeof window !== "undefined") {
+        window.sessionStorage.removeItem(NEW_REVIEW_CHECKOUT_KEY);
+        window.sessionStorage.removeItem(NEW_REVIEW_PLAN_KEY);
+        clearCompletedReviewSession();
+        router.replace("/upload?payment=confirmed&new=1");
         return;
       }
 
-      const { data: userData } = await supabase
-        .from("users")
-        .select("plan_type")
-        .eq("id", data.session.user.id)
-        .single();
-      const planType = userData?.plan_type;
-
-      if (planType === "single") {
-        router.replace("/upload");
-      } else {
-        router.replace("/dashboard?payment=success");
-      }
+      router.replace("/upload?resumed=1");
     })();
   }, [router, sessionId]);
 
-  return <div>Finishing up…</div>;
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#0f2744] px-6 text-center text-[#e8f0f8]">
+      <ProcessingSpinner className="h-10 w-10" colorClassName="text-[#f0a050]" />
+      <p className="mt-4 text-base font-semibold">{status}</p>
+    </div>
+  );
 }

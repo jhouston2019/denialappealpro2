@@ -1,4 +1,8 @@
 import type { Json } from "@/types/database.types";
+import {
+  clearWizardResumeCheckoutFlags,
+  DAP_WIZARD_STATE_KEY,
+} from "@/lib/dap-wizard-snapshot";
 
 /** Session keys for wizard resume / deliverables (shared with legacy ERP deliverables helpers). */
 export const WIZARD_STATE_STORAGE_KEY = "dap_wizard_state" as const;
@@ -69,6 +73,8 @@ export function writeWizardResumeSnapshot(
 export function clearCompletedReviewSession(): void {
   if (typeof window === "undefined") return;
   window.sessionStorage.removeItem(WIZARD_STATE_STORAGE_KEY);
+  window.sessionStorage.removeItem(DAP_WIZARD_STATE_KEY);
+  clearWizardResumeCheckoutFlags();
   window.sessionStorage.removeItem(DELIVERABLES_REVIEW_ID_KEY);
   window.sessionStorage.removeItem(PAID_RESUME_SESSION_KEY);
   window.sessionStorage.removeItem("erp_resume");

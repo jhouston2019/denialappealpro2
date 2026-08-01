@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useCallback, useEffect } from "react";
+import { ProcessingSpinner } from "@/components/wizard/ProcessingSpinner";
 import type { ExtractDenialResponse } from "@/lib/wizard/mapExtractedToIntake";
 
 function fileMatchesAccept(file: File, acceptAttr?: string) {
@@ -324,6 +325,7 @@ export default function DenialDocumentDropZone({
 
   return (
     <div
+      aria-busy={busy}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
@@ -344,7 +346,7 @@ export default function DenialDocumentDropZone({
           isDragActive && !confirmed
             ? "0 0 0 4px rgba(34, 197, 94, 0.15)"
             : undefined,
-        animation: extracting ? "dapZonePulse 1.2s ease-in-out infinite" : undefined,
+        animation: busy ? "dapZonePulse 1.2s ease-in-out infinite" : undefined,
         ...outerStyle,
       }}
     >
@@ -364,52 +366,90 @@ export default function DenialDocumentDropZone({
       />
       {confirmed ? (
         <div style={{ textAlign: "center", padding: "8px 4px" }}>
-          <div
-            style={{
-              fontSize: 28,
-              lineHeight: 1,
-              color: "#22c55e",
-              marginBottom: 10,
-            }}
-            aria-hidden="true"
-          >
-            ✓
-          </div>
-          <div
-            style={{
-              fontWeight: 700,
-              color: "#0f172a",
-              fontSize: 15,
-              wordBreak: "break-word",
-            }}
-          >
-            {confirmedFile.name} · {formatFileSize(confirmedFile.size)}
-          </div>
-          <button
-            type="button"
-            disabled={busy}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onRemoveFile?.();
-            }}
-            style={{
-              marginTop: 14,
-              background: "none",
-              border: "none",
-              cursor: busy ? "not-allowed" : "pointer",
-              color: "#64748b",
-              fontSize: 14,
-              fontWeight: 600,
-              textDecoration: "underline",
-              padding: "8px 12px",
-            }}
-          >
-            × Remove
-          </button>
-          <p style={{ margin: "12px 0 0", fontSize: 12, color: "#94a3b8" }}>
-            Drop another file or use Remove to start over
-          </p>
+          {busy ? (
+            <div
+              role="status"
+              aria-live="polite"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 12,
+                padding: "8px 4px",
+              }}
+            >
+              <ProcessingSpinner className="h-9 w-9" />
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "#2563EB",
+                }}
+              >
+                Extracting claim details…
+              </p>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 13,
+                  color: "#64748b",
+                  wordBreak: "break-word",
+                }}
+              >
+                {confirmedFile.name}
+              </p>
+            </div>
+          ) : (
+            <>
+              <div
+                style={{
+                  fontSize: 28,
+                  lineHeight: 1,
+                  color: "#22c55e",
+                  marginBottom: 10,
+                }}
+                aria-hidden="true"
+              >
+                ✓
+              </div>
+              <div
+                style={{
+                  fontWeight: 700,
+                  color: "#0f172a",
+                  fontSize: 15,
+                  wordBreak: "break-word",
+                }}
+              >
+                {confirmedFile.name} · {formatFileSize(confirmedFile.size)}
+              </div>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onRemoveFile?.();
+                }}
+                style={{
+                  marginTop: 14,
+                  background: "none",
+                  border: "none",
+                  cursor: busy ? "not-allowed" : "pointer",
+                  color: "#64748b",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  textDecoration: "underline",
+                  padding: "8px 12px",
+                }}
+              >
+                × Remove
+              </button>
+              <p style={{ margin: "12px 0 0", fontSize: 12, color: "#94a3b8" }}>
+                Drop another file or use Remove to start over
+              </p>
+            </>
+          )}
         </div>
       ) : (
         <label
@@ -421,7 +461,25 @@ export default function DenialDocumentDropZone({
             margin: 0,
           }}
         >
-          {isDragActive ? (
+          {busy ? (
+            <div
+              style={{ textAlign: "center", padding: "12px 4px" }}
+              role="status"
+              aria-live="polite"
+            >
+              <ProcessingSpinner className="mx-auto h-9 w-9" />
+              <p
+                style={{
+                  margin: "12px 0 0",
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "#2563EB",
+                }}
+              >
+                Extracting claim details…
+              </p>
+            </div>
+          ) : isDragActive ? (
             <div style={{ textAlign: "center", padding: "12px 4px" }}>
               <p
                 style={{

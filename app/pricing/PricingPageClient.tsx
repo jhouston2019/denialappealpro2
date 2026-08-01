@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PricingSiteHeader } from "@/components/marketing/PricingSiteHeader";
 import { markNewReviewCheckout } from "@/lib/wizard-snapshot";
+import {
+  markWizardResumeCheckout,
+  readDapWizardResume,
+} from "@/lib/dap-wizard-snapshot";
 import type { CheckoutPlanType, PlanPriceDisplay } from "@/lib/billing/stripePlanPrices";
 
 type PlanKey = CheckoutPlanType;
@@ -194,7 +198,11 @@ export default function PricingPageClient({ userEmail }: Props) {
     setLoading(planType);
 
     try {
-      markNewReviewCheckout(planType);
+      if (readDapWizardResume()) {
+        markWizardResumeCheckout();
+      } else {
+        markNewReviewCheckout(planType);
+      }
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
