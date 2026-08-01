@@ -13,6 +13,7 @@ export default async function UploadRoutePage({
     new?: string;
     resumed?: string;
     payment?: string;
+    mode?: string;
   }>;
 }) {
   const { supabase, user } = await requireUserAndPaywall({
@@ -60,6 +61,7 @@ export default async function UploadRoutePage({
   const resumeAfterPayment =
     sp.resumed === "1" || sp.resumed === "true";
   const paymentConfirmed = sp.payment === "confirmed";
+  const defaultInputTab = sp.mode === "bulk" ? "bulk" : "upload";
 
   return (
     <UploadWizardClient
@@ -68,6 +70,7 @@ export default async function UploadRoutePage({
       startFreshReview={startFreshReview}
       resumeAfterPayment={resumeAfterPayment}
       paymentConfirmed={paymentConfirmed}
+      defaultInputTab={defaultInputTab}
     />
   );
 }

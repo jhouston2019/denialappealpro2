@@ -3,9 +3,10 @@ import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
 import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
 import { PaymentActivationNotice } from "@/components/billing/PaymentActivationNotice";
 import { PostPaymentSessionRefresh } from "@/components/billing/PostPaymentSessionRefresh";
-import { ReviewNavCtaLink } from "@/components/billing/ReviewNavCtaLink";
+import { DashboardHeroActions } from "@/components/dashboard/DashboardHeroActions";
 import { DashboardPlanUsage } from "@/components/dashboard/DashboardPlanUsage";
-import { UPLOAD_NEW_REVIEW_HREF } from "@/lib/wizard-snapshot";
+import { LowUsageBanner } from "@/components/dashboard/LowUsageBanner";
+import { PastReportsPanel } from "@/components/dashboard/PastReportsPanel";
 
 export default async function DashboardPage({
   searchParams,
@@ -19,7 +20,9 @@ export default async function DashboardPage({
 
   const { data: reviews } = await supabase
     .from("reviews")
-    .select("*")
+    .select(
+      "id, insured_name, created_at, ai_summary_json, letter_text, pdf_report_url"
+    )
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
@@ -108,6 +111,10 @@ export default async function DashboardPage({
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-3 py-6 sm:px-6 sm:py-8">
         <PaymentActivationNotice enabled={paymentReturn} />
 
+        {limitReviews > 0 ? (
+          <LowUsageBanner reviewsRemaining={reviewsRemainingCount} />
+        ) : null}
+
         <section className="flex flex-col items-center px-2 py-4 text-center sm:py-6">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300">
             Dashboard
@@ -116,8 +123,8 @@ export default async function DashboardPage({
             Your denial appeals
           </h1>
           <p className="mt-2 max-w-xl text-sm text-slate-300">
-            Upload new estimates, download AI reports, and re‑run analysis as
-            claims evolve.
+            Upload denial letters, generate appeal packages, and download PDF
+            exports as claims evolve.
           </p>
           {planNameDisplay ? (
             <div className="mt-3 flex min-w-0 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[11px] text-slate-400">
@@ -147,14 +154,9 @@ export default async function DashboardPage({
               )}
             </div>
           ) : null}
-          <ReviewNavCtaLink
-            variant="dashboard-hero"
-            billing={{
-              plan: planType ?? "none",
-              status: snap.status,
-              reviews_limit: limitReviews,
-              reviews_remaining: reviewsRemainingCount,
-            }}
+          <DashboardHeroActions
+            reviewsRemaining={reviewsRemainingCount}
+            reviewsLimit={limitReviews}
           />
         </section>
 
@@ -221,85 +223,18 @@ export default async function DashboardPage({
               Past reports
             </h2>
             <p className="text-[11px] text-slate-400 sm:max-w-md sm:text-right">
-              We keep a full history of your PDF exports for audit and
-              record‑keeping.
+              Search, filter, and download appeal letters from your history.
             </p>
           </div>
-          <div className="mt-3 space-y-2">
-            {!reviews || reviews.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/30 px-4 py-8 text-center sm:px-6">
-                <p className="text-sm text-slate-300">
-                  No reviews yet. Upload a contractor and carrier estimate to
-                  run your first comparison.
-                </p>
-                {reviewsRemainingCount > 0 ? (
-                  <Link
-                    href={UPLOAD_NEW_REVIEW_HREF}
-                    className="mt-5 inline-flex items-center justify-center rounded-full bg-[#2563EB] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:text-base"
-                  >
-                    Run a New Review
-                  </Link>
-                ) : (
-                  <Link
-                    href="/pricing"
-                    className="mt-5 inline-flex items-center justify-center rounded-full bg-[#2563EB] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2563EB]/40 transition hover:bg-[#1E40AF] sm:text-base"
-                  >
-                    Buy another review
-                  </Link>
-                )}
-              </div>
-            ) : (
-              <div className="divide-y divide-slate-900/80">
-                {reviews.map((review: any) => (
-                  <div
-                    key={review.id}
-                    className="flex flex-col items-start justify-between gap-3 py-3 md:flex-row md:items-center"
-                  >
-                    <div className="space-y-1">
-                      <p className="text-xs font-medium text-slate-100">
-                        {review.insured_name?.trim() || "Denial Appeal"}
-                      </p>
-                      <p className="text-[11px] text-slate-400">
-                        Created{" "}
-                        {new Date(review.created_at).toLocaleString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 text-[11px]">
-                      <span className="inline-flex items-center rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-200">
-                        Ready
-                      </span>
-                      {review.pdf_report_url && (
-                        <a
-                          href={review.pdf_report_url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center rounded-full border border-slate-700 px-3 py-1 font-semibold hover:border-slate-500 hover:text-slate-50"
-                        >
-                          Download PDF
-                        </a>
-                      )}
-                      <Link
-                        href={`/deliverables?reviewId=${review.id}`}
-                        className="inline-flex items-center rounded-full border border-slate-700 px-3 py-1 font-semibold hover:border-slate-500 hover:text-slate-50"
-                      >
-                        View details
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+          <div className="mt-3">
+            <PastReportsPanel
+              reviews={reviews ?? []}
+              reviewsRemaining={reviewsRemainingCount}
+              reviewsLimit={limitReviews}
+            />
           </div>
         </section>
       </main>
     </div>
   );
 }
-
-

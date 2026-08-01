@@ -77,6 +77,8 @@ type UploadWizardClientProps = {
   startFreshReview?: boolean;
   resumeAfterPayment?: boolean;
   paymentConfirmed?: boolean;
+  /** When `bulk`, open Step 1 on the bulk upload tab (from `?mode=bulk`). */
+  defaultInputTab?: "upload" | "paste" | "bulk";
 };
 
 function buildSnapshot(
@@ -135,6 +137,7 @@ export default function UploadWizardClient({
   startFreshReview = false,
   resumeAfterPayment = false,
   paymentConfirmed = false,
+  defaultInputTab = "upload",
 }: UploadWizardClientProps = {}) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(() =>
@@ -150,7 +153,9 @@ export default function UploadWizardClient({
   );
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [pasteText, setPasteText] = useState("");
-  const [inputTab, setInputTab] = useState<"upload" | "paste" | "bulk">("upload");
+  const [inputTab, setInputTab] = useState<"upload" | "paste" | "bulk">(
+    defaultInputTab
+  );
   const [extracting, setExtracting] = useState(false);
   const [extractError, setExtractError] = useState<string | null>(null);
   const [generateLoading, setGenerateLoading] = useState(false);
@@ -180,6 +185,12 @@ export default function UploadWizardClient({
     },
     [confidence, enclosures, intake, ledger, uploadedFile]
   );
+
+  useEffect(() => {
+    if (defaultInputTab === "bulk") {
+      setInputTab("bulk");
+    }
+  }, [defaultInputTab]);
 
   useEffect(() => {
     if (startFreshReview && typeof window !== "undefined") {

@@ -159,5 +159,95 @@ export function formatRecentAppealDate(iso: string): string {
 
 export function formatCarcList(codes: string[]): string {
   if (!codes.length) return "—";
-  return codes.slice(0, 3).join(", ");
+  return codes
+    .slice(0, 3)
+    .map((code) => {
+      const trimmed = code.trim();
+      if (!trimmed) return "";
+      if (/^CO-/i.test(trimmed)) return trimmed.toUpperCase();
+      const digits = trimmed.replace(/^CO-?/i, "");
+      return digits ? `CO-${digits}` : trimmed;
+    })
+    .filter(Boolean)
+    .join(", ");
+}
+
+type ValidationErrorLike = {
+  rule?: string;
+  message?: string;
+};
+
+function pushUnique(list: string[], label: string) {
+  if (!list.includes(label)) list.push(label);
+}
+
+/** Human-readable export gaps for dashboard "Needs Review" rows. */
+export function reviewValidationGaps(row: RecentAppealRow): string[] {
+  const summary = (row.ai_summary_json ?? {}) as DapSummaryJson;
+  const gaps: string[] = [];
+  const errors = (summary.validationErrors ?? []) as ValidationErrorLike[];
+
+  for (const err of errors) {
+    const rule = String(err?.rule ?? "").toLowerCase();
+    const message = String(err?.message ?? "").toLowerCase();
+
+    if (
+      rule.includes("icd") ||
+      rule.includes("diagnosis") ||
+      message.includes("icd-10") ||
+      message.includes("diagnosis")
+    ) {
+      pushUnique(gaps, "Missing ICD-10");
+    }
+    if (rule.includes("npi") || message.includes("npi")) {
+      pushUnique(gaps, "Missing provider NPI");
+    }
+    if (
+      rule.includes("placeholder") ||
+      message.includes("placeholder") ||
+      message.includes("[[required:")
+    ) {
+      pushUnique(gaps, "Unresolved placeholder");
+    }
+    if (rule.includes("citation") || message.includes("citation")) {
+      pushUnique(gaps, "Citation validation failure");
+    }
+  }
+
+  const letter = row.letter_text ?? "";
+  if (/XXX\.XXX/i.test(letter)) {
+    pushUnique(gaps, "Missing ICD-10");
+  }
+  if (/\[\[REQUIRED:/i.test(letter)) {
+    pushUnique(gaps, "Unresolved placeholder");
+  }
+
+  if (
+    gaps.length === 0 &&
+    (summary.exportAllowed === false || errors.length > 0)
+  ) {
+    if (errors[0]?.message?.trim()) {
+      pushUnique(gaps, errors[0].message.trim());
+    } else {
+      pushUnique(gaps, "Export blocked — resolve missing facts");
+    }
+  }
+
+  return gaps;
+}
+
+export type ReviewStatusFilter =
+  | "all"
+  | "ready"
+  | "needs_review"
+  | "in_progress";
+
+export function reviewStatusBucket(
+  summary: RecentAppealSummary
+): Exclude<ReviewStatusFilter, "all"> {
+  const label = summary.statusLabel.toLowerCase();
+  if (label === "ready") return "ready";
+  if (label.includes("needs review")) return "needs_review";
+  if (label.includes("progress")) return "in_progress";
+  return "in_progress";
 }
