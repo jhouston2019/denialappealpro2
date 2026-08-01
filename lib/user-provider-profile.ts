@@ -13,6 +13,15 @@ export type UserProviderProfile = {
   signer_phone: string | null;
 };
 
+/** NPI must be exactly 10 digits (ignoring formatting characters). */
+export function normalizeNpiDigits(value: string | null | undefined): string {
+  return String(value ?? "").replace(/\D/g, "");
+}
+
+export function isValidNpi(value: string | null | undefined): boolean {
+  return normalizeNpiDigits(value).length === 10;
+}
+
 export function mergeProviderProfileIntoIntake(
   intake: DenialIntake,
   profile: UserProviderProfile | null | undefined
@@ -31,6 +40,44 @@ export function mergeProviderProfileIntoIntake(
       intake.signerCredentials || profile.signer_credentials || "",
     signerPhone: intake.signerPhone || profile.signer_phone || "",
   };
+}
+
+/** Patch only intake fields that are still empty (extraction wins). */
+export function providerProfilePatch(
+  intake: DenialIntake,
+  profile: UserProviderProfile | null | undefined
+): Partial<DenialIntake> {
+  if (!profile) return {};
+  const merged = mergeProviderProfileIntoIntake(intake, profile);
+  const patch: Partial<DenialIntake> = {};
+  if (!intake.providerName?.trim() && merged.providerName) {
+    patch.providerName = merged.providerName;
+  }
+  if (!intake.providerNpi?.trim() && merged.providerNpi) {
+    patch.providerNpi = merged.providerNpi;
+  }
+  if (!intake.providerAddress?.trim() && merged.providerAddress) {
+    patch.providerAddress = merged.providerAddress;
+  }
+  if (!intake.providerPhone?.trim() && merged.providerPhone) {
+    patch.providerPhone = merged.providerPhone;
+  }
+  if (!intake.providerFax?.trim() && merged.providerFax) {
+    patch.providerFax = merged.providerFax;
+  }
+  if (!intake.signerName?.trim() && merged.signerName) {
+    patch.signerName = merged.signerName;
+  }
+  if (!intake.signerTitle?.trim() && merged.signerTitle) {
+    patch.signerTitle = merged.signerTitle;
+  }
+  if (!intake.signerCredentials?.trim() && merged.signerCredentials) {
+    patch.signerCredentials = merged.signerCredentials;
+  }
+  if (!intake.signerPhone?.trim() && merged.signerPhone) {
+    patch.signerPhone = merged.signerPhone;
+  }
+  return patch;
 }
 
 export async function loadUserProviderProfile(

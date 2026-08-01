@@ -38,12 +38,15 @@ import {
 } from "@/lib/supabaseClient";
 import { Step2ExtractionPanel } from "./step2-extraction-panel";
 import {
+  isValidNpi,
   loadUserProviderProfile,
   mergeProviderProfileIntoIntake,
   saveUserProviderProfile,
 } from "@/lib/user-provider-profile";
 import { Step3ConfirmPanel } from "./step3-confirm-panel";
 import { Step4GeneratePanel } from "./step4-generate-panel";
+import { Step1BulkUploadPanel } from "./step1-bulk-upload-panel";
+import { Step1RecentAppeals } from "./step1-recent-appeals";
 import "./dap-wizard.css";
 
 function defaultEnclosures(): EnclosureItem[] {
@@ -103,6 +106,7 @@ export default function UploadWizardClient({
   );
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [pasteText, setPasteText] = useState("");
+  const [inputTab, setInputTab] = useState<"upload" | "paste" | "bulk">("upload");
   const [extracting, setExtracting] = useState(false);
   const [extractError, setExtractError] = useState<string | null>(null);
   const [generateLoading, setGenerateLoading] = useState(false);
@@ -198,6 +202,17 @@ export default function UploadWizardClient({
         return;
       }
 
+      const userId = data.session!.user!.id;
+
+      try {
+        const profile = await loadUserProviderProfile(supabase, userId);
+        if (profile) {
+          setIntake((prev) => mergeProviderProfileIntoIntake(prev, profile));
+        }
+      } catch {
+        // Provider profile columns may not exist until migration is applied.
+      }
+
       const pendingPostPayment =
         window.sessionStorage.getItem(PAID_RESUME_SESSION_KEY) === "true" ||
         Boolean(initialReviewId?.trim()) ||
@@ -209,31 +224,14 @@ export default function UploadWizardClient({
         return;
       }
 
-      const { data: userRow, error: planError } = await supabase
+      const { data: userRow } = await supabase
         .from("users")
         .select("plan_type")
-        .eq("id", data.session!.user!.id)
+        .eq("id", userId)
         .maybeSingle();
 
       const plan = userRow?.plan_type;
       setIsPaid(Boolean(plan) || !isPreviewMode);
-
-      if (!planError) {
-        const { data: profileRow } = await supabase
-          .from("users")
-          .select(
-            "provider_name, provider_npi, provider_address, provider_phone, provider_fax, signer_name, signer_title, signer_credentials, signer_phone"
-          )
-          .eq("id", data.session!.user!.id)
-          .maybeSingle();
-        if (profileRow) {
-          setIntake((prev) =>
-            mergeProviderProfileIntoIntake(prev, profileRow as Parameters<
-              typeof mergeProviderProfileIntoIntake
-            >[1])
-          );
-        }
-      }
       setSessionReady(true);
     };
 
@@ -357,14 +355,17 @@ export default function UploadWizardClient({
     }
     if (
       !intake.providerName?.trim() ||
-      !intake.providerNpi?.trim() ||
+      !isValidNpi(intake.providerNpi) ||
       !intake.providerAddress?.trim() ||
       !intake.providerPhone?.trim() ||
       !signerName ||
       !intake.signerTitle?.trim()
     ) {
+      const npiEntered = Boolean(intake.providerNpi?.trim());
       announce(
-        "Complete provider name, NPI, address, phone, and signer title before continuing."
+        npiEntered && !isValidNpi(intake.providerNpi)
+          ? "Provider NPI must be exactly 10 digits before continuing."
+          : "Complete provider name, NPI, address, phone, and signer title before continuing."
       );
       return;
     }
@@ -436,6 +437,10 @@ export default function UploadWizardClient({
   ]);
 
   const handleGenerate = useCallback(async () => {
+    if (!isValidNpi(intake.providerNpi)) {
+      announce("Provider NPI must be exactly 10 digits before generating.");
+      return;
+    }
     setGenerateLoading(true);
     try {
       const factLedger = ensureLedger(ledger, intake, enclosures);
@@ -514,6 +519,46 @@ export default function UploadWizardClient({
   }, [router]);
 
   const stepLabels = useMemo(() => STEP_LABELS, []);
+
+  const handleInputTabChange = useCallback((tab: "upload" | "paste" | "bulk") => {
+    if (tab === inputTab) return;
+    setInputTab(tab);
+    if (tab === "upload") {
+      setPasteText("");
+    } else if (tab === "paste") {
+      setUploadedFile(null);
+      setExtractError(null);
+    } else {
+      setUploadedFile(null);
+      setPasteText("");
+      setExtractError(null);
+    }
+  }, [inputTab]);
+
+  const bulkProviderDefaults = useMemo(
+    () => ({
+      providerName: intake.providerName,
+      providerNpi: intake.providerNpi,
+      providerAddress: intake.providerAddress,
+      providerPhone: intake.providerPhone,
+      providerFax: intake.providerFax,
+      signerName: intake.signerName,
+      signerTitle: intake.signerTitle,
+      signerCredentials: intake.signerCredentials,
+      signerPhone: intake.signerPhone,
+    }),
+    [intake]
+  );
+
+  const handlePrefillProviderFromReview = useCallback(
+    (patch: Partial<DenialIntake>) => {
+      setIntake((prev) => ({
+        ...prev,
+        ...patch,
+      }));
+    },
+    []
+  );
 
   return (
     <div className="dap-wizard-shell flex min-h-screen flex-col bg-[#0f2744]">
@@ -622,81 +667,173 @@ export default function UploadWizardClient({
               Upload denial letter
             </h2>
             <p className="mt-1 text-sm text-[#5a6a7a]">
-              Drop a PDF denial letter or EOB, paste text, or browse to extract
-              claim details automatically.
+              Upload a PDF denial letter or EOB, paste text, or bulk upload up
+              to 10 PDFs to extract claim details automatically.
             </p>
 
             <div className="mt-6">
-              <DenialDocumentDropZone
-                accept="application/pdf,.pdf"
-                extractAfterDrop
-                extracting={extracting}
-                confirmedFile={uploadedFile}
-                onRemoveFile={() => {
-                  setUploadedFile(null);
-                  setExtractError(null);
-                }}
-                onFile={(file) => setUploadedFile(file)}
-                onExtractSuccess={applyExtraction}
-                onExtractError={(err) => {
-                  const msg =
-                    err instanceof Error
-                      ? err.message
-                      : "Could not extract from PDF.";
-                  setExtractError(msg);
-                  announce(msg);
-                }}
-                onPasteText={(text) => {
-                  setPasteText(text);
-                  void runTextExtraction(text);
-                }}
+              <div
+                role="tablist"
+                aria-label="Denial input method"
+                className="dap-input-tabs flex overflow-x-auto border-b border-[#e4e4e4]"
               >
-                <div className="text-center">
-                  <p className="text-base font-semibold text-[#0f172a]">
-                    Drop PDF here or click to browse
-                  </p>
-                  <p className="mt-2 text-sm text-[#64748b]">
-                    You can also paste denial text anywhere on this page
+                <button
+                  type="button"
+                  role="tab"
+                  id="denial-input-tab-upload"
+                  aria-selected={inputTab === "upload"}
+                  aria-controls="denial-input-panel-upload"
+                  tabIndex={inputTab === "upload" ? 0 : -1}
+                  onClick={() => handleInputTabChange("upload")}
+                  className={`shrink-0 border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                    inputTab === "upload"
+                      ? "border-[#22c55e] text-[#1a2a3a]"
+                      : "border-transparent text-[#94a3b8] hover:text-[#5a6a7a]"
+                  }`}
+                >
+                  Upload PDF
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="denial-input-tab-paste"
+                  aria-selected={inputTab === "paste"}
+                  aria-controls="denial-input-panel-paste"
+                  tabIndex={inputTab === "paste" ? 0 : -1}
+                  onClick={() => handleInputTabChange("paste")}
+                  className={`shrink-0 border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                    inputTab === "paste"
+                      ? "border-[#22c55e] text-[#1a2a3a]"
+                      : "border-transparent text-[#94a3b8] hover:text-[#5a6a7a]"
+                  }`}
+                >
+                  Paste Text
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="denial-input-tab-bulk"
+                  aria-selected={inputTab === "bulk"}
+                  aria-controls="denial-input-panel-bulk"
+                  tabIndex={inputTab === "bulk" ? 0 : -1}
+                  onClick={() => handleInputTabChange("bulk")}
+                  className={`shrink-0 border-b-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                    inputTab === "bulk"
+                      ? "border-[#22c55e] text-[#1a2a3a]"
+                      : "border-transparent text-[#94a3b8] hover:text-[#5a6a7a]"
+                  }`}
+                >
+                  Bulk Upload
+                </button>
+              </div>
+
+              {inputTab === "upload" ? (
+                <div
+                  role="tabpanel"
+                  id="denial-input-panel-upload"
+                  aria-labelledby="denial-input-tab-upload"
+                  className="mt-6"
+                >
+                  <DenialDocumentDropZone
+                    accept="application/pdf,.pdf"
+                    extractAfterDrop
+                    enablePageDrop
+                    extracting={extracting}
+                    confirmedFile={uploadedFile}
+                    onRemoveFile={() => {
+                      setUploadedFile(null);
+                      setExtractError(null);
+                    }}
+                    onFile={(file) => setUploadedFile(file)}
+                    onExtractSuccess={applyExtraction}
+                    onExtractError={(err) => {
+                      const msg =
+                        err instanceof Error
+                          ? err.message
+                          : "Could not extract from PDF.";
+                      setExtractError(msg);
+                      announce(msg);
+                    }}
+                    onPasteText={(text) => {
+                      setPasteText(text);
+                      void runTextExtraction(text);
+                    }}
+                  >
+                    <div className="text-center">
+                      <p className="text-base font-semibold text-[#0f172a]">
+                        Drop PDF here or click to browse
+                      </p>
+                      <p className="mt-2 text-sm text-[#64748b]">
+                        PDF files only — extraction starts automatically
+                      </p>
+                    </div>
+                  </DenialDocumentDropZone>
+                  <p className="mt-2 text-center text-xs text-[#64748b]">
+                    Accepts PDF files · Scanned documents · Up to 10MB
                   </p>
                 </div>
-              </DenialDocumentDropZone>
+              ) : inputTab === "paste" ? (
+                <div
+                  role="tabpanel"
+                  id="denial-input-panel-paste"
+                  aria-labelledby="denial-input-tab-paste"
+                  className="mt-6"
+                >
+                  <label
+                    htmlFor="denial-paste-text"
+                    className="mb-1 block text-sm font-semibold text-[#1a2a3a]"
+                  >
+                    Paste denial text
+                  </label>
+                  <textarea
+                    id="denial-paste-text"
+                    rows={5}
+                    value={pasteText}
+                    onChange={(e) => setPasteText(e.target.value)}
+                    className="w-full rounded-lg border border-[#cbd5e1] p-3 text-sm"
+                    placeholder="Paste EOB or denial letter text…"
+                  />
+                  <button
+                    type="button"
+                    className="dap-btn-primary-green mt-3"
+                    disabled={extracting || !pasteText.trim()}
+                    onClick={() => void runTextExtraction(pasteText)}
+                  >
+                    {extracting ? "Extracting…" : "Extract from text"}
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-6">
+                  <Step1BulkUploadPanel
+                    providerDefaults={bulkProviderDefaults}
+                    isPreviewMode={isPreviewMode}
+                    isAuthenticated={isAuthenticated}
+                    isPaid={isPaid}
+                    announce={announce}
+                    onPreviewUnlock={() => void handlePreviewUnlock()}
+                    previewUnlockBusy={previewUnlockBusy}
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="mt-6">
-              <label
-                htmlFor="denial-paste-text"
-                className="mb-1 block text-sm font-semibold text-[#1a2a3a]"
-              >
-                Or paste denial text
-              </label>
-              <textarea
-                id="denial-paste-text"
-                rows={5}
-                value={pasteText}
-                onChange={(e) => setPasteText(e.target.value)}
-                className="w-full rounded-lg border border-[#cbd5e1] p-3 text-sm"
-                placeholder="Paste EOB or denial letter text…"
-              />
-              <button
-                type="button"
-                className="dap-btn-cta mt-3"
-                disabled={extracting || !pasteText.trim()}
-                onClick={() => void runTextExtraction(pasteText)}
-              >
-                {extracting ? "Extracting…" : "Extract from text"}
-              </button>
-            </div>
-
-            {extracting ? (
+            {inputTab !== "bulk" && extracting ? (
               <p className="mt-4 text-sm font-medium text-[#2563EB]">
                 Extracting…
               </p>
             ) : null}
-            {extractError ? (
+            {inputTab !== "bulk" && extractError ? (
               <p className="mt-4 text-sm text-[#b45309]" role="alert">
                 {extractError}
               </p>
             ) : null}
+
+            <Step1RecentAppeals
+              isAuthenticated={isAuthenticated}
+              sessionReady={sessionReady}
+              onPrefillProvider={handlePrefillProviderFromReview}
+              announce={announce}
+            />
           </section>
         ) : null}
 

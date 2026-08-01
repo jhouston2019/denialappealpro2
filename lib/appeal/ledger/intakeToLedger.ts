@@ -1,4 +1,5 @@
 import type { DenialIntake } from "@/lib/wizard/denialIntakeEngine";
+import { normalizeIcd10Array } from "../format/normalizeIcd10";
 import { emptyLedger, mergeLedger, setFact } from "./builder";
 import { DEFAULT_ENCLOSURES } from "./keys";
 import type { EnclosureItem, FactKey, FactLedger } from "./types";
@@ -10,6 +11,11 @@ function strOrNull(v: string | undefined | null): string | null {
 
 function arrOrNull(v: string[] | undefined): string[] | null {
   const a = (v || []).map((x) => String(x).trim()).filter(Boolean);
+  return a.length ? a : null;
+}
+
+function icdArrOrNull(v: string[] | undefined): string[] | null {
+  const a = normalizeIcd10Array(v);
   return a.length ? a : null;
 }
 
@@ -56,7 +62,7 @@ export function applyIntakeToLedger(
   user("claim.carcCodes", arrOrNull(intake.carcCodes), "carcCodes", 2);
   user("claim.rarcCodes", arrOrNull(intake.rarcCodes), "rarcCodes", 2);
   user("claim.cptCodes", arrOrNull(intake.cptCodes), "cptCodes", 2);
-  user("claim.icd10Codes", arrOrNull(intake.icdCodes), "icdCodes", 3);
+  user("claim.icd10Codes", icdArrOrNull(intake.icdCodes), "icdCodes", 3);
   user(
     "claim.modifiers",
     intake.modifiers?.trim()
@@ -100,7 +106,7 @@ export function applyIntakeToLedger(
     3
   );
 
-  user("clinical.icd10Codes", arrOrNull(intake.icdCodes), "icdCodes", 3);
+  user("clinical.icd10Codes", icdArrOrNull(intake.icdCodes), "icdCodes", 3);
   user(
     "clinical.primaryDiagnosis",
     strOrNull(intake.primaryDiagnosis),

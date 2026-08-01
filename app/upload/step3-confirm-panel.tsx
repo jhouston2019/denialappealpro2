@@ -7,7 +7,14 @@ import { DEFAULT_ENCLOSURES } from "@/lib/appeal/ledger/keys";
 import type { EnclosureItem, FactLedger, PlanType } from "@/lib/appeal/ledger/types";
 import { routeDenial } from "@/lib/appeal/router/index";
 import { isCarc4M144Bundling } from "@/lib/appeal/router/bundling-detect";
+import { createSupabaseBrowserClient } from "@/lib/supabaseClient";
+import {
+  isValidNpi,
+  loadUserProviderProfile,
+  providerProfilePatch,
+} from "@/lib/user-provider-profile";
 import type { DenialIntake } from "@/lib/wizard/denialIntakeEngine";
+import { normalizeIcd10Array } from "@/lib/appeal/format/normalizeIcd10";
 
 const WIZARD_PANEL =
   "rounded-[10px] border-[0.5px] border-[#e4e4e4] bg-white px-[18px] py-4 text-[#2a3a4a] md:px-[18px] md:py-4";
@@ -86,16 +93,18 @@ const TIMELY_FILING_BRANCH_OPTIONS: Array<{
 ];
 
 const AUTH_BRANCH_OPTIONS: Array<{
-  id: "A" | "B" | "C" | "D";
+  id: "A" | "B" | "C";
   label: string;
 }> = [
-  { id: "A", label: "Authorization was obtained and the number is on file" },
-  { id: "B", label: "Authorization was obtained for a different CPT code" },
+  { id: "A", label: "Authorization was obtained — number is on file" },
+  {
+    id: "B",
+    label: "No prior authorization was obtained — request retroactive review",
+  },
   {
     id: "C",
-    label: "Authorization applies to a different rendering provider or TIN",
+    label: "Authorization requirement is disputed — plan did not identify the provision",
   },
-  { id: "D", label: "No prior authorization was obtained" },
 ];
 
 const PLAN_TYPE_OPTIONS: Array<{ value: PlanType; label: string }> = [
@@ -158,13 +167,44 @@ export function Step3ConfirmPanel({
   const needsIcd10Codes = !icdFromDocument && intake.icdCodes.length === 0;
   const effectiveSignerName =
     intake.signerName?.trim() || intake.providerName?.trim() || "";
+  const hasValidNpi = isValidNpi(intake.providerNpi);
   const needsProviderDetails =
     !intake.providerName?.trim() ||
-    !intake.providerNpi?.trim() ||
+    !hasValidNpi ||
     !intake.providerAddress?.trim() ||
     !intake.providerPhone?.trim() ||
     !effectiveSignerName ||
     !intake.signerTitle?.trim();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function prefillFromUserProfile() {
+      try {
+        const supabase = createSupabaseBrowserClient();
+        const { data } = await supabase.auth.getSession();
+        const userId = data.session?.user?.id;
+        if (!userId || cancelled) return;
+
+        const profile = await loadUserProviderProfile(supabase, userId);
+        if (cancelled || !profile) return;
+
+        const patch = providerProfilePatch(intake, profile);
+        if (Object.keys(patch).length > 0) {
+          onIntakeChange(patch);
+        }
+      } catch {
+        // Provider profile columns may not exist until migration is applied.
+      }
+    }
+
+    void prefillFromUserProfile();
+    return () => {
+      cancelled = true;
+    };
+    // Prefill once when Step 3 mounts; do not overwrite fields the user already has.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (
@@ -264,9 +304,7 @@ export function Step3ConfirmPanel({
               Required before continuing
             </p>
           ) : null}
-          {(intake.authBranch === "A" ||
-            intake.authBranch === "B" ||
-            intake.authBranch === "C") && (
+          {(intake.authBranch === "A") && (
             <label className="mt-4 block">
               <span className="mb-1 block text-sm font-semibold">
                 Authorization number
@@ -438,10 +476,16 @@ export function Step3ConfirmPanel({
             style={inputStyle}
           />
         </label>
+        {intake.providerNpi?.trim() && !hasValidNpi ? (
+          <p className="sm:col-span-2 text-sm font-medium text-[#b45309]" role="alert">
+            Provider NPI must be exactly 10 digits.
+          </p>
+        ) : null}
         {needsProviderDetails ? (
           <p className="sm:col-span-2 text-sm font-medium text-[#b45309]" role="alert">
-            Provider name, NPI, address, phone, and signer title are required before
-            continuing. Signer name defaults to provider name when left blank.
+            Provider name, a valid 10-digit NPI, address, phone, and signer title are
+            required before continuing. Signer name defaults to provider name when left
+            blank.
           </p>
         ) : null}
         <label className="block">
@@ -494,6 +538,15 @@ export function Step3ConfirmPanel({
                   .filter(Boolean),
               })
             }
+            onBlur={(e) => {
+              const normalized = normalizeIcd10Array(
+                e.target.value
+                  .split(/[,;\s]+/)
+                  .map((s) => s.trim())
+                  .filter(Boolean)
+              );
+              onIntakeChange({ icdCodes: normalized });
+            }}
             placeholder={
               needsIcd10Codes
                 ? "e.g. M16.11"
@@ -677,8 +730,11 @@ export function Step3ConfirmPanel({
           }
           onClick={() => {
             if (needsProviderDetails) {
+              const npiEntered = Boolean(intake.providerNpi?.trim());
               announce(
-                "Complete provider name, NPI, address, phone, and signer title before continuing."
+                npiEntered && !hasValidNpi
+                  ? "Provider NPI must be exactly 10 digits before continuing."
+                  : "Complete provider name, NPI, address, phone, and signer title before continuing."
               );
               return;
             }

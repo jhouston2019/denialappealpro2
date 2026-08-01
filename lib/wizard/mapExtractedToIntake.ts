@@ -4,6 +4,7 @@ import {
   type DapConfidenceMap,
   type FieldConfidence,
 } from "@/lib/dap-wizard-snapshot";
+import { normalizeIcd10Array } from "@/lib/appeal/format/normalizeIcd10";
 import type { FactLedger } from "@/lib/appeal/ledger/types";
 
 export type ExtractDenialResponse = {
@@ -102,7 +103,7 @@ export function mapExtractedToIntake(payload: ExtractDenialResponse): {
     rarcCodes: arr(payload.rarcCodes),
     cptCodes: arr(payload.cptCodes),
     modifiers: arr(payload.modifiers).join(", "),
-    icdCodes: arr(payload.icd10Codes),
+    icdCodes: normalizeIcd10Array(arr(payload.icd10Codes)),
     billedAmount: str(payload.billedAmount),
     paidAmount: str(payload.paidAmount),
     deniedAmount: denied,
@@ -127,6 +128,33 @@ export function mapExtractedToIntake(payload: ExtractDenialResponse): {
   return {
     intake,
     confidence,
-    ledger: payload.ledger && typeof payload.ledger === "object" ? payload.ledger : null,
+    ledger:
+      payload.ledger && typeof payload.ledger === "object"
+        ? normalizeLedgerIcd10(payload.ledger)
+        : null,
+  };
+}
+
+function normalizeLedgerIcd10(ledger: FactLedger): FactLedger {
+  const icdFact = ledger.facts["claim.icd10Codes"];
+  if (!icdFact?.value) return ledger;
+  const normalized = normalizeIcd10Array(
+    Array.isArray(icdFact.value)
+      ? icdFact.value.map(String)
+      : String(icdFact.value)
+          .split(/[,;\s]+/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+  );
+  if (!normalized.length) return ledger;
+  return {
+    ...ledger,
+    facts: {
+      ...ledger.facts,
+      "claim.icd10Codes": {
+        ...icdFact,
+        value: normalized,
+      },
+    },
   };
 }

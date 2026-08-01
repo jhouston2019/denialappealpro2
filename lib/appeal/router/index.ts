@@ -5,6 +5,7 @@ import {
   carc4M144BundlingEntry,
   isCarc4M144Bundling,
 } from "./bundling-detect";
+import { inferAuthBranch } from "./inferBranches";
 import {
   getAuthBranch,
   getBundlingBranch,
@@ -80,7 +81,8 @@ function resolveAuthBranch(ledger: FactLedger): AuthBranchId | null {
   const v = getValue(ledger, "appeal.authBranch");
   if (v == null) return null;
   const s = String(v).trim().toUpperCase();
-  if (s === "A" || s === "B" || s === "C" || s === "D") return s;
+  if (s === "D") return "B";
+  if (s === "A" || s === "B" || s === "C") return s;
   return null;
 }
 
@@ -236,20 +238,10 @@ export function routeDenial(ledger: FactLedger): RouteDenialResult {
   let branch: StrategyBranch | null = null;
 
   if (primaryId === "authorization") {
-    const authBranchId = resolveAuthBranch(ledger);
-    if (!authBranchId) {
-      warnings.push(
-        "auth branch not selected — wizard must ask branch question before generation"
-      );
-    } else {
-      branch = getAuthBranch(authBranchId);
-      strategy = {
-        ...baseStrategy,
-        leadArgument: branch.leadArgument,
-        sectionOrder: branch.sectionOrder ?? baseStrategy.sectionOrder,
-        requiredFacts: branch.requiredFacts ?? baseStrategy.requiredFacts,
-      };
-    }
+    const authBranchId =
+      resolveAuthBranch(ledger) ?? inferAuthBranch(ledger);
+    branch = getAuthBranch(authBranchId);
+    strategy = applyBranchToStrategy(baseStrategy, branch);
   } else if (effectivePrimaryId === "bundling") {
     let bundlingBranchId = resolveBundlingBranch(ledger);
     if (!bundlingBranchId && carc4M144) {
@@ -383,23 +375,26 @@ export function serializeStrategyForPrompt(ledger: FactLedger): string {
     lines.push(
       "AUTHORIZATION STATUS: Cite claim.authorizationNumber exactly, including date obtained and approving entity if present in the ledger."
     );
-  }
-
-  if (strategy.id === "authorization" && branch?.id === "D") {
     lines.push(
-      "REQUIRED ARGUMENT THREADS: (1) retroactive authorization review, (2) notice/waiver of auth requirements, (3) disproportionate remedy."
-    );
-    lines.push(
-      "DO NOT characterize the service as emergent, urgent, or unscheduled. Elective procedures are never excused from authorization requirements on an emergent basis."
-    );
-    lines.push(
-      "If claim.authorizationNumber is absent, state that no authorization number is on file and request retroactive authorization review — do not invent a clinical excuse."
+      "DO NOT state that no authorization is on file. DO NOT request retroactive authorization review."
     );
   }
 
-  if (strategy.id === "authorization") {
+  if (strategy.id === "authorization" && branch?.id === "B") {
     lines.push(
-      "AUTHORIZATION ARGUMENT HIERARCHY: (1) If claim.authorizationNumber is present, cite it and request reprocessing. (2) If auth was not required per plan terms, cite only plan provisions present in the ledger. (3) If auth was denied or lapsed, argue medical necessity only when clinical.* facts are present and request retroactive review. (4) NEVER fabricate emergent/urgent justification for missing authorization."
+      "AUTHORIZATION STATUS: State that no prior authorization number is on file and request retroactive authorization review."
+    );
+    lines.push(
+      "DO NOT state that an authorization number is on file. DO NOT describe this as a payer processing error."
+    );
+  }
+
+  if (strategy.id === "authorization" && branch?.id === "C") {
+    lines.push(
+      "AUTHORIZATION STATUS: State that the plan has not identified the specific provision requiring prior authorization and dispute that authorization was required."
+    );
+    lines.push(
+      "DO NOT state that an authorization number is on file. DO NOT request retroactive authorization review."
     );
   }
 

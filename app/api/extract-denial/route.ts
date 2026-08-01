@@ -31,6 +31,8 @@ import {
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 const EXTRACTION_SYSTEM_PROMPT = `You are a medical billing denial extraction engine.
 
 Extract structured claim data from the input text.
@@ -387,8 +389,19 @@ export async function POST(request: NextRequest) {
       }
       documentId = file.name || "upload";
       const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      if (buffer.length > MAX_FILE_SIZE) {
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              "File too large. Maximum size is 10MB. Please compress the PDF or paste the text instead.",
+          },
+          { status: 413 }
+        );
+      }
       try {
-        rawText = await extractTextFromPDF(Buffer.from(arrayBuffer));
+        rawText = await extractTextFromPDF(buffer);
       } catch (err) {
         if (err instanceof MalformedPdfError) {
           return NextResponse.json(

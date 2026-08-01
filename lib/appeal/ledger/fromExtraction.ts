@@ -1,4 +1,5 @@
 import { emptyLedger, setFact } from "./builder";
+import { normalizeIcd10Array } from "../format/normalizeIcd10";
 import {
   extractProviderNameFromRaw,
   sanitizeProviderName,
@@ -116,15 +117,28 @@ function numericConfidence(val: FactValue, raw: string): number {
   return 0;
 }
 
-function toFactValue(val: unknown, asArray: boolean): FactValue {
+function toFactValue(val: unknown, asArray: boolean, llmKey?: string): FactValue {
   if (val == null || val === "") return null;
   if (asArray) {
     if (Array.isArray(val)) {
       const arr = val.map((x) => String(x).trim()).filter(Boolean);
-      return arr.length ? arr : null;
+      const normalized =
+        llmKey === "icd10_codes" || llmKey === "icd_codes"
+          ? normalizeIcd10Array(arr)
+          : arr;
+      return normalized.length ? normalized : null;
     }
     const s = String(val).trim();
-    return s ? [s] : null;
+    if (!s) return null;
+    const split = s
+      .split(/[,;\s]+/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    const normalized =
+      llmKey === "icd10_codes" || llmKey === "icd_codes"
+        ? normalizeIcd10Array(split)
+        : split;
+    return normalized.length ? normalized : null;
   }
   if (typeof val === "number" && Number.isFinite(val)) return val;
   const s = String(val).trim();
@@ -154,7 +168,7 @@ export function buildLedgerFromExtraction(opts: {
 
   for (const [llmKey, factKey] of Object.entries(LLM_TO_FACT)) {
     const rawVal = fields[llmKey];
-    const value = toFactValue(rawVal, arrayKeys.has(llmKey));
+    const value = toFactValue(rawVal, arrayKeys.has(llmKey), llmKey);
     const confidence = numericConfidence(value, rawText);
     const sourceRef = `doc:${documentId}:p1:${llmKey}`;
     ledger = setFact(ledger, factKey, value, "document", sourceRef, confidence);

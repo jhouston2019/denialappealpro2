@@ -50,6 +50,7 @@ export const FACT_LABELS: Record<FactKey, string> = {
   "claim.modifiers": "Modifiers",
   "claim.timelyFilingDays": "Timely filing days",
   "claim.authorizationNumber": "Authorization number",
+  "claim.authDisputed": "Authorization requirement disputed",
   "claim.goodCauseDescription": "Good cause description",
   "claim.appealAddressBlock": "Appeal address block",
   "patient.name": "Patient name",

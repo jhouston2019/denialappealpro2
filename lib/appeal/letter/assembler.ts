@@ -17,7 +17,9 @@ import {
 import { lookupCarc, routeDenial } from "../router/index";
 import { isCarc4M144Bundling } from "../router/bundling-detect";
 import { appendEnclosuresBlock } from "./enclosures";
+import { appendLetterDisclaimer } from "./disclaimer";
 import { assembleSignatureBlock, stripTrailingSignature } from "./signature";
+import { normalizeIcd10Array } from "../format/normalizeIcd10";
 
 function str(v: FactValue | undefined): string {
   if (v == null) return "";
@@ -114,8 +116,8 @@ function formatDenialCodes(ledger: FactLedger): string {
 }
 
 function formatIcd10Line(ledger: FactLedger): string {
-  const codes = arr(getValue(ledger, "claim.icd10Codes"));
-  const fallback = arr(getValue(ledger, "clinical.icd10Codes"));
+  const codes = normalizeIcd10Array(arr(getValue(ledger, "claim.icd10Codes")));
+  const fallback = normalizeIcd10Array(arr(getValue(ledger, "clinical.icd10Codes")));
   const allCodes = codes.length ? codes : fallback;
   if (!allCodes.length) {
     return "";
@@ -535,6 +537,7 @@ export function assembleLetterParts(
   let full = sections.join("\n\n");
   full = appendEnclosuresBlock(full, ledger.enclosures || []);
   full = stripContentAfterEnclosures(full);
+  full = appendLetterDisclaimer(full);
 
   return {
     scaffold,
@@ -599,21 +602,35 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
       "10. CLINICAL ARGUMENT — Omit entirely."
     );
   } else if (strategyId === "authorization") {
-    lines.push(
-      "9. AUTHORIZATION STATUS — If claim.authorizationNumber is present, cite it exactly and request reprocessing. If absent, state that no authorization number is on file and request retroactive authorization review.",
-      "",
-      "10. STRATEGY ARGUMENT — Follow DENIAL STRATEGY and branch lead argument exactly.",
-      "NEVER claim the service was emergent, urgent, or unscheduled unless clinical.urgency is populated.",
-      "Include claim.icd10Codes and clinical.primaryDiagnosis in the claim summary when present.",
-      hasClinicalFacts(ledger)
-        ? "10. CLINICAL ARGUMENT — Omit from your output; the system appends populated clinical.* facts verbatim after your narrative."
-        : "10. CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in the ledger)."
-    );
-    if (route.branch?.id === "D") {
+    const branchId = route.branch?.id;
+    if (branchId === "A") {
       lines.push(
-        "Branch D: argue retroactive authorization, notice/waiver, and disproportionate remedy only."
+        "9. AUTHORIZATION STATUS — Cite claim.authorizationNumber exactly and request reprocessing. This is a payer processing error."
+      );
+      lines.push(
+        "10. STRATEGY ARGUMENT — Follow the branch A lead argument only. Do NOT state that no authorization is on file. Do NOT request retroactive authorization review."
+      );
+    } else if (branchId === "C") {
+      lines.push(
+        "9. AUTHORIZATION STATUS — State that the plan has not identified the specific provision requiring prior authorization and dispute that authorization was required."
+      );
+      lines.push(
+        "10. STRATEGY ARGUMENT — Follow the branch C lead argument only. Do NOT state that an authorization number is on file."
+      );
+    } else {
+      lines.push(
+        "9. AUTHORIZATION STATUS — State that no prior authorization number is on file and request retroactive authorization review."
+      );
+      lines.push(
+        "10. STRATEGY ARGUMENT — Follow the branch B lead argument only. Do NOT state that an authorization number is on file. Do NOT describe this as a payer processing error."
       );
     }
+    lines.push(
+      "NEVER claim the service was emergent, urgent, or unscheduled unless clinical.urgency is populated.",
+      hasClinicalFacts(ledger)
+        ? "CLINICAL ARGUMENT — Omit from your output; the system appends populated clinical.* facts verbatim after your narrative."
+        : "CLINICAL ARGUMENT — Omit entirely (no clinical.* facts in the ledger)."
+    );
   } else {
     lines.push(
       "9. STRATEGY ARGUMENT — Follow DENIAL STRATEGY and branch lead argument exactly."

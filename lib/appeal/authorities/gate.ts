@@ -9,6 +9,15 @@ import {
 } from "./records";
 import { GLOBAL_PREAPPROVED_CITATIONS } from "./allowlist";
 
+function isNcciAuthorityRecord(record: AuthorityRecord): boolean {
+  const hay = `${record.id} ${record.citation} ${record.shortLabel}`.toLowerCase();
+  return hay.includes("ncci");
+}
+
+function ncciAllowedForStrategy(strategyId: StrategyId): boolean {
+  return strategyId === "bundling";
+}
+
 export type { AuthorityRecord } from "./records";
 
 /** Normalize payer name from ledger to slug used on authority records. */
@@ -83,6 +92,7 @@ export function getAuthorities(
       r.planTypes.includes(planType) &&
       !r.blocked.includes(planType) &&
       r.strategies.includes(strategyId) &&
+      (!isNcciAuthorityRecord(r) || ncciAllowedForStrategy(strategyId)) &&
       passesLedgerFilters(r, ledger)
   );
 }

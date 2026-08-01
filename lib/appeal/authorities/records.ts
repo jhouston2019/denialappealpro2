@@ -285,7 +285,7 @@ export const AUTHORITY_RECORDS: AuthorityRecord[] = [
       "marketplace-individual",
       "medicare-traditional",
     ],
-    strategies: ["bundling", "authorization"],
+    strategies: ["bundling"],
     argument: `The CMS National Correct Coding Initiative Policy Manual for Medicare Services, Chapter 1, establishes that correct coding requires reporting the service actually rendered. Where a procedure is performed and documented in the operative record, denial based on bundling or administrative coding grounds must be evaluated against the NCCI procedure-to-procedure edit table and the applicable modifier indicators. A modifier indicator of '1' permits unbundling with an appropriate modifier; denial without evaluation of the applicable modifier is inconsistent with NCCI policy.`,
     quotable: "correct coding requires reporting the service actually rendered",
     blocked: ["medicaid-mco"],

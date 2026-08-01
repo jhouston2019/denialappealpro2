@@ -100,7 +100,7 @@ const AUTH_BRANCH_A: StrategyBranch = {
   id: "A",
   label: "Authorization was obtained — number is on file",
   leadArgument:
-    "This is a payer processing error. The authorization number is on file and applies to the billed service and provider. Request reprocessing, not reconsideration.",
+    "The authorization number on file was obtained for this service and provider and applies to the billed claim. This is a payer processing error. Request reprocessing with the authorization number cited from the ledger — not reconsideration.",
   sectionOrder: [
     "relief-requested",
     "claim-summary",
@@ -116,46 +116,27 @@ const AUTH_BRANCH_A: StrategyBranch = {
 
 const AUTH_BRANCH_B: StrategyBranch = {
   id: "B",
-  label: "Authorization was obtained for a different CPT code",
+  label: "No authorization was obtained prior to service",
   leadArgument:
-    "Authorization was obtained prior to service. Intraoperative or clinical findings necessitated the billed procedure in lieu of or in addition to the authorized procedure. The original authorization establishes the plan's acknowledgment of medical necessity for the surgical episode.",
+    "No prior authorization number is on file. We request retroactive authorization review on the grounds that the service was medically necessary and supported by the clinical record. Separately, the plan must demonstrate that advance authorization was required and that adequate notice of that requirement was provided before the date of service.",
   sectionOrder: [
     "relief-requested",
     "claim-summary",
     "denial-basis",
     "authorization-status",
     "administrative-argument",
-    "clinical-argument",
     "procedural-obligations",
     "escalation",
     "signature",
   ],
-  requiredFacts: ["claim.authorizationNumber", "clinical.procedureNarrative"],
+  requiredFacts: [],
 };
 
 const AUTH_BRANCH_C: StrategyBranch = {
   id: "C",
-  label: "Authorization applies to a different rendering provider or TIN",
+  label: "Authorization requirement is disputed",
   leadArgument:
-    "Administrative mismatch between rendering provider and authorized provider. The service was clinically authorized; the denial reflects a billing correction, not a coverage determination.",
-  sectionOrder: [
-    "relief-requested",
-    "claim-summary",
-    "denial-basis",
-    "authorization-status",
-    "administrative-argument",
-    "procedural-obligations",
-    "escalation",
-    "signature",
-  ],
-  requiredFacts: ["claim.authorizationNumber"],
-};
-
-const AUTH_BRANCH_D: StrategyBranch = {
-  id: "D",
-  label: "No authorization was obtained prior to service",
-  leadArgument:
-    "No authorization reference number appears in our records for this service. We request retroactive authorization review under the plan's retroactive authorization policy. Separately, the plan must demonstrate that advance authorization was required for this specific service and that adequate notice of that requirement was provided before the date of service. Denial of payment for an administrative authorization defect is a disproportionate remedy where the service was otherwise appropriate.",
+    "The plan has not identified the specific provision requiring prior authorization for this service. We dispute that authorization was required under the member's plan documents and request reversal of the denial on that basis.",
   sectionOrder: [
     "relief-requested",
     "claim-summary",
@@ -171,11 +152,11 @@ const AUTH_BRANCH_D: StrategyBranch = {
 
 export const AUTHORIZATION_STRATEGY: DenialStrategy = {
   id: "authorization",
-  leadArgument: AUTH_BRANCH_D.leadArgument,
-  sectionOrder: AUTH_BRANCH_D.sectionOrder!,
+  leadArgument: AUTH_BRANCH_B.leadArgument,
+  sectionOrder: AUTH_BRANCH_B.sectionOrder!,
   requiredFacts: [],
   branchQuestion: "What is the authorization status for this claim?",
-  branches: [AUTH_BRANCH_A, AUTH_BRANCH_B, AUTH_BRANCH_C, AUTH_BRANCH_D],
+  branches: [AUTH_BRANCH_A, AUTH_BRANCH_B, AUTH_BRANCH_C],
 };
 
 const BUNDLING_BRANCHES: StrategyBranch[] = [
@@ -747,7 +728,8 @@ export function getStrategy(id: StrategyId): DenialStrategy {
 }
 
 export function getAuthBranch(id: AuthBranchId): StrategyBranch {
-  const branch = AUTHORIZATION_STRATEGY.branches!.find((b) => b.id === id);
+  const effectiveId = id === "D" ? "B" : id;
+  const branch = AUTHORIZATION_STRATEGY.branches!.find((b) => b.id === effectiveId);
   if (!branch) throw new Error(`Unknown auth branch: ${id}`);
   return branch;
 }

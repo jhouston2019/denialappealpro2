@@ -48,6 +48,8 @@ type Props = {
   confirmedFile?: File | null;
   onRemoveFile?: () => void;
   extracting?: boolean;
+  /** When true, dragging a file anywhere on the page highlights the zone and accepts drops. */
+  enablePageDrop?: boolean;
 };
 
 export default function DenialDocumentDropZone({
@@ -66,11 +68,14 @@ export default function DenialDocumentDropZone({
   confirmedFile = null,
   onRemoveFile,
   extracting = false,
+  enablePageDrop = false,
 }: Props) {
   const [dragOver, setDragOver] = useState(false);
+  const [pageDragOver, setPageDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [pasteDetected, setPasteDetected] = useState(false);
   const depth = useRef(0);
+  const pageDepth = useRef(0);
   const pasteFeedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const handleChosenFileRef = useRef<(file: File) => void>(() => {});
 
@@ -84,6 +89,7 @@ export default function DenialDocumentDropZone({
   }, []);
 
   const runExtractPipeline = async (file: File) => {
+    onFile?.(file);
     setUploading(true);
     try {
       const formData = new FormData();
@@ -98,7 +104,6 @@ export default function DenialDocumentDropZone({
       onParseResult?.(payload);
 
       if (payload?.success) {
-        onFile?.(file);
         onExtractSuccess?.(payload);
       } else {
         throw new Error(payload?.message || payload?.error || "Extraction failed");
@@ -106,7 +111,6 @@ export default function DenialDocumentDropZone({
     } catch (err) {
       console.error("Denial extract error:", err);
       onExtractError?.(err);
-      onFile?.(file);
     } finally {
       setUploading(false);
     }
@@ -217,6 +221,61 @@ export default function DenialDocumentDropZone({
     return () => window.removeEventListener("paste", onPaste);
   }, [busy, accept, onPasteText, flashPasteDetected]);
 
+  const resetPageDrag = useCallback(() => {
+    pageDepth.current = 0;
+    setPageDragOver(false);
+  }, []);
+
+  const dragEventHasFiles = (e: DragEvent) =>
+    Array.from(e.dataTransfer?.types ?? []).includes("Files");
+
+  useEffect(() => {
+    if (!enablePageDrop || busy) return undefined;
+
+    const onDragEnter = (e: DragEvent) => {
+      if (!dragEventHasFiles(e)) return;
+      e.preventDefault();
+      pageDepth.current += 1;
+      if (pageDepth.current === 1) setPageDragOver(true);
+    };
+
+    const onDragLeave = (e: DragEvent) => {
+      if (!dragEventHasFiles(e)) return;
+      e.preventDefault();
+      pageDepth.current -= 1;
+      if (pageDepth.current <= 0) {
+        resetPageDrag();
+      }
+    };
+
+    const onDragOver = (e: DragEvent) => {
+      if (!dragEventHasFiles(e)) return;
+      e.preventDefault();
+    };
+
+    const onDrop = (e: DragEvent) => {
+      if (!dragEventHasFiles(e)) return;
+      e.preventDefault();
+      resetPageDrag();
+      const file = e.dataTransfer?.files?.[0];
+      if (!file || !fileMatchesAccept(file, accept)) return;
+      handleChosenFileRef.current(file);
+    };
+
+    document.addEventListener("dragenter", onDragEnter);
+    document.addEventListener("dragleave", onDragLeave);
+    document.addEventListener("dragover", onDragOver);
+    document.addEventListener("drop", onDrop);
+
+    return () => {
+      document.removeEventListener("dragenter", onDragEnter);
+      document.removeEventListener("dragleave", onDragLeave);
+      document.removeEventListener("dragover", onDragOver);
+      document.removeEventListener("drop", onDrop);
+      resetPageDrag();
+    };
+  }, [accept, busy, enablePageDrop, resetPageDrag]);
+
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -244,6 +303,7 @@ export default function DenialDocumentDropZone({
     e.preventDefault();
     e.stopPropagation();
     resetDepth();
+    resetPageDrag();
     if (disabled || uploading || extracting) return;
     const file = e.dataTransfer.files?.[0];
     if (!file) return;
@@ -257,9 +317,10 @@ export default function DenialDocumentDropZone({
   };
 
   const confirmed = confirmedFile && confirmedFile.name;
+  const isDragActive = dragOver || pageDragOver;
   const baseBorder = confirmed
     ? "2px solid #22c55e"
-    : `2px dashed ${dragOver ? "#22c55e" : "#cbd5e1"}`;
+    : `2px dashed ${isDragActive ? "#22c55e" : "#cbd5e1"}`;
 
   return (
     <div
@@ -271,9 +332,18 @@ export default function DenialDocumentDropZone({
         border: baseBorder,
         borderRadius: 12,
         padding: 20,
-        background: confirmed || dragOver ? "#f0fdf4" : "#ffffff",
-        transition: "border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease",
+        background: confirmed
+          ? "#f0fdf4"
+          : isDragActive
+            ? "#ecfdf5"
+            : "#ffffff",
+        transition:
+          "border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease",
         boxSizing: "border-box",
+        boxShadow:
+          isDragActive && !confirmed
+            ? "0 0 0 4px rgba(34, 197, 94, 0.15)"
+            : undefined,
         animation: extracting ? "dapZonePulse 1.2s ease-in-out infinite" : undefined,
         ...outerStyle,
       }}
@@ -351,7 +421,22 @@ export default function DenialDocumentDropZone({
             margin: 0,
           }}
         >
-          {children}
+          {isDragActive ? (
+            <div style={{ textAlign: "center", padding: "12px 4px" }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 18,
+                  fontWeight: 700,
+                  color: "#15803d",
+                }}
+              >
+                Drop it!
+              </p>
+            </div>
+          ) : (
+            children
+          )}
         </label>
       )}
       {pasteDetected ? (

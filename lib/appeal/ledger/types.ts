@@ -27,6 +27,7 @@ export type FactKey =
   | "claim.modifiers"
   | "claim.timelyFilingDays"
   | "claim.authorizationNumber"
+  | "claim.authDisputed"
   | "claim.goodCauseDescription"
   | "claim.appealAddressBlock"
   // patient / member

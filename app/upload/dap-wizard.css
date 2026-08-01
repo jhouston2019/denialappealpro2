@@ -58,6 +58,30 @@
   opacity: 0.5 !important;
 }
 
+.dap-btn-primary-green {
+  background-color: #22c55e !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 6px;
+  padding: 8px 22px;
+  font-weight: 600;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: background-color 0.15s ease;
+}
+
+.dap-btn-primary-green:hover:not(:disabled) {
+  background-color: #16a34a !important;
+}
+
+.dap-btn-primary-green:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+}
+
 .dap-action-check {
   appearance: none;
   margin-top: 0.125rem;
@@ -104,4 +128,29 @@
 
 .dap-find-dot-navy {
   background: #1e3f6e;
+}
+
+/* Step 1 input tabs — horizontal scroll on narrow viewports */
+.dap-input-tabs {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.dap-input-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .dap-input-tabs {
+    flex-wrap: nowrap;
+  }
+}
+
+.dap-recent-appeals-strip {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.dap-recent-appeals-strip::-webkit-scrollbar {
+  display: none;
 }
