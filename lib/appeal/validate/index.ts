@@ -136,7 +136,38 @@ const PROCEDURAL_TIMELY_RE =
   /\b(timely filing|filed within|filing limit|filing deadline|adhered to the timely|within the required timeframe)\b/i;
 
 const PROCEDURAL_AUTH_COMPLIANCE_RE =
-  /\b(authorization (?:number )?(?:is )?on file|auth(?:orization)? (?:was )?obtained|prior authorization (?:was )?obtained|precertification (?:was )?obtained)\b/i;
+  /\b(authorization (?:number )?was obtained|auth(?:orization)? was obtained|prior authorization was obtained|precertification was obtained|the authorization number on file)\b/i;
+
+const UNSUPPORTED_AUTH_CLINICAL_PHRASES = [
+  /medically necessary and supported by the clinical record/i,
+  /clinical record supports/i,
+  /clinically indicated/i,
+  /supported by established clinical guidelines/i,
+];
+
+function assertsAuthorizationCompliance(body: string): boolean {
+  if (PROCEDURAL_AUTH_COMPLIANCE_RE.test(body)) {
+    return true;
+  }
+  const onFileRe = /\b(?:prior\s+)?authorization (?:number )?(?:is )?on file\b/gi;
+  let match: RegExpExecArray | null;
+  while ((match = onFileRe.exec(body)) !== null) {
+    const windowStart = Math.max(0, match.index - 24);
+    const prefix = body.slice(windowStart, match.index + match[0].length);
+    if (!/\bno\s+(?:prior\s+)?authorization\b/i.test(prefix)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function lacksAuthClinicalGrounding(ledger: FactLedger): boolean {
+  return (
+    !isPresent(getValue(ledger, "clinical.conservativeCareTried")) &&
+    !isPresent(getValue(ledger, "clinical.functionalImpact")) &&
+    !isPresent(getValue(ledger, "clinical.indication"))
+  );
+}
 
 const PROCEDURAL_COMPLETENESS_RE =
   /\b(submitted with all (?:necessary|required)|all necessary (?:details|information)|complete(?:ness)? of (?:the )?information|claim was complete)\b/i;
@@ -448,7 +479,7 @@ export function validateLetter(
     });
   }
   if (
-    PROCEDURAL_AUTH_COMPLIANCE_RE.test(body) &&
+    assertsAuthorizationCompliance(body) &&
     !isPresent(getValue(ledger, "claim.authorizationNumber"))
   ) {
     errors.push({
@@ -468,6 +499,21 @@ export function validateLetter(
           "Letter asserts claim completeness without a ledger fact supporting submission completeness",
         wizardStep: 4,
       });
+    }
+  }
+
+  // 13b. no_unsupported_clinical_assertion (authorization without clinical facts)
+  if (route.strategy.id === "authorization" && lacksAuthClinicalGrounding(ledger)) {
+    for (const phrase of UNSUPPORTED_AUTH_CLINICAL_PHRASES) {
+      if (phrase.test(body)) {
+        errors.push({
+          rule: "no_unsupported_clinical_assertion",
+          message:
+            "Letter asserts clinical necessity without conservativeCare, functionalImpact, or indication in ledger",
+          wizardStep: 4,
+        });
+        break;
+      }
     }
   }
 

@@ -397,7 +397,66 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 6. Pricing CTA */}
+        {/* 6. Appeal Resources */}
+        <section className="border-y border-slate-800/50 bg-slate-900/40 px-4 py-16 sm:px-6 sm:py-20">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="mb-4 text-center text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
+              Free Insurance Appeal Resources
+            </h2>
+            <p className="mx-auto mb-10 max-w-2xl text-center text-slate-400">
+              Learn how to fight back against common denial types with our free
+              guides.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Link
+                href="/appeals/ai/can-ai-write-insurance-appeal-letter.html"
+                className="rounded-xl border border-slate-700 bg-slate-800/50 p-6 transition hover:border-[#22c55e]/50 hover:bg-slate-800"
+              >
+                <h3 className="mb-2 font-semibold text-white">
+                  Can AI Write an Insurance Appeal Letter?
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-400">
+                  How AI generates CARC-specific appeal letters from your denial
+                  in under 60 seconds.
+                </p>
+              </Link>
+              <Link
+                href="/appeals/ai/how-do-i-write-appeal-letter-medical-necessity.html"
+                className="rounded-xl border border-slate-700 bg-slate-800/50 p-6 transition hover:border-[#22c55e]/50 hover:bg-slate-800"
+              >
+                <h3 className="mb-2 font-semibold text-white">
+                  How to Appeal a Medical Necessity Denial
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-400">
+                  Map clinical findings to payer coverage criteria for CARC 50
+                  medical necessity denials.
+                </p>
+              </Link>
+              <Link
+                href="/appeals/ai/index.html"
+                className="rounded-xl border border-slate-700 bg-slate-800/50 p-6 transition hover:border-[#22c55e]/50 hover:bg-slate-800"
+              >
+                <h3 className="mb-2 font-semibold text-white">
+                  CARC Code Guide for Billing Professionals
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-400">
+                  Direct answers to 20 common AI and insurance appeal questions
+                  from billing teams.
+                </p>
+              </Link>
+            </div>
+            <div className="mt-8 text-center">
+              <Link
+                href="/appeals/ai/index.html"
+                className="text-sm font-semibold text-[#22c55e] hover:text-[#16a34a] hover:underline"
+              >
+                View all guides →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 7. Pricing CTA */}
         <section className="px-4 py-16 sm:px-6 sm:py-20">
           <div className="mx-auto max-w-6xl">
             <h2 className="mb-4 text-center text-2xl font-bold text-white sm:text-3xl lg:text-4xl">

@@ -118,7 +118,7 @@ const AUTH_BRANCH_B: StrategyBranch = {
   id: "B",
   label: "No authorization was obtained prior to service",
   leadArgument:
-    "No prior authorization number is on file. We request retroactive authorization review on the grounds that the service was medically necessary and supported by the clinical record. Separately, the plan must demonstrate that advance authorization was required and that adequate notice of that requirement was provided before the date of service.",
+    "No prior authorization number is on file. We request retroactive authorization review. Separately, the plan must demonstrate that advance authorization was required for this specific service and that adequate notice of that requirement was provided before the date of service.",
   sectionOrder: [
     "relief-requested",
     "claim-summary",
@@ -725,6 +725,16 @@ const STRATEGIES: Record<StrategyId, DenialStrategy> = {
 
 export function getStrategy(id: StrategyId): DenialStrategy {
   return STRATEGIES[id] ?? STRATEGIES.unknown;
+}
+
+export const AUTH_BRANCH_B_CLINICAL_SUFFIX =
+  " We further request retroactive authorization review on the grounds that the service was medically necessary and supported by the clinical record.";
+
+/** Branch B lead — procedural only, or with clinical necessity when facts exist. */
+export function buildAuthBranchBLeadArgument(includeClinical: boolean): string {
+  const branch = AUTHORIZATION_STRATEGY.branches!.find((b) => b.id === "B");
+  const procedural = branch?.leadArgument ?? "";
+  return includeClinical ? procedural + AUTH_BRANCH_B_CLINICAL_SUFFIX : procedural;
 }
 
 export function getAuthBranch(id: AuthBranchId): StrategyBranch {

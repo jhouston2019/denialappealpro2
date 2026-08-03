@@ -621,6 +621,11 @@ export function narrativeSectionSpec(ledger: FactLedger): string {
       lines.push(
         "10. STRATEGY ARGUMENT — Follow the branch B lead argument only. Do NOT state that an authorization number is on file. Do NOT describe this as a payer processing error."
       );
+      if (!clinical) {
+        lines.push(
+          "Do not reference medical necessity or claim the service is supported by the clinical record. Argue only that retroactive authorization review is required and that the plan must identify the specific provision requiring prior authorization."
+        );
+      }
     }
     lines.push(
       "NEVER claim the service was emergent, urgent, or unscheduled unless clinical.urgency is populated.",

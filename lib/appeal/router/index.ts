@@ -1,6 +1,7 @@
 import { formatCurrency } from "../format/render";
 import { resolveFactKeyPlaceholders } from "../format/resolveFactPlaceholders";
 import { getValue } from "../ledger/builder";
+import { CLINICAL_KEYS } from "../ledger/keys";
 import type { FactLedger, FactValue } from "../ledger/types";
 import { lookupCarc, normalizeCarcCode, type CarcEntry } from "./carc-table";
 import {
@@ -9,6 +10,7 @@ import {
 } from "./bundling-detect";
 import { inferAuthBranch } from "./inferBranches";
 import {
+  buildAuthBranchBLeadArgument,
   getAuthBranch,
   getBundlingBranch,
   getClaimDefectBranch,
@@ -196,6 +198,30 @@ function applyBranchToStrategy(
   };
 }
 
+function hasClinicalFactsInLedger(ledger: FactLedger): boolean {
+  return CLINICAL_KEYS.some((key) => {
+    const v = getValue(ledger, key);
+    if (v == null) return false;
+    if (typeof v === "string") return v.trim().length > 0;
+    if (Array.isArray(v)) return v.length > 0;
+    return true;
+  });
+}
+
+function resolveAuthBranchLeadArgument(
+  ledger: FactLedger,
+  branch: StrategyBranch,
+  authBranchId: AuthBranchId
+): StrategyBranch {
+  if (branch.id !== "B" && authBranchId !== "D") {
+    return branch;
+  }
+  return {
+    ...branch,
+    leadArgument: buildAuthBranchBLeadArgument(hasClinicalFactsInLedger(ledger)),
+  };
+}
+
 export function routeDenial(ledger: FactLedger): RouteDenialResult {
   const warnings: string[] = [];
   const unknownCarcs: string[] = [];
@@ -242,7 +268,8 @@ export function routeDenial(ledger: FactLedger): RouteDenialResult {
   if (primaryId === "authorization") {
     const authBranchId =
       resolveAuthBranch(ledger) ?? inferAuthBranch(ledger);
-    branch = getAuthBranch(authBranchId);
+    const baseBranch = getAuthBranch(authBranchId);
+    branch = resolveAuthBranchLeadArgument(ledger, baseBranch, authBranchId);
     strategy = applyBranchToStrategy(baseStrategy, branch);
   } else if (effectivePrimaryId === "bundling") {
     let bundlingBranchId = resolveBundlingBranch(ledger);

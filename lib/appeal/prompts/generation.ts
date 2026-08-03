@@ -70,6 +70,14 @@ ABSOLUTE CONSTRAINTS — violating any of these invalidates the output:
 Tone: professional, direct, addressed to a payer appeals reviewer. Argue the specific
 reason code the payer cited. Do not pad.
 
+14. AUTHORIZATION DENIALS (CARC 15 / prior auth) — When no clinical facts are provided
+    in SOURCE FACTS (no clinical.conservativeCareTried, clinical.functionalImpact, or
+    clinical.indication), do NOT assert medical necessity or claim the service is
+    supported by the clinical record. Limit the argument to procedural grounds only:
+    the authorization requirement was not met, the plan must identify the specific
+    provision requiring auth, and retroactive review is requested. Never fabricate
+    clinical justification.
+
 OUTPUT RULES:
 - Plain text only. No markdown. No bullet symbols. No # headers. No JSON.
 - Write ONLY narrative sections 6–10 (relief requested through clinical/strategy argument).

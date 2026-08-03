@@ -12,10 +12,34 @@ export function SiteFooter() {
     >
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-3 px-4">
         <LegalDisclaimer className="max-w-2xl" />
-        <div className="flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-6">
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
           <span className="text-slate-600">
             © {new Date().getFullYear()} Denial Appeal Pro · Build {BUILD_NUMBER}
           </span>
+          <span className="hidden text-slate-700 sm:inline" aria-hidden>
+            |
+          </span>
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+            Resources
+          </span>
+          <Link
+            href="/appeals/ai/index.html"
+            className="font-medium text-blue-300/90 hover:text-blue-200 hover:underline"
+          >
+            Appeal Guides
+          </Link>
+          <Link
+            href="/appeals/seo/index.html"
+            className="font-medium text-blue-300/90 hover:text-blue-200 hover:underline"
+          >
+            Denial Code Library
+          </Link>
+          <Link
+            href="/appeals/learn/index.html"
+            className="font-medium text-blue-300/90 hover:text-blue-200 hover:underline"
+          >
+            Learning Center
+          </Link>
           <span className="hidden text-slate-700 sm:inline" aria-hidden>
             |
           </span>

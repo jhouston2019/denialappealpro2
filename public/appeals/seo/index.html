@@ -105,6 +105,14 @@
              margin-top: 4rem; }
     footer a { color: var(--gray-600); text-decoration: none;
                margin: 0 1rem; }
+    .hub-nav { background: var(--gray-50); border-bottom: 1px solid var(--gray-200);
+               padding: 0.75rem 2rem; display: flex; justify-content: center;
+               gap: 1.5rem; flex-wrap: wrap; }
+    .hub-nav a { color: var(--gray-600); text-decoration: none; font-size: 0.875rem;
+                 font-weight: 600; }
+    .hub-nav a:hover { color: var(--accent); }
+    .hub-nav-bottom { border-bottom: none; border-top: 1px solid var(--gray-200);
+                      margin-top: 3rem; }
   </style>
   <script type="application/ld+json">
   {
@@ -137,6 +145,11 @@
   <nav class="nav">
     <a href="/" class="nav-logo">Denial Appeal Pro</a>
     <a href="/analysis-preview" class="nav-cta">Appeal This Denial Free →</a>
+  </nav>
+
+  <nav class="hub-nav" aria-label="Resource hubs">
+    <a href="../ai/index.html">AI Appeal Guides</a>
+    <a href="../learn/index.html">Learning Center</a>
   </nav>
 
   <section class="hero">
@@ -223,10 +236,15 @@
     </div>
   </div>
 
+  <nav class="hub-nav hub-nav-bottom" aria-label="Resource hubs">
+    <a href="../ai/index.html">AI Appeal Guides</a>
+    <a href="../learn/index.html">Learning Center</a>
+  </nav>
+
   <footer>
     <p>© 2026 Denial Appeal Pro ·
       <a href="/">Home</a>
-      <a href="/appeals/learn/">Glossary</a>
+      <a href="/appeals/learn/index.html">Glossary</a>
       <a href="/pricing">Pricing</a>
       <a href="/analysis-preview">Appeal This Denial Free</a>
     </p>

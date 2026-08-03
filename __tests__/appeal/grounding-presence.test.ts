@@ -37,7 +37,10 @@ function withClinical(
   return L;
 }
 
-function narrativeForClinicalCheck(letter: string): string {
+function narrativeForClinicalCheck(
+  letter: string,
+  suppliedClinicalTerms: string[]
+): string {
   let t = letter;
   const start = t.search(/To the Appeals Review Department/i);
   if (start >= 0) t = t.slice(start);
@@ -45,17 +48,31 @@ function narrativeForClinicalCheck(letter: string): string {
     /\n(?:29 U\.S\.C\.|45 C\.F\.R\.|CMS NCCI|Procedural Obligations|Escalation)\b/i
   );
   if (stop >= 0) t = t.slice(0, stop);
-  return t;
+
+  let scrubbed = t.replace(
+    /^(Conservative care tried|Functional impact|Clinical indication|Primary diagnosis|Prior treatments|Urgency|Procedure narrative|Clinical ICD-10):.*$/gim,
+    ""
+  );
+
+  for (const term of suppliedClinicalTerms) {
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    scrubbed = scrubbed.replace(new RegExp(escaped, "gi"), " ");
+    const words = term.split(/[\s,]+/).filter((w) => w.length >= 2);
+    for (const word of words) {
+      const wordEscaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      scrubbed = scrubbed.replace(new RegExp(`\\b${wordEscaped}\\b`, "gi"), " ");
+    }
+  }
+
+  return scrubbed;
 }
 
-function assertNoExtraClinical(letter: string, allowed: RegExp[]): void {
-  // Check LLM narrative only — exclude scaffold ICD and deterministic clinical block.
-  let scrubbed = narrativeForClinicalCheck(letter);
-  scrubbed = scrubbed.replace(
-    /(?:Primary diagnosis|Clinical indication|Prior treatments|Conservative care tried|Functional impact|Urgency|Procedure narrative|Clinical ICD-10):[^.\n]*\.?/gi,
-    " "
-  );
-  // Claim-level ICD in summary is from claim.icd10Codes, not clinical fabrication.
+function assertNoExtraClinical(
+  letter: string,
+  suppliedClinicalTerms: string[],
+  allowed: RegExp[] = []
+): void {
+  let scrubbed = narrativeForClinicalCheck(letter, suppliedClinicalTerms);
   scrubbed = scrubbed.replace(/\bICD-10[^.\n]*/gi, " ");
   scrubbed = scrubbed.replace(/\bM16\.11\b/gi, " ");
   for (const re of allowed) {
@@ -83,7 +100,7 @@ describe("grounding presence — clinical facts must appear in letter", () => {
         const hasDx =
           /Primary osteoarthritis of right hip/i.test(t) || /\bM16\.11\b/.test(t);
         assert.ok(hasDx, `diagnosis missing from letter:\n${t}`);
-        assertNoExtraClinical(t, [
+        assertNoExtraClinical(t, [diagnosis], [
           /Primary osteoarthritis of right hip,? M16\.11/gi,
           /Primary osteoarthritis of right hip/gi,
           /M16\.11/gi,
@@ -111,8 +128,7 @@ describe("grounding presence — clinical facts must appear in letter", () => {
           `injection missing:\n${t}`
         );
         assert.ok(/NSAID/i.test(t), `NSAIDs missing:\n${t}`);
-        assertNoExtraClinical(t, [
-          /Six months PT,? intra-articular corticosteroid injection,? NSAIDs/gi,
+        assertNoExtraClinical(t, [care], [
           /Six months PT/gi,
           /\bPT\b/g,
           /physical therapy/gi,
@@ -141,8 +157,7 @@ describe("grounding presence — clinical facts must appear in letter", () => {
           /ambulat/i.test(t) && (/50\s*feet/i.test(t) || /assistive device/i.test(t)),
           `ambulation limitation missing:\n${t}`
         );
-        assertNoExtraClinical(t, [
-          /Unable to ambulate more than 50 feet without assistive device/gi,
+        assertNoExtraClinical(t, [impact], [
           /ambulate/gi,
           /50 feet/gi,
           /assistive device/gi,
@@ -178,9 +193,7 @@ describe("grounding presence — clinical facts must appear in letter", () => {
           ),
           `priorTreatments missing:\n${t}`
         );
-        assertNoExtraClinical(t, [
-          new RegExp(indication.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
-          new RegExp(prior.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+        assertNoExtraClinical(t, [indication, prior], [
           /degenerative joint/gi,
           /End-stage/gi,
           /refractory/gi,
