@@ -377,10 +377,6 @@ export default function PricingPageClient({ userEmail }: Props) {
             </div>
           </div>
         </section>
-
-        <p className="text-center text-sm text-slate-400">
-          No contracts. Cancel anytime. Appeals generated in under 60 seconds.
-        </p>
       </main>
 
       <footer className="border-t border-slate-800/50 bg-[#0F172A]/95">
