@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { absoluteCanonical } from "@/lib/seo/site";
+
+export const metadata: Metadata = {
+  title: "Sign in | Denial Appeal Pro",
+  description: "Sign in to your Denial Appeal Pro account.",
+  alternates: { canonical: absoluteCanonical("/login") },
+};
 
 export default function LoginPage() {
   return (

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/legal/LegalPageShell";
+import { absoluteCanonical } from "@/lib/seo/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Denial Appeal Pro",
   description: "Privacy Policy for Denial Appeal Pro healthcare appeal software.",
+  alternates: { canonical: absoluteCanonical("/privacy") },
 };
 
 const EFFECTIVE_DATE = "July 31, 2026";

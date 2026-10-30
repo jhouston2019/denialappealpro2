@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { absoluteCanonical } from "@/lib/seo/site";
 import { requireUserAndPaywall } from "@/lib/auth/serverPageGuards";
 import { isPaymentBypassActive } from "@/lib/billing/devBypass";
 import { getBillingSnapshot } from "@/lib/billing/getBillingSnapshot";
 import UploadWizardClient from "./UploadWizardClient";
+
+export const metadata: Metadata = {
+  title: "Upload denial letter | Denial Appeal Pro",
+  description: "Upload your denial letter to start your appeal review.",
+  alternates: { canonical: absoluteCanonical("/upload") },
+};
 
 export default async function UploadRoutePage({
   searchParams,

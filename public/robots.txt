@@ -1,9 +1,11 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /admin-dashboard.html
 Disallow: /api/
 Disallow: /dashboard/
 Disallow: /deliverables
+Disallow: /upload
 Disallow: /account
 Disallow: /success
 Disallow: /cancel
@@ -12,4 +14,4 @@ Disallow: /create-account
 Disallow: /auth/
 Disallow: /app
 
-Sitemap: https://denialappealpro.com/sitemap.xml
+Sitemap: https://www.denialappealpro.com/sitemap.xml

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { absoluteCanonical } from "@/lib/seo/site";
 import { ContactForm } from "./contact-form";
 
 const OWNER_EMAIL = "info@axis-strategic-labs.com";
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   title: "Contact | Denial Appeal Pro",
   description:
     "Get help with Denial Appeal Pro. Contact Axis Strategic Labs for support and technical issues.",
+  alternates: { canonical: absoluteCanonical("/contact") },
 };
 
 export default function ContactPage() {

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/legal/LegalPageShell";
+import { absoluteCanonical } from "@/lib/seo/site";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Denial Appeal Pro",
   description: "Terms of Service for Denial Appeal Pro.",
+  alternates: { canonical: absoluteCanonical("/terms") },
 };
 
 const EFFECTIVE_DATE = "July 31, 2026";

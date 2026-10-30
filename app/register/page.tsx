@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { RegisterForm } from "@/components/auth/RegisterForm";
+import { absoluteCanonical } from "@/lib/seo/site";
+
+export const metadata: Metadata = {
+  title: "Create account | Denial Appeal Pro",
+  description: "Create a Denial Appeal Pro account.",
+  alternates: { canonical: absoluteCanonical("/register") },
+};
 
 export default function RegisterPage() {
   return (

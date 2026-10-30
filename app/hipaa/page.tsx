@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { LegalPageShell } from "@/components/legal/LegalPageShell";
+import { absoluteCanonical } from "@/lib/seo/site";
 
 export const metadata: Metadata = {
   title: "HIPAA Notice | Denial Appeal Pro",
   description: "HIPAA posture and Business Associate information for Denial Appeal Pro.",
+  alternates: { canonical: absoluteCanonical("/hipaa") },
 };
 
 const BAA_EMAIL = "baa@denialappealpro.com";

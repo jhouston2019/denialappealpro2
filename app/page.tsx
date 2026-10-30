@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { BrandLogo } from "@/components/BrandLogo";
+import { absoluteCanonical } from "@/lib/seo/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: absoluteCanonical("/") },
+};
 
 const STATS = [
   {
