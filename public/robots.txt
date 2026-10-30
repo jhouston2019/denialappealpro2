@@ -12,6 +12,7 @@ Disallow: /cancel
 Disallow: /recover
 Disallow: /create-account
 Disallow: /auth/
-Disallow: /app
+Disallow: /app/
+Disallow: /app$
 
 Sitemap: https://www.denialappealpro.com/sitemap.xml
