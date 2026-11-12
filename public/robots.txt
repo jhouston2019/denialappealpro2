@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Allow: /appeals/
+
 Disallow: /admin/
 Disallow: /admin-dashboard.html
 Disallow: /api/
@@ -14,5 +16,6 @@ Disallow: /create-account
 Disallow: /auth/
 Disallow: /app/
 Disallow: /app$
+Disallow: /.netlify/functions/
 
 Sitemap: https://www.denialappealpro.com/sitemap.xml
