@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["pdf-parse", "@sentry/nextjs", "@sentry/node"],
+  async redirects() {
+    const hubs = ["learn", "ai", "seo"] as const;
+    return hubs.map((hub) => ({
+      source: `/appeals/${hub}/:path((?!.*\\.html$).+)`,
+      destination: `https://www.denialappealpro.com/appeals/${hub}/:path.html`,
+      permanent: true,
+    }));
+  },
   async rewrites() {
     return [
       {
