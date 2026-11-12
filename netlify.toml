@@ -14,4 +14,22 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Extensionless appeals articles → canonical .html (hub roots use Next rewrites)
+[[redirects]]
+  from = "/appeals/learn/*"
+  to = "https://www.denialappealpro.com/appeals/learn/:splat.html"
+  status = 301
+  conditions = {Path = {match = "^/appeals/learn/.+(?<!\\.html)$"}}
+
+[[redirects]]
+  from = "/appeals/ai/*"
+  to = "https://www.denialappealpro.com/appeals/ai/:splat.html"
+  status = 301
+  conditions = {Path = {match = "^/appeals/ai/.+(?<!\\.html)$"}}
+
+[[redirects]]
+  from = "/appeals/seo/*"
+  to = "https://www.denialappealpro.com/appeals/seo/:splat.html"
+  status = 301
+  conditions = {Path = {match = "^/appeals/seo/.+(?<!\\.html)$"}}
 
