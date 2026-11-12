@@ -46,6 +46,9 @@ yarn-error.log*
 Thumbs.db
 
 # Local test / preview artifacts (do not commit)
+tsconfig.tsbuildinfo
+phase1.6-presence-output.txt
+phase1.6-test-output.txt
 test-body.json
 test-body2.json
 test-body3.json
